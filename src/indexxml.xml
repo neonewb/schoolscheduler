@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<timetable>
+   <days>
+      <day name="Понедельник" short="Пн" day="0"/>
+      <day name="Вторник" short="Вт" day="1"/>
+      <day name="Среда" short="Ср" day="2"/>
+      <day name="Четверг" short="Чт" day="3"/>
+      <day name="Пятница" short="Пт" day="4"/>
+      <day name="Суббота" short="Сб" day="5"/>
+   </days>
+   <periods>
+      <period period="1" starttime="8:00" endtime="8:45"/>
+      <period period="2" starttime="9:00" endtime="9:45"/>
+      <period period="3" starttime="10:00" endtime="10:45"/>
+      <period period="4" starttime="11:00" endtime="11:45"/>
+      <period period="5" starttime="12:00" endtime="12:45"/>
+      <period period="6" starttime="13:00" endtime="13:45"/>
+      <period period="7" starttime="14:00" endtime="14:45"/>
+      <period period="8" starttime="15:00" endtime="15:45"/>
+      <period period="9" starttime="16:00" endtime="16:45"/>
+      <period period="10" starttime="17:00" endtime="17:45"/>
+   </periods>
+   <teachers>
+      <teacher id="1" name="Лабынцев Руслан" short="" gender="F" color="#FF0000"/>
+      <teacher id="2" name="Колтырина Елена" short="ЕК" gender="F" color="#00FF00"/>
+   </teachers>
+   <classes>
+      <class id="1" name="1А" short="1А" teacherid="" classroomids="" grade=""/>
+      <class id="2" name="1Б" short="1Б" teacherid="" classroomids="" grade=""/>
+      <class id="3" name="2А" short="2А" teacherid="" classroomids="" grade=""/>
+      <class id="4" name="2Б" short="2Б" teacherid="" classroomids="" grade=""/>
+      <class id="5" name="3А" short="3А" teacherid="" classroomids="" grade=""/>
+      <class id="6" name="3Б" short="3Б" teacherid="" classroomids="" grade=""/>
+      <class id="7" name="4А" short="4А" teacherid="" classroomids="" grade=""/>
+      <class id="8" name="4Б" short="4Б" teacherid="" classroomids="" grade=""/>
+      <class id="9" name="5А" short="5А" teacherid="" classroomids="" grade=""/>
+      <class id="10" name="5Б" short="5Б" teacherid="" classroomids="" grade=""/>
+      <class id="11" name="6А" short="6А" teacherid="" classroomids="" grade=""/>
+      <class id="12" name="6Б" short="6Б" teacherid="" classroomids="" grade=""/>
+      <class id="13" name="7А" short="7А" teacherid="" classroomids="" grade=""/>
+      <class id="14" name="7Б" short="7Б" teacherid="" classroomids="" grade=""/>
+      <class id="15" name="8А" short="8А" teacherid="" classroomids="" grade=""/>
+      <class id="16" name="8Б" short="8Б" teacherid="" classroomids="" grade=""/>
+      <class id="17" name="9А" short="9А" teacherid="" classroomids="" grade=""/>
+      <class id="18" name="9Б" short="9Б" teacherid="" classroomids="" grade=""/>
+      <class id="19" name="11" short="11" teacherid="" classroomids="" grade=""/>
+   </classes>
+   <subjects>
+      <subject id="1" name="Всеобщая история" short="Ви"/>
+      <subject id="2" name="Русский язык" short="Ря"/>
+      <subject id="3" name="Алгебра" short="Ал"/>
+   </subjects>
+   <classrooms>
+      <classroom id="1" name="204" short="24"/>
+      <classroom id="2" name="206" short="26"/>
+   </classrooms>
+   <groups>
+      <group id="1" name="Весь класс" classid="1" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="2" name="1 группа" classid="1" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="3" name="2 группа" classid="1" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="4" name="Мальчики" classid="1" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="5" name="Девочки" classid="1" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="6" name="Весь класс" classid="2" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="7" name="1 группа" classid="2" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="8" name="2 группа" classid="2" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="9" name="Мальчики" classid="2" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="10" name="Девочки" classid="2" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="11" name="Весь класс" classid="3" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="12" name="1 группа" classid="3" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="13" name="2 группа" classid="3" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="14" name="Мальчики" classid="3" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="15" name="Девочки" classid="3" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="16" name="Весь класс" classid="4" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="17" name="1 группа" classid="4" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="18" name="2 группа" classid="4" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="19" name="Мальчики" classid="4" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="20" name="Девочки" classid="4" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="21" name="Весь класс" classid="5" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="22" name="1 группа" classid="5" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="23" name="2 группа" classid="5" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="24" name="Мальчики" classid="5" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="25" name="Девочки" classid="5" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="26" name="Весь класс" classid="6" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="27" name="1 группа" classid="6" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="28" name="2 группа" classid="6" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="29" name="Мальчики" classid="6" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="30" name="Девочки" classid="6" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="31" name="Весь класс" classid="7" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="32" name="1 группа" classid="7" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="33" name="2 группа" classid="7" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="34" name="Мальчики" classid="7" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="35" name="Девочки" classid="7" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="36" name="Весь класс" classid="8" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="37" name="1 группа" classid="8" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="38" name="2 группа" classid="8" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="39" name="Мальчики" classid="8" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="40" name="Девочки" classid="8" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="41" name="Весь класс" classid="9" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="42" name="1 группа" classid="9" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="43" name="2 группа" classid="9" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="44" name="Мальчики" classid="9" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="45" name="Девочки" classid="9" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="46" name="Весь класс" classid="10" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="47" name="1 группа" classid="10" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="48" name="2 группа" classid="10" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="49" name="Мальчики" classid="10" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="50" name="Девочки" classid="10" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="51" name="Весь класс" classid="11" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="52" name="1 группа" classid="11" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="53" name="2 группа" classid="11" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="54" name="Мальчики" classid="11" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="55" name="Девочки" classid="11" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="56" name="Весь класс" classid="12" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="57" name="1 группа" classid="12" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="58" name="2 группа" classid="12" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="59" name="Мальчики" classid="12" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="60" name="Девочки" classid="12" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="61" name="Весь класс" classid="13" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="62" name="1 группа" classid="13" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="63" name="2 группа" classid="13" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="64" name="Мальчики" classid="13" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="65" name="Девочки" classid="13" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="66" name="Весь класс" classid="14" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="67" name="1 группа" classid="14" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="68" name="2 группа" classid="14" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="69" name="Мальчики" classid="14" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="70" name="Девочки" classid="14" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="71" name="Весь класс" classid="15" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="72" name="1 группа" classid="15" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="73" name="2 группа" classid="15" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="74" name="Мальчики" classid="15" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="75" name="Девочки" classid="15" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="76" name="Весь класс" classid="16" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="77" name="1 группа" classid="16" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="78" name="2 группа" classid="16" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="79" name="Мальчики" classid="16" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="80" name="Девочки" classid="16" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="81" name="Весь класс" classid="17" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="82" name="1 группа" classid="17" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="83" name="2 группа" classid="17" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="84" name="Мальчики" classid="17" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="85" name="Девочки" classid="17" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="86" name="Весь класс" classid="18" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="87" name="1 группа" classid="18" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="88" name="2 группа" classid="18" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="89" name="Мальчики" classid="18" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="90" name="Девочки" classid="18" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="91" name="Весь класс" classid="19" entireclass="1" divisiontag="0" studentcount=""/>
+      <group id="92" name="1 группа" classid="19" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="93" name="2 группа" classid="19" entireclass="0" divisiontag="1" studentcount=""/>
+      <group id="94" name="Мальчики" classid="19" entireclass="0" divisiontag="2" studentcount=""/>
+      <group id="95" name="Девочки" classid="19" entireclass="0" divisiontag="2" studentcount=""/>
+   </groups>
+   <lessons>
+      <lesson id="1" classids="9" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="41" studentids="" weeks="1"/>
+      <lesson id="2" classids="10" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="46" studentids="" weeks="1"/>
+      <lesson id="3" classids="11" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="51" studentids="" weeks="1"/>
+      <lesson id="4" classids="12" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="56" studentids="" weeks="1"/>
+      <lesson id="5" classids="13" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="61" studentids="" weeks="1"/>
+      <lesson id="6" classids="14" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="66" studentids="" weeks="1"/>
+      <lesson id="7" classids="15" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="71" studentids="" weeks="1"/>
+      <lesson id="8" classids="16" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="76" studentids="" weeks="1"/>
+      <lesson id="9" classids="17" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="81" studentids="" weeks="1"/>
+      <lesson id="10" classids="18" subjectid="1" periodspercard="1" periodsperweek="2.0" teacherids="1" classroomids="" groupids="86" studentids="" weeks="1"/>
+   </lessons>
+   <cards>
+      <card lessonid="1" classroomids="" day="4" period="2"/>
+      <card lessonid="1" classroomids="" day="3" period="3"/>
+      <card lessonid="2" classroomids="" day="1" period="4"/>
+      <card lessonid="2" classroomids="" day="2" period="1"/>
+      <card lessonid="3" classroomids="" day="3" period="9"/>
+      <card lessonid="3" classroomids="" day="1" period="9"/>
+      <card lessonid="4" classroomids="" day="3" period="5"/>
+      <card lessonid="4" classroomids="" day="4" period="10"/>
+      <card lessonid="5" classroomids="" day="4" period="6"/>
+      <card lessonid="5" classroomids="" day="1" period="7"/>
+      <card lessonid="6" classroomids="" day="0" period="1"/>
+      <card lessonid="6" classroomids="" day="0" period="2"/>
+   </cards>
+</timetable>
