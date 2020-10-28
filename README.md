@@ -1,1 +1,1 @@
-Web app for create and edit school shedules buil with React, Redux & Firebase
+Web app for create and edit school shedules build with React, Redux & Firebase
