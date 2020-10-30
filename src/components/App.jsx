@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const App = ({ currentUser, setCurrentUserAC, clearCurrentUserAC }) => {
+  
   useEffect(() => {
     let unsubscribeFromAuth = null
 

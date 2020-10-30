@@ -11,6 +11,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "firebase": "^7.24.0",
+    "firebase-tools": "^8.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^6.9.6",

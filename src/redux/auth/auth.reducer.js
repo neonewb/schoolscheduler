@@ -1,7 +1,9 @@
 import { SET_CURRENT_USER, CLEAR_CURRENT_USER, SIGN_UP_USER_SUCCESS, SIGN_UP_USER_FAILED, LOG_OUT_USER_FAILED, LOG_IN_USER_SUCCESS } from './auth.actions'
 
 const initialState = {
-  currentUser: null
+  currentUser: {
+    email: null
+  }
 }
 
 const authReducer = (state = initialState, { type, payload }) => {

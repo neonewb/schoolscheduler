@@ -10,6 +10,7 @@ export const LOG_IN_USER_FAILED = 'app/auth/LOG_IN_USER_FAILED'
 export const LOG_IN_USER_SUCCESS = 'app/auth/LOG_IN_USER_SUCCESS'
 export const LOG_IN_WITH_GOOGLE = 'app/auth/LOG_IN_WITH_GOOGLE'
 
+
 export const setCurrentUserAC = (currentUser) => ({
   type: SET_CURRENT_USER,
   payload: {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { logOutAC } from '../../redux/auth/auth.actions'
 import clsx from 'clsx'
@@ -19,10 +19,18 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import Tooltip from '@material-ui/core/Tooltip'
 import { mainListItems, secondaryListItems } from './ListItems'
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded'
+import PlusIcon from '../../utils/PlusIcon'
+import theme from '../../styles/theme'
+import { Button } from '@material-ui/core'
+import {
+  addDocToCollectionAC,
+  setDoscToRxStateAC,
+  deleteDocFromCollectionAC,
+} from '../../redux/database/firestore.actions'
+import { db } from '../../configs/firebase.config'
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 
 const drawerWidth = 240
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -101,11 +109,18 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeightWidth: {
     height: 240,
-    width: 240,
+    width: drawerWidth,
   },
 }))
 
-const Dashboard = ({ currentUser, logOutAC }) => {
+const Dashboard = ({
+  currentUser,
+  logOutAC,
+  addDocToCollectionAC,
+  setDoscToRxStateAC,
+  schedules,
+  deleteDocFromCollectionAC,
+}) => {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
   const handleDrawerOpen = () => {
@@ -115,6 +130,31 @@ const Dashboard = ({ currentUser, logOutAC }) => {
     setOpen(false)
   }
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
+
+  const onAddClick = () => {
+    // const date = new Date()
+    addDocToCollectionAC(currentUser.email)
+  }
+
+  const onDeleteClick = (docId) => {
+    deleteDocFromCollectionAC(currentUser.email, docId)
+  }
+
+  useEffect(() => {
+    if (currentUser.email) {
+      db.collection(currentUser.email)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            console.log(doc.id, ' => ', doc.data())
+            setDoscToRxStateAC({ id: doc.id, ...doc.data() })
+          })
+        })
+        .catch(function (error) {
+          console.log('Error getting document:', error)
+        })
+    }
+  }, [currentUser, setDoscToRxStateAC])
 
   return (
     <div className={classes.root}>
@@ -197,17 +237,25 @@ const Dashboard = ({ currentUser, logOutAC }) => {
             alignItems='flex-start'>
             <Grid item>
               <Paper className={fixedHeightWidthPaper}>
-                <AddCircleOutlineRoundedIcon color='primary' fontSize='large' />
+                <Button onClick={onAddClick}>
+                  <PlusIcon color={theme.palette.primary.main} />
+                </Button>
               </Paper>
             </Grid>
-
-            <Grid item>
-              <Paper className={fixedHeightWidthPaper}>
-                <Typography align='center' component='p' variant='h4'>
-                  Schedule
-                </Typography>
-              </Paper>
-            </Grid>
+            {schedules.map((item, index) => {
+              return (
+                <Grid item key={index}>
+                  <Paper className={fixedHeightWidthPaper}>
+                    <Typography align='center' component='p' variant='h4'>
+                      {index}
+                    </Typography>
+                    <IconButton onClick={ () => {onDeleteClick(item.id)}}>
+                      <DeleteRoundedIcon color='primary' />
+                    </IconButton>
+                  </Paper>
+                </Grid>
+              )
+            })}
           </Grid>
         </Container>
       </main>
@@ -217,6 +265,12 @@ const Dashboard = ({ currentUser, logOutAC }) => {
 
 const mapStateToProps = (state) => ({
   currentUser: state.auth.currentUser,
+  schedules: state.fsdb.schedules,
 })
 
-export default connect(mapStateToProps, { logOutAC })(Dashboard)
+export default connect(mapStateToProps, {
+  logOutAC,
+  addDocToCollectionAC,
+  setDoscToRxStateAC,
+  deleteDocFromCollectionAC,
+})(Dashboard)

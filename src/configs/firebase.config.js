@@ -1,5 +1,6 @@
-import firebase from 'firebase/app'
+import firebase from 'firebase'
 import 'firebase/auth'
+import 'firebase/firestore'
 
 firebase.initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,6 +13,15 @@ firebase.initializeApp({
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 })
 
+firebase.firestore()
+
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 export const auth = firebase.auth()
+export const db = firebase.firestore()
+
+// let docRef = db.collection('imperror555@gmail.com').doc('Qvwio3ZiuHfbSbNtgEFB')
+
+// let updateTimestamp = docRef.update({
+//   timestamp: firebase.firestore.FieldValue.serverTimestamp()
+// })
