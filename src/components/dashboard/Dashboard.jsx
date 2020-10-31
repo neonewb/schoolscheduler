@@ -24,8 +24,8 @@ import theme from '../../styles/theme'
 import { Button } from '@material-ui/core'
 import {
   addDocToCollectionAC,
-  setDoscToRxStateAC,
   deleteDocFromCollectionAC,
+  getDoscFromDBAC,
 } from '../../redux/database/firestore.actions'
 import { db } from '../../configs/firebase.config'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
@@ -117,9 +117,9 @@ const Dashboard = ({
   currentUser,
   logOutAC,
   addDocToCollectionAC,
-  setDoscToRxStateAC,
   schedules,
   deleteDocFromCollectionAC,
+  getDoscFromDBAC,
 }) => {
   const classes = useStyles()
   const [open, setOpen] = React.useState(false)
@@ -142,19 +142,9 @@ const Dashboard = ({
 
   useEffect(() => {
     if (currentUser.email) {
-      db.collection(currentUser.email)
-        .get()
-        .then(function (querySnapshot) {
-          querySnapshot.forEach(function (doc) {
-            console.log(doc.id, ' => ', doc.data())
-            setDoscToRxStateAC({ id: doc.id, ...doc.data() })
-          })
-        })
-        .catch(function (error) {
-          console.log('Error getting document:', error)
-        })
+      getDoscFromDBAC(currentUser.email)
     }
-  }, [currentUser, setDoscToRxStateAC])
+  }, [currentUser, getDoscFromDBAC])
 
   return (
     <div className={classes.root}>
@@ -249,7 +239,10 @@ const Dashboard = ({
                     <Typography align='center' component='p' variant='h4'>
                       {index}
                     </Typography>
-                    <IconButton onClick={ () => {onDeleteClick(item.id)}}>
+                    <IconButton
+                      onClick={() => {
+                        onDeleteClick(item.id)
+                      }}>
                       <DeleteRoundedIcon color='primary' />
                     </IconButton>
                   </Paper>
@@ -271,6 +264,6 @@ const mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
   logOutAC,
   addDocToCollectionAC,
-  setDoscToRxStateAC,
   deleteDocFromCollectionAC,
+  getDoscFromDBAC,
 })(Dashboard)

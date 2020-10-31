@@ -1,6 +1,7 @@
 export const ADD_DOC_TO_COLLECTION = 'app/db/ADD_DOC_TO_COLLECTION'
 export const ADD_DOC_TO_COLLECTION_SUCCESS = 'app/db/ADD_DOC_TO_COLLECTION_SUCCESS'
 export const ADD_DOC_TO_COLLECTION_FAILED = 'app/db/ADD_DOC_TO_COLLECTION_FAILED'
+export const GET_DOCS_FROM_DB = 'app/db/GET_DOCS_FROM_DB'
 export const SET_DOCS_TO_RX_STATE = 'app/db/SET_DOCS_TO_RX_STATE'
 export const DEL_DOC_FROM_COLLECTION = 'app/db/DEL_DOC_FROM_COLLECTION'
 export const DEL_DOC_FROM_COLLECTION_FAILED = 'app/db/DEL_DOC_FROM_COLLECTION_FAILED'
@@ -24,7 +25,12 @@ export const addDocToCollectionFailedAC = (payload) => ({
 })
 
 
-export const setDoscToRxStateAC = (payload) => ({
+export const getDoscFromDBAC = (email) => ({
+  type: GET_DOCS_FROM_DB,
+  email
+})
+
+export const setDocsToRxStateAC = (payload) => ({
   type: SET_DOCS_TO_RX_STATE,
   payload
 })

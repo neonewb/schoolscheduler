@@ -19,6 +19,8 @@ import {
   delDocFromCollFailedAC,
   delDocFromRxStateAC,
   clearRxStateAC,
+  GET_DOCS_FROM_DB,
+  setDocsToRxStateAC,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -70,13 +72,12 @@ function* logInWithGoogleSaga() {
 }
 
 function* addDocToCollectionSaga(action) {
-
   let addDoc = yield db.collection(action.email)
-  // let docRef = yield db.collection(action.email).doc('Qvwio3ZiuHfbSbNtgEFB')
+
   try {
     const response = yield call([addDoc, addDoc.add], {
       first: 'doc',
-      'created': 'action.date'
+      created: 'action.date',
     })
     // let updateTimestamp = yield docRef.update({
     //   timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -88,7 +89,6 @@ function* addDocToCollectionSaga(action) {
 }
 
 function* deleteDocFromCollectionSaga(action) {
-
   let docRef = yield db.collection(action.email).doc(action.docId)
 
   try {
@@ -99,6 +99,29 @@ function* deleteDocFromCollectionSaga(action) {
   }
 }
 
+function* getDoscFromDBSaga(action) {
+  try {
+    const docRef = yield db.collection(action.email)
+    const querySnapshot = yield call([docRef, docRef.get])
+
+    let arrDoc = []
+    
+    querySnapshot.forEach(function (doc) {
+      arrDoc.push({
+        id: doc.id,
+        ...doc.data(),
+      })
+    })
+
+    for (const element of arrDoc) {
+      yield put(setDocsToRxStateAC(element))
+    }
+
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -106,4 +129,5 @@ export function* mySaga() {
   yield takeEvery(LOG_IN_WITH_GOOGLE, logInWithGoogleSaga)
   yield takeEvery(ADD_DOC_TO_COLLECTION, addDocToCollectionSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
+  yield takeEvery(GET_DOCS_FROM_DB, getDoscFromDBSaga)
 }
