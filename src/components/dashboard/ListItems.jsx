@@ -31,7 +31,7 @@ export const mainListItems = (
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Made by Neo</ListSubheader>
+    <ListSubheader inset>Made by Ruslan</ListSubheader>
     <ListSubheader inset>With</ListSubheader>
     <ListSubheader inset>React</ListSubheader>
     <ListSubheader inset>Redux</ListSubheader>

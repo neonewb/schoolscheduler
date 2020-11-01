@@ -8,10 +8,10 @@ export const DEL_DOC_FROM_COLLECTION_FAILED = 'app/db/DEL_DOC_FROM_COLLECTION_FA
 export const DEL_DOC_FROM_RX_STATE = 'app/db/DEL_DOC_FROM_RX_STATE'
 export const CLEAR_RX_STATE = 'app/db/CLEAR_RX_STATE'
 
-export const addDocToCollectionAC = (email, date) => ({
+export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
   email,
-  date
+  userID
 })
 
 export const addDocToCollectionSuccessAC = (payload) => ({
@@ -25,9 +25,10 @@ export const addDocToCollectionFailedAC = (payload) => ({
 })
 
 
-export const getDoscFromDBAC = (email) => ({
+export const getDoscFromDBAC = (email, userID) => ({
   type: GET_DOCS_FROM_DB,
-  email
+  email,
+  userID
 })
 
 export const setDocsToRxStateAC = (payload) => ({
@@ -35,10 +36,11 @@ export const setDocsToRxStateAC = (payload) => ({
   payload
 })
 
-export const deleteDocFromCollectionAC = (email, docId) => ({
+export const deleteDocFromCollectionAC = (email, userID, docID) => ({
   type: DEL_DOC_FROM_COLLECTION,
   email,
-  docId
+  userID,
+  docID
 })
 
 export const delDocFromCollFailedAC = (payload) => ({
@@ -46,10 +48,10 @@ export const delDocFromCollFailedAC = (payload) => ({
   payload
 })
 
-export const delDocFromRxStateAC = (docId) => ({
+export const delDocFromRxStateAC = (docID) => ({
   type: DEL_DOC_FROM_RX_STATE,
   payload: {
-    docId
+    docID
   }
 })
 

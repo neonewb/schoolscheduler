@@ -16,6 +16,9 @@ import { makeStyles } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
+    '& .MuiTouchRipple-child': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
 }))
 
@@ -49,17 +52,17 @@ const App = ({ currentUser, setCurrentUserAC, clearCurrentUserAC }) => {
           <Redirect to='/signup' />
         </Route>
 
-        <Route path='/signup'>
+        <Route exact path='/signup'>
           <MainPageLeft />
           <SignUp />
         </Route>
 
-        <Route path='/login'>
+        <Route exact path='/login'>
           <MainPageLeft />
           <LogIn />
         </Route>
 
-        <Route path='/dashboard'>
+        <Route exact path='/dashboard'>
           <Dashboard />
         </Route>
       </Grid>

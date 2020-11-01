@@ -35,7 +35,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     case DEL_DOC_FROM_RX_STATE:
       return {
         ...state,
-        schedules: [...state.schedules.filter((i) => i.id !== payload.docId)],
+        schedules: [...state.schedules.filter((i) => i.id !== payload.docID)],
       }
 
     case ADD_DOC_TO_COLLECTION_FAILED:

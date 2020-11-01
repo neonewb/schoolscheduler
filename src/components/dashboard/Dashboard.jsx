@@ -27,17 +27,22 @@ import {
   deleteDocFromCollectionAC,
   getDoscFromDBAC,
 } from '../../redux/database/firestore.actions'
-import { db } from '../../configs/firebase.config'
-import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
+import { teal } from '@material-ui/core/colors'
+import ScheduleItems from './ScheduleItems'
+import DeleteConfirm from './DeleteConfirm'
 
 const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    '& .MuiTouchRipple-child': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
+
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
@@ -96,6 +101,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'auto',
   },
   container: {
+    maxWidth: '100vw',
+    margin: 0,
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
   },
@@ -106,10 +113,19 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    '&:hover': {
+      background: teal[50],
+    },
   },
   fixedHeightWidth: {
     height: 240,
     width: drawerWidth,
+  },
+  zeroPadding: {
+    padding: 0,
+  },
+  child: {
+    backgroundColor: 'blue',
   },
 }))
 
@@ -122,29 +138,40 @@ const Dashboard = ({
   getDoscFromDBAC,
 }) => {
   const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
-  const handleDrawerOpen = () => {
-    setOpen(true)
-  }
-  const handleDrawerClose = () => {
-    setOpen(false)
-  }
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
 
-  const onAddClick = () => {
-    // const date = new Date()
-    addDocToCollectionAC(currentUser.email)
+  const [isOpenMenu, setOpenMenu] = React.useState(false)
+  const handleDrawerOpen = () => {
+    setOpenMenu(true)
   }
-
-  const onDeleteClick = (docId) => {
-    deleteDocFromCollectionAC(currentUser.email, docId)
+  const handleDrawerClose = () => {
+    setOpenMenu(false)
   }
 
   useEffect(() => {
-    if (currentUser.email) {
-      getDoscFromDBAC(currentUser.email)
+    if (currentUser.email && currentUser.uid) {
+      getDoscFromDBAC(currentUser.email, currentUser.uid)
     }
   }, [currentUser, getDoscFromDBAC])
+
+  const handleAddClick = () => {
+    addDocToCollectionAC(currentUser.email, currentUser.uid)
+  }
+
+  const [isOpenDelDialog, setOpenDelDialog] = useState(false)
+
+  const [index, setIndex] = useState('')
+  const [docId, setDocId] = useState('')
+
+  const handleClickDel = (index, docID) => {
+    setIndex(index)
+    setDocId(docID)
+    setOpenDelDialog(true)
+  }
+
+  const handleClose = () => {
+    setOpenDelDialog(false)
+  }
 
   return (
     <div className={classes.root}>
@@ -152,7 +179,7 @@ const Dashboard = ({
 
       <AppBar
         position='absolute'
-        className={clsx(classes.appBar, open && classes.appBarShift)}>
+        className={clsx(classes.appBar, isOpenMenu && classes.appBarShift)}>
         <Toolbar className={classes.toolbar}>
           <Tooltip title='Menu'>
             <IconButton
@@ -162,7 +189,7 @@ const Dashboard = ({
               onClick={handleDrawerOpen}
               className={clsx(
                 classes.menuButton,
-                open && classes.menuButtonHidden
+                isOpenMenu && classes.menuButtonHidden
               )}>
               <MenuIcon fontSize='large' />
             </IconButton>
@@ -201,9 +228,12 @@ const Dashboard = ({
       <Drawer
         variant='permanent'
         classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          paper: clsx(
+            classes.drawerPaper,
+            !isOpenMenu && classes.drawerPaperClose
+          ),
         }}
-        open={open}>
+        open={isOpenMenu}>
         <div className={classes.toolbarIcon}>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
@@ -222,36 +252,32 @@ const Dashboard = ({
           <Grid
             container
             direction='row'
-            spacing={3}
+            spacing={2}
             justify='flex-start'
             alignItems='flex-start'>
             <Grid item>
-              <Paper className={fixedHeightWidthPaper}>
-                <Button onClick={onAddClick}>
+              <Button className={classes.zeroPadding} onClick={handleAddClick}>
+                <Paper className={fixedHeightWidthPaper}>
                   <PlusIcon color={theme.palette.primary.main} />
-                </Button>
-              </Paper>
+                </Paper>
+              </Button>
             </Grid>
-            {schedules.map((item, index) => {
-              return (
-                <Grid item key={index}>
-                  <Paper className={fixedHeightWidthPaper}>
-                    <Typography align='center' component='p' variant='h4'>
-                      {index}
-                    </Typography>
-                    <IconButton
-                      onClick={() => {
-                        onDeleteClick(item.id)
-                      }}>
-                      <DeleteRoundedIcon color='primary' />
-                    </IconButton>
-                  </Paper>
-                </Grid>
-              )
-            })}
+
+            <ScheduleItems
+              schedules={schedules}
+              handleClickDel={handleClickDel}
+            />
           </Grid>
         </Container>
       </main>
+      <DeleteConfirm
+        deleteDocFromCollectionAC={deleteDocFromCollectionAC}
+        currentUser={currentUser}
+        isOpen={isOpenDelDialog}
+        handleClose={handleClose}
+        index={index}
+        docID={docId}
+      />
     </div>
   )
 }

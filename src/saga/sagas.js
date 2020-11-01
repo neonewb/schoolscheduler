@@ -71,41 +71,31 @@ function* logInWithGoogleSaga() {
   }
 }
 
-function* addDocToCollectionSaga(action) {
-  let addDoc = yield db.collection(action.email)
+const schedulesColl = db.collection('schedules')
 
+function* addDocToCollectionSaga(action) {
   try {
-    const response = yield call([addDoc, addDoc.add], {
-      first: 'doc',
-      created: 'action.date',
+    const response = yield call([schedulesColl, schedulesColl.add], {
+      email: action.email,
+      userid: action.userID,
     })
-    // let updateTimestamp = yield docRef.update({
-    //   timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    // })
+
     yield put(addDocToCollectionSuccessAC(response.id))
   } catch (error) {
     yield put(addDocToCollectionFailedAC(error))
   }
 }
 
-function* deleteDocFromCollectionSaga(action) {
-  let docRef = yield db.collection(action.email).doc(action.docId)
-
-  try {
-    yield call([docRef, docRef.delete])
-    yield put(delDocFromRxStateAC(action.docId))
-  } catch (error) {
-    yield put(delDocFromCollFailedAC(error))
-  }
-}
-
 function* getDoscFromDBSaga(action) {
   try {
-    const docRef = yield db.collection(action.email)
-    const querySnapshot = yield call([docRef, docRef.get])
+    const mySchedules = schedulesColl
+      .where('email', '==', action.email)
+      .where('userid', '==', action.userID)
+
+    const querySnapshot = yield call([mySchedules, mySchedules.get])
 
     let arrDoc = []
-    
+
     querySnapshot.forEach(function (doc) {
       arrDoc.push({
         id: doc.id,
@@ -116,9 +106,19 @@ function* getDoscFromDBSaga(action) {
     for (const element of arrDoc) {
       yield put(setDocsToRxStateAC(element))
     }
-
   } catch (error) {
     console.error('Error:', error)
+  }
+}
+
+function* deleteDocFromCollectionSaga(action) {
+  const docRef = schedulesColl.doc(action.docID)
+
+  try {
+    yield call([docRef, docRef.delete])
+    yield put(delDocFromRxStateAC(action.docID))
+  } catch (error) {
+    yield put(delDocFromCollFailedAC(error))
   }
 }
 
@@ -128,6 +128,6 @@ export function* mySaga() {
   yield takeEvery(LOG_OUT_USER, logOutSaga)
   yield takeEvery(LOG_IN_WITH_GOOGLE, logInWithGoogleSaga)
   yield takeEvery(ADD_DOC_TO_COLLECTION, addDocToCollectionSaga)
-  yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
   yield takeEvery(GET_DOCS_FROM_DB, getDoscFromDBSaga)
+  yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
 }
