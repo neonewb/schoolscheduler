@@ -5,6 +5,7 @@ import {
   DEL_DOC_FROM_COLLECTION_FAILED,
   DEL_DOC_FROM_RX_STATE,
   CLEAR_RX_STATE,
+  CHOOSE_SCHEDULE,
 } from './firestore.actions'
 
 const initialState = {
@@ -28,6 +29,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           {
             id: payload.id,
             ...payload,
+            isChoosen: false,
           },
         ],
       }
@@ -41,6 +43,20 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     case ADD_DOC_TO_COLLECTION_FAILED:
     case DEL_DOC_FROM_COLLECTION_FAILED:
       return { ...state, error: [payload] }
+
+    case CHOOSE_SCHEDULE:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule, index) => {
+          if (index !== payload.docIndex) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            isChoosen: !schedule.isChoosen,
+          }
+        }),
+      }
 
     case CLEAR_RX_STATE:
       return { schedules: [], error: null }

@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
 import { Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
-import { Link as RLink } from 'react-router-dom'
+import { Link as RLink, useHistory } from 'react-router-dom'
 
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -17,6 +17,8 @@ import { connect } from 'react-redux'
 import { logInUserAC, logInWithGoogleAC } from '../../redux/auth/auth.actions'
 import { schemaSI } from '../../utils/yupSchema'
 import GoogleButton from '../google/GoogleButton'
+import { useEffect } from 'react'
+import { auth } from '../../configs/firebase.config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +38,17 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
   const { register, handleSubmit, control, errors } = useForm({
     resolver: yupResolver(schemaSI),
   })
+
+  const history = useHistory()
+
+  useEffect(() => {
+      let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+        if (user) {
+          history.push('/dashboard')
+        }
+      })
+      return () => unsubscribeFromAuth()
+  }, [history])
 
   const onSubmit = ({ email, password }) => {
     logInUserAC(email, password)
@@ -124,27 +137,23 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
         </form>
 
         <Grid className={classes.form} container spacing={3}>
-
-        <GoogleButton callBackFn={logInWithGoogleAC}/>
+          <GoogleButton callBackFn={logInWithGoogleAC} />
 
           <Grid item xs={12}>
             <Grid container justify='flex-end'>
-              
               <Grid item xs>
                 <Link component={RLink} to='/signup' variant='h6'>
                   Forgot password?
                 </Link>
               </Grid>
-              
+
               <Grid item>
                 <Link component={RLink} to='/signup' variant='h6'>
                   Sign Up
                 </Link>
               </Grid>
-
             </Grid>
           </Grid>
-
         </Grid>
       </div>
     </Grid>

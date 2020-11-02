@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import MainPageLeft from './mainpage/MainPageLeft'
 import SignUp from './mainpage/SignUp'
 import LogIn from './mainpage/LogIn'
-import { BrowserRouter as Router, Redirect, Route } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 import Dashboard from './dashboard/Dashboard'
 import { connect } from 'react-redux'
 import { auth } from '../configs/firebase.config'
@@ -12,6 +12,7 @@ import {
   setCurrentUserAC,
 } from '../redux/auth/auth.actions'
 import { makeStyles } from '@material-ui/core'
+import Edit from './edit/Edit'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const App = ({ currentUser, setCurrentUserAC, clearCurrentUserAC }) => {
-  
+const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
+    
   useEffect(() => {
     let unsubscribeFromAuth = null
-
     unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (user) {
         setCurrentUserAC(user)
@@ -34,19 +34,13 @@ const App = ({ currentUser, setCurrentUserAC, clearCurrentUserAC }) => {
         clearCurrentUserAC()
       }
     })
-
     return () => unsubscribeFromAuth()
-  }, [currentUser, setCurrentUserAC, clearCurrentUserAC])
+  }, [setCurrentUserAC, clearCurrentUserAC])
 
   const classes = useStyles()
   return (
-    <Router>
+
       <Grid container component='main' className={classes.root}>
-        {currentUser && currentUser ? (
-          <Redirect to='/dashboard' />
-        ) : (
-          <Redirect to='/login' />
-        )}
 
         <Route exact path='/'>
           <Redirect to='/signup' />
@@ -65,16 +59,21 @@ const App = ({ currentUser, setCurrentUserAC, clearCurrentUserAC }) => {
         <Route exact path='/dashboard'>
           <Dashboard />
         </Route>
+
+        <Route path='/edit'>
+          <Edit />
+        </Route>
+
       </Grid>
-    </Router>
+
   )
 }
 
-const mapStateToProps = (state) => ({
-  currentUser: state.auth.currentUser,
-})
+// const mapStateToProps = (state) => ({
+//   currentUser: state.auth.currentUser,
+// })
 
-export default connect(mapStateToProps, {
+export default connect(null, {
   setCurrentUserAC,
   clearCurrentUserAC,
 })(App)

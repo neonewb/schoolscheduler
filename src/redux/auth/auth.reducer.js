@@ -17,7 +17,7 @@ const authReducer = (state = initialState, { type, payload }) => {
       return { ...state, ...payload }
 
     case CLEAR_CURRENT_USER:
-      return { ...state, currentUser: null }
+      return { ...state, currentUser: { email: null} }
 
     default:
       return state

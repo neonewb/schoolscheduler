@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import { logOutAC } from '../../redux/auth/auth.actions'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,7 +18,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import Tooltip from '@material-ui/core/Tooltip'
-import { mainListItems, secondaryListItems } from './ListItems'
+import { MainListItems, secondaryListItems } from './ListItems'
 import PlusIcon from '../../utils/PlusIcon'
 import theme from '../../styles/theme'
 import { Button } from '@material-ui/core'
@@ -26,10 +26,13 @@ import {
   addDocToCollectionAC,
   deleteDocFromCollectionAC,
   getDoscFromDBAC,
+  chooseScheduleAC,
 } from '../../redux/database/firestore.actions'
 import { teal } from '@material-ui/core/colors'
 import ScheduleItems from './ScheduleItems'
 import DeleteConfirm from './DeleteConfirm'
+import { useHistory } from 'react-router-dom'
+import { auth } from '../../configs/firebase.config'
 
 const drawerWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   toolbarIcon: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     padding: '0 8px',
     ...theme.mixins.toolbar,
   },
@@ -136,6 +139,7 @@ const Dashboard = ({
   schedules,
   deleteDocFromCollectionAC,
   getDoscFromDBAC,
+  chooseScheduleAC,
 }) => {
   const classes = useStyles()
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
@@ -148,11 +152,21 @@ const Dashboard = ({
     setOpenMenu(false)
   }
 
+  const history = useHistory()
+
+  const fsdb = useSelector(state => state.fsdb.schedules)
+
   useEffect(() => {
-    if (currentUser.email && currentUser.uid) {
-      getDoscFromDBAC(currentUser.email, currentUser.uid)
-    }
-  }, [currentUser, getDoscFromDBAC])
+    let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      if (user && fsdb.length === 0) {
+        getDoscFromDBAC(user.email, user.uid)
+      } else if (!user) {
+        history.push('/login')
+      }
+    })
+
+    return () => unsubscribeFromAuth()
+  }, [getDoscFromDBAC, history, fsdb])
 
   const handleAddClick = () => {
     addDocToCollectionAC(currentUser.email, currentUser.uid)
@@ -160,17 +174,17 @@ const Dashboard = ({
 
   const [isOpenDelDialog, setOpenDelDialog] = useState(false)
 
-  const [index, setIndex] = useState('')
-  const [docId, setDocId] = useState('')
-
-  const handleClickDel = (index, docID) => {
-    setIndex(index)
-    setDocId(docID)
+  const handleClickDel = () => {
     setOpenDelDialog(true)
   }
 
   const handleClose = () => {
     setOpenDelDialog(false)
+  }
+
+  const logOut = () => {
+    logOutAC()
+    // history.push('/login')
   }
 
   return (
@@ -216,7 +230,7 @@ const Dashboard = ({
           ) : null}
 
           <Tooltip title='Log Out'>
-            <IconButton onClick={logOutAC} color='inherit'>
+            <IconButton onClick={logOut} color='inherit'>
               {currentUser && currentUser ? (
                 <ExitToAppRoundedIcon fontSize='large' />
               ) : null}
@@ -235,12 +249,15 @@ const Dashboard = ({
         }}
         open={isOpenMenu}>
         <div className={classes.toolbarIcon}>
+          <Typography>Menu</Typography>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
+        <List>
+          <MainListItems handleClickDel={handleClickDel} />
+        </List>
         <Divider />
         <List>{secondaryListItems}</List>
       </Drawer>
@@ -265,7 +282,7 @@ const Dashboard = ({
 
             <ScheduleItems
               schedules={schedules}
-              handleClickDel={handleClickDel}
+              chooseScheduleAC={chooseScheduleAC}
             />
           </Grid>
         </Container>
@@ -275,8 +292,6 @@ const Dashboard = ({
         currentUser={currentUser}
         isOpen={isOpenDelDialog}
         handleClose={handleClose}
-        index={index}
-        docID={docId}
       />
     </div>
   )
@@ -292,4 +307,5 @@ export default connect(mapStateToProps, {
   addDocToCollectionAC,
   deleteDocFromCollectionAC,
   getDoscFromDBAC,
+  chooseScheduleAC,
 })(Dashboard)

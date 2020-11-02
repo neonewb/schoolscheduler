@@ -12,11 +12,13 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { makeStyles } from '@material-ui/core'
 
-import { Link as RLink } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { Link as RLink, useHistory } from 'react-router-dom'
+import { connect, useSelector } from 'react-redux'
 import { logInWithGoogleAC, signUpUserAC } from '../../redux/auth/auth.actions'
 import { schemaSU } from '../../utils/yupSchema'
 import GoogleButton from '../google/GoogleButton'
+import { useEffect } from 'react'
+import { auth } from '../../configs/firebase.config'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +38,17 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schemaSU),
   })
+
+  const history = useHistory()
+
+  useEffect(() => {
+    let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        history.push('/dashboard')
+      }
+    })
+    return () => unsubscribeFromAuth()
+  }, [history])
 
   const onSubmit = ({ email, password }) => {
     signUpUserAC(email, password)
@@ -57,7 +70,6 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
           className={classes.form}
           noValidate>
           <Grid container spacing={3}>
-
             <Grid item xs={12}>
               <TextField
                 inputRef={register({ required: true })}
@@ -122,7 +134,6 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
                 Sign Up
               </Button>
             </Grid>
-
           </Grid>
         </form>
 
@@ -135,7 +146,6 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
             Already have an account? Log in
           </Link>
         </Grid>
-
       </div>
     </Grid>
   )

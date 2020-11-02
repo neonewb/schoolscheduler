@@ -3,31 +3,37 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';import Tooltip from '@material-ui/core/Tooltip'
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
+import Tooltip from '@material-ui/core/Tooltip'
+import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 
-export const mainListItems = (
-  <div>
-      <Tooltip title='Add new schedule' placement='right'>
-      <ListItem button>
-        <ListItemIcon>
-          <AddCircleOutlineRoundedIcon color="primary" fontSize="large"/>
-        </ListItemIcon>
-        <ListItemText primary='Add new schedule' />
-      </ListItem>
-    </Tooltip>
+export const MainListItems = ({ handleClickDel }) => {
+  return (
+    <div>
+      <Tooltip title='Settings' placement='right'>
+        <ListItem button>
+          <ListItemIcon>
+            <SettingsRoundedIcon color='primary' fontSize='large' />
+          </ListItemIcon>
+          <ListItemText primary='Settings' />
+        </ListItem>
+      </Tooltip>
 
-    <Tooltip title='Dashboard' placement='right'>
-      <ListItem button>
-        <ListItemIcon>
-          <DashboardRoundedIcon color="primary" fontSize="large"/>
-        </ListItemIcon>
-        <ListItemText primary='Dashboard' />
-      </ListItem>
-    </Tooltip>
-
-  </div>
-)
+      <Tooltip title='Delete schedule' placement='right'>
+        <ListItem
+          button
+          onClick={() => {
+            handleClickDel()
+          }}>
+          <ListItemIcon>
+            <DeleteRoundedIcon color='primary' fontSize='large' />
+          </ListItemIcon>
+          <ListItemText primary='Delete schedule' />
+        </ListItem>
+      </Tooltip>
+    </div>
+  )
+}
 
 export const secondaryListItems = (
   <div>
