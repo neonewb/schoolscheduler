@@ -12,7 +12,10 @@ const DeleteConfirm = ({
 }) => {
   const choosenShedules = useSelector(selectChoosenShedules)
   const deleteConfirm = () => {
-    console.log(choosenShedules)
+    if (choosenShedules.length === 0) {
+      console.log('no choosen schedules')
+      handleClose()
+    }
     choosenShedules.forEach( i => {
       deleteDocFromCollectionAC(currentUser.email, currentUser.uid, i.id)
     })

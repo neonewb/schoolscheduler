@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 
 const Edit = () => {
-
+  
   const history = useHistory()
 
   useEffect(() => {
@@ -15,10 +15,8 @@ const Edit = () => {
     })
     return () => unsubscribeFromAuth()
   }, [history])
-  
-  return (
-    <Typography>Editor</Typography>
-  )
+
+  return <Typography>Editor</Typography>
 }
 
 export default Edit
