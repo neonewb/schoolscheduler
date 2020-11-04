@@ -13,7 +13,7 @@ const DeleteConfirm = ({
   const choosenShedules = useSelector(selectChoosenShedules)
   const deleteConfirm = () => {
     if (choosenShedules.length === 0) {
-      console.log('no choosen schedules')
+      console.log('nothing choosen')
       handleClose()
     }
     choosenShedules.forEach( i => {

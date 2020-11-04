@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 
 const Edit = () => {
-  
   const history = useHistory()
 
   useEffect(() => {
