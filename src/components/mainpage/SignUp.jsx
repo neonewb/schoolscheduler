@@ -1,6 +1,5 @@
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Link from '@material-ui/core/Link'
 import Grid from '@material-ui/core/Grid'
@@ -10,30 +9,18 @@ import Paper from '@material-ui/core/Paper'
 import Alert from '@material-ui/lab/Alert'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { makeStyles } from '@material-ui/core'
 
 import { Link as RLink, useHistory } from 'react-router-dom'
-import { connect, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { logInWithGoogleAC, signUpUserAC } from '../../redux/auth/auth.actions'
 import { schemaSU } from '../../utils/yupSchema'
 import GoogleButton from '../google/GoogleButton'
 import { useEffect } from 'react'
 import { auth } from '../../configs/firebase.config'
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    margin: theme.spacing(8, 3),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import { useStylesLoginSignUp } from '../../styles/styleLoginSignUp'
 
 const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
-  const classes = useStyles()
+  const classes = useStylesLoginSignUp()
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schemaSU),
@@ -55,8 +42,7 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
   }
 
   return (
-    <Grid item xs={12} sm={6} md={6} elevation={10} component={Paper} square>
-      <CssBaseline />
+    <Grid item xs={12} sm={12} md={6} elevation={10} component={Paper} square>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -72,6 +58,11 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
+                InputProps={{
+                  classes: {
+                    input: classes.fontSizeTextField,
+                  },
+                }}
                 inputRef={register({ required: true })}
                 autoFocus
                 variant='outlined'
@@ -90,6 +81,11 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
 
             <Grid item xs={12}>
               <TextField
+                InputProps={{
+                  classes: {
+                    input: classes.fontSizeTextField,
+                  },
+                }}
                 inputRef={register({ required: true })}
                 variant='outlined'
                 required
@@ -107,6 +103,11 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
 
             <Grid item xs={12}>
               <TextField
+                InputProps={{
+                  classes: {
+                    input: classes.fontSizeTextField,
+                  },
+                }}
                 inputRef={register}
                 variant='outlined'
                 required
@@ -126,6 +127,7 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
 
             <Grid item xs={12}>
               <Button
+                className={classes.button}
                 type='submit'
                 fullWidth
                 size='large'

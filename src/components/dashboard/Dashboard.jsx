@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { logOutAC } from '../../redux/auth/auth.actions'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
@@ -25,112 +24,14 @@ import { Button } from '@material-ui/core'
 import {
   addDocToCollectionAC,
   deleteDocFromCollectionAC,
-  getDoscFromDBAC,
+  getDocsFromDBAC,
   chooseScheduleAC,
 } from '../../redux/database/firestore.actions'
-import { teal } from '@material-ui/core/colors'
 import ScheduleItems from './ScheduleItems'
 import DeleteConfirm from './DeleteConfirm'
 import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
-
-const drawerWidth = 240
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& .MuiTouchRipple-child': {
-      backgroundColor: theme.palette.primary.main,
-    },
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    maxWidth: '100vw',
-    margin: 0,
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    overflow: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      background: teal[50],
-    },
-  },
-  fixedHeightWidth: {
-    height: 240,
-    width: drawerWidth,
-  },
-  zeroPadding: {
-    padding: 0,
-  },
-  child: {
-    backgroundColor: 'blue',
-  },
-}))
+import { useStylesDashboard } from '../../styles/stylesDashboard'
 
 const Dashboard = ({
   currentUser,
@@ -138,10 +39,10 @@ const Dashboard = ({
   addDocToCollectionAC,
   schedules,
   deleteDocFromCollectionAC,
-  getDoscFromDBAC,
+  getDocsFromDBAC,
   chooseScheduleAC,
 }) => {
-  const classes = useStyles()
+  const classes = useStylesDashboard()
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
 
   const [isOpenMenu, setOpenMenu] = React.useState(false)
@@ -154,19 +55,19 @@ const Dashboard = ({
 
   const history = useHistory()
 
-  const fsdb = useSelector(state => state.fsdb.schedules)
+  const fsdb = useSelector((state) => state.fsdb.schedules)
 
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (user && fsdb.length === 0) {
-        getDoscFromDBAC(user.email, user.uid)
+        getDocsFromDBAC(user.email, user.uid)
       } else if (!user) {
         history.push('/login')
       }
     })
 
     return () => unsubscribeFromAuth()
-  }, [getDoscFromDBAC, history, fsdb])
+  }, [getDocsFromDBAC, history, fsdb])
 
   const handleAddClick = () => {
     addDocToCollectionAC(currentUser.email, currentUser.uid)
@@ -184,7 +85,6 @@ const Dashboard = ({
 
   const logOut = () => {
     logOutAC()
-    // history.push('/login')
   }
 
   return (
@@ -199,7 +99,7 @@ const Dashboard = ({
             <IconButton
               edge='start'
               color='inherit'
-              aria-label='open drawer'
+              aria-label='Menu'
               onClick={handleDrawerOpen}
               className={clsx(
                 classes.menuButton,
@@ -218,22 +118,18 @@ const Dashboard = ({
             Dashboard
           </Typography>
 
-          {currentUser && currentUser ? (
-            <Typography
-              component='h1'
-              variant='h6'
-              color='inherit'
-              noWrap
-              className={classes.title}>
-              {currentUser.displayName || currentUser.email}
-            </Typography>
-          ) : null}
+          <Typography
+            component='h1'
+            variant='h6'
+            color='inherit'
+            noWrap
+            className={classes.title}>
+            {currentUser.displayName || currentUser.email}
+          </Typography>
 
           <Tooltip title='Log Out'>
-            <IconButton onClick={logOut} color='inherit'>
-              {currentUser && currentUser ? (
-                <ExitToAppRoundedIcon fontSize='large' />
-              ) : null}
+            <IconButton onClick={logOut} color='inherit' aria-label='Log Out'>
+              <ExitToAppRoundedIcon fontSize='large' />
             </IconButton>
           </Tooltip>
         </Toolbar>
@@ -249,7 +145,7 @@ const Dashboard = ({
         }}
         open={isOpenMenu}>
         <div className={classes.toolbarIcon}>
-          <Typography>Menu</Typography>
+          <Typography className={classes.menuMargin}>Menu</Typography>
           <IconButton onClick={handleDrawerClose}>
             <ChevronLeftIcon />
           </IconButton>
@@ -306,6 +202,6 @@ export default connect(mapStateToProps, {
   logOutAC,
   addDocToCollectionAC,
   deleteDocFromCollectionAC,
-  getDoscFromDBAC,
+  getDocsFromDBAC,
   chooseScheduleAC,
 })(Dashboard)

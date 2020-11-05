@@ -60,7 +60,7 @@ const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
           <Dashboard />
         </Route>
 
-        <Route path='/edit'>
+        <Route path='/edit/:id'>
           <Edit />
         </Route>
 

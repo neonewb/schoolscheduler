@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
 import React from 'react'
 import { useSelector } from 'react-redux'
 
-const selectChoosenShedules = state => state.fsdb.schedules.filter((i) => i.isChoosen === true)
+const selectChoosenSchedules = state => state.fsdb.schedules.filter((i) => i.isChoosen === true)
 
 const DeleteConfirm = ({
   deleteDocFromCollectionAC,
@@ -10,13 +10,13 @@ const DeleteConfirm = ({
   isOpen,
   handleClose,
 }) => {
-  const choosenShedules = useSelector(selectChoosenShedules)
+  const choosenSchedules = useSelector(selectChoosenSchedules)
   const deleteConfirm = () => {
-    if (choosenShedules.length === 0) {
+    if (choosenSchedules.length === 0) {
       console.log('nothing choosen')
       handleClose()
     }
-    choosenShedules.forEach( i => {
+    choosenSchedules.forEach( i => {
       deleteDocFromCollectionAC(currentUser.email, currentUser.uid, i.id)
     })
     handleClose()

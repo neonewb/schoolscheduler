@@ -4,19 +4,21 @@ import GoogleIcon from './GoogleIcon'
 
 const useStyles = makeStyles((theme) => ({
   googleButton: {
-    backgroundColor : 'white',
+    backgroundColor: 'white',
     '&:hover': {
       backgroundColor: 'white',
-  }
-  }
+    },
+    height: 66.69,
+    fontSize: 25,
+  },
 }))
 
-const GoogleButton = ({callBackFn}) => {
+const GoogleButton = ({ callBackFn }) => {
   const classes = useStyles()
   return (
     <Grid align='center' item xs={12}>
       <Button
-      className={classes.googleButton}
+        className={classes.googleButton}
         onClick={() => callBackFn()}
         startIcon={<GoogleIcon />}
         fullWidth

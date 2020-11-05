@@ -1,5 +1,5 @@
 import React from 'react'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { Button, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import clsx from 'clsx'
@@ -34,18 +34,22 @@ const useStyles = makeStyles((theme) => ({
 const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
   const classes = useStyles()
 
-  const history = useHistory();
+  const history = useHistory()
   const handleOnDubbleClick = (id) => history.push(`/edit/${id}`)
-  
+
   let items
-  
+
   if (schedules.length > 0) {
     items = schedules.map((item, index) => {
       let itemClass
       if (!item.isChoosen) {
         itemClass = clsx(classes.paper, classes.fixedHeightWidth)
       } else {
-        itemClass = clsx(classes.paper, classes.fixedHeightWidth, classes.activeSchedule)
+        itemClass = clsx(
+          classes.paper,
+          classes.fixedHeightWidth,
+          classes.activeSchedule
+        )
       }
       return (
         <Grid item key={item.id}>
@@ -54,11 +58,12 @@ const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
             onClick={() => {
               chooseScheduleAC(index)
             }}
-            onDoubleClick={()=> {handleOnDubbleClick(item.id)}}
-            >
+            onDoubleClick={() => {
+              handleOnDubbleClick(item.id)
+            }}>
             <Paper className={itemClass}>
               <Typography align='center' component='p' variant='h4'>
-                {index}
+                {item.title || `New schedule ${index + 1}`}
               </Typography>
             </Paper>
           </Button>

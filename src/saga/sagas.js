@@ -20,7 +20,10 @@ import {
   delDocFromRxStateAC,
   clearRxStateAC,
   GET_DOCS_FROM_DB,
-  setDocsToRxStateAC,
+  setDocToRxStateAC,
+  GET_DOC_FROM_DB,
+  setIsLoadingTrue,
+  setIsLoadingFalse,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -78,6 +81,7 @@ function* addDocToCollectionSaga(action) {
     const response = yield call([schedulesColl, schedulesColl.add], {
       email: action.email,
       userid: action.userID,
+      title: 'New schedule',
     })
 
     yield put(addDocToCollectionSuccessAC(response.id))
@@ -86,7 +90,28 @@ function* addDocToCollectionSaga(action) {
   }
 }
 
-function* getDoscFromDBSaga(action) {
+function* getDocFromDBSaga(action) {
+  try {
+    yield put(setIsLoadingTrue())
+    const docRef = schedulesColl.doc(action.docID)
+
+    const mySchedule = yield call([docRef, docRef.get])
+
+    if (mySchedule.exists) {
+      yield put(setDocToRxStateAC({ id: mySchedule.id, ...mySchedule.data() }))
+      yield put(setIsLoadingFalse())
+    } else {
+      // doc.data() will be undefined in this case
+      console.log('No such document!')
+      yield put(setIsLoadingFalse())
+    }
+  } catch (error) {
+    console.error('Error get doc:', error)
+    yield put(setIsLoadingFalse())
+  }
+}
+
+function* getDocsFromDBSaga(action) {
   try {
     const mySchedules = schedulesColl
       .where('email', '==', action.email)
@@ -104,10 +129,10 @@ function* getDoscFromDBSaga(action) {
     })
 
     for (const element of arrDoc) {
-      yield put(setDocsToRxStateAC(element))
+      yield put(setDocToRxStateAC(element))
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error get docs:', error)
   }
 }
 
@@ -128,6 +153,7 @@ export function* mySaga() {
   yield takeEvery(LOG_OUT_USER, logOutSaga)
   yield takeEvery(LOG_IN_WITH_GOOGLE, logInWithGoogleSaga)
   yield takeEvery(ADD_DOC_TO_COLLECTION, addDocToCollectionSaga)
-  yield takeEvery(GET_DOCS_FROM_DB, getDoscFromDBSaga)
+  yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
+  yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
 }

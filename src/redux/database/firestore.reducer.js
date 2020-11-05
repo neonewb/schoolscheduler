@@ -1,15 +1,18 @@
 import {
   ADD_DOC_TO_COLLECTION_FAILED,
   ADD_DOC_TO_COLLECTION_SUCCESS,
-  SET_DOCS_TO_RX_STATE,
+  SET_DOC_TO_RX_STATE,
   DEL_DOC_FROM_COLLECTION_FAILED,
   DEL_DOC_FROM_RX_STATE,
   CLEAR_RX_STATE,
   CHOOSE_SCHEDULE,
+  SET_IS_LOADING_TRUE,
+  SET_IS_LOADING_FALSE,
 } from './firestore.actions'
 
 const initialState = {
   schedules: [],
+  isLoading: false,
   error: null,
 }
 
@@ -18,7 +21,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     case ADD_DOC_TO_COLLECTION_SUCCESS:
       return { ...state, schedules: [...state.schedules, { id: payload }] }
 
-    case SET_DOCS_TO_RX_STATE:
+    case SET_DOC_TO_RX_STATE:
       if (state.schedules.some((e) => e.id === payload.id)) {
         return state
       }
@@ -60,6 +63,12 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
 
     case CLEAR_RX_STATE:
       return { schedules: [], error: null }
+
+    case SET_IS_LOADING_TRUE:
+      return { ...state, isLoading: true }
+
+    case SET_IS_LOADING_FALSE:
+      return { ...state, isLoading: false }
 
     default:
       return state

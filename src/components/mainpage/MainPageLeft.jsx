@@ -11,7 +11,7 @@ const MainPageLeft = () => {
   const classes = useStyles()
 
   return (
-    <Grid item xs={false} sm={6} md={6}>
+    <Grid item xs={false} sm={12} md={6}>
       <div className={classes.mainPage}>
         <Typography component='h1' variant='h3'>
           Neo Time Table - easy & free way to create & edit school schedules!

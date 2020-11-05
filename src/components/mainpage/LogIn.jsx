@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import Paper from '@material-ui/core/Paper'
-import { Checkbox, FormControlLabel, makeStyles } from '@material-ui/core'
+import { Checkbox, FormControlLabel } from '@material-ui/core'
 import { Link as RLink, useHistory } from 'react-router-dom'
 
 import { useForm, Controller } from 'react-hook-form'
@@ -19,21 +19,10 @@ import { schemaSI } from '../../utils/yupSchema'
 import GoogleButton from '../google/GoogleButton'
 import { useEffect } from 'react'
 import { auth } from '../../configs/firebase.config'
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    margin: theme.spacing(8, 3),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import { useStylesLoginSignUp } from '../../styles/styleLoginSignUp'
 
 const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
-  const classes = useStyles()
+  const classes = useStylesLoginSignUp()
 
   const { register, handleSubmit, control, errors } = useForm({
     resolver: yupResolver(schemaSI),
@@ -42,12 +31,12 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
   const history = useHistory()
 
   useEffect(() => {
-      let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-        if (user) {
-          history.push('/dashboard')
-        }
-      })
-      return () => unsubscribeFromAuth()
+    let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+      if (user) {
+        history.push('/dashboard')
+      }
+    })
+    return () => unsubscribeFromAuth()
   }, [history])
 
   const onSubmit = ({ email, password }) => {
@@ -55,9 +44,9 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
   }
 
   return (
-    <Grid item xs={12} sm={6} md={6} elevation={10} component={Paper} square>
+    <Grid item xs={12} sm={12} md={6} elevation={10} component={Paper} square>
       <div className={classes.paper}>
-        <Avatar>
+        <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h3'>
@@ -65,11 +54,16 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
         </Typography>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className={classes.form}
-          noValidate>
+          noValidate
+          className={classes.form}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <TextField
+                InputProps={{
+                  classes: {
+                    input: classes.fontSizeTextField,
+                  },
+                }}
                 inputRef={register({ required: true })}
                 autoFocus
                 variant='outlined'
@@ -88,6 +82,11 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
 
             <Grid item xs={12}>
               <TextField
+                InputProps={{
+                  classes: {
+                    input: classes.fontSizeTextField,
+                  },
+                }}
                 inputRef={register({ required: true })}
                 variant='outlined'
                 required
@@ -122,6 +121,7 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                 label='Remember me'
               />
             </Grid>
+
             <Grid item xs={12}>
               <Button
                 type='submit'
@@ -129,7 +129,7 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                 fullWidth
                 variant='contained'
                 color='primary'
-                className={classes.submit}>
+                className={classes.button}>
                 Log In
               </Button>
             </Grid>
@@ -140,7 +140,7 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
           <GoogleButton callBackFn={logInWithGoogleAC} />
 
           <Grid item xs={12}>
-            <Grid container justify='flex-end'>
+            <Grid container>
               <Grid item xs>
                 <Link component={RLink} to='/signup' variant='h6'>
                   Forgot password?
