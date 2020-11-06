@@ -24,6 +24,8 @@ import {
   GET_DOC_FROM_DB,
   setIsLoadingTrue,
   setIsLoadingFalse,
+  SET_SCHED_TITLE,
+  updateFailedAC,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -147,6 +149,17 @@ function* deleteDocFromCollectionSaga(action) {
   }
 }
 
+function* setSchedTitleSaga(action) {
+  const docRef = schedulesColl.doc(action.payload.schedID)
+
+  try {
+    yield call([docRef, docRef.update], {title: action.payload.title})
+    console.log('Schedule Title successfully updated!');
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -156,4 +169,5 @@ export function* mySaga() {
   yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
+  yield takeEvery(SET_SCHED_TITLE, setSchedTitleSaga)
 }

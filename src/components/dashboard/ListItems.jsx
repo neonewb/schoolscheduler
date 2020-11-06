@@ -6,19 +6,11 @@ import ListSubheader from '@material-ui/core/ListSubheader'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import Tooltip from '@material-ui/core/Tooltip'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
+import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 
 export const MainListItems = ({ handleClickDel }) => {
   return (
     <div>
-      <Tooltip title='Settings' placement='right'>
-        <ListItem button>
-          <ListItemIcon>
-            <SettingsRoundedIcon color='primary' fontSize='large' />
-          </ListItemIcon>
-          <ListItemText primary='Settings' />
-        </ListItem>
-      </Tooltip>
-
       <Tooltip title='Delete schedule' placement='right'>
         <ListItem
           button
@@ -29,6 +21,25 @@ export const MainListItems = ({ handleClickDel }) => {
             <DeleteRoundedIcon color='primary' fontSize='large' />
           </ListItemIcon>
           <ListItemText primary='Delete schedule' />
+        </ListItem>
+      </Tooltip>
+
+      <Tooltip title='Settings' placement='right'>
+        <ListItem button>
+          <ListItemIcon>
+            <SettingsRoundedIcon color='primary' fontSize='large' />
+          </ListItemIcon>
+          <ListItemText primary='Settings' />
+        </ListItem>
+      </Tooltip>
+
+      <Tooltip title='Support' placement='right'>
+        <ListItem
+          button>
+          <ListItemIcon>
+            <HelpRoundedIcon color='primary' fontSize='large' />
+          </ListItemIcon>
+          <ListItemText primary='Support' />
         </ListItem>
       </Tooltip>
     </div>

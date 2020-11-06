@@ -13,7 +13,9 @@ export const DEL_DOC_FROM_RX_STATE = 'app/db/DEL_DOC_FROM_RX_STATE'
 export const CLEAR_RX_STATE = 'app/db/CLEAR_RX_STATE'
 export const SET_IS_LOADING_TRUE = 'app/db/SET_IS_LOADING_TRUE'
 export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
+export const SET_SCHED_TITLE = 'app/db/SET_SCHED_TITLE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
+export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -61,6 +63,7 @@ export const delDocFromCollFailedAC = (payload) => ({
   payload,
 })
 
+
 export const delDocFromRxStateAC = (docID) => ({
   type: DEL_DOC_FROM_RX_STATE,
   payload: {
@@ -85,4 +88,17 @@ export const setIsLoadingTrue = () => ({
 
 export const setIsLoadingFalse = () => ({
   type: SET_IS_LOADING_FALSE,
+})
+
+export const setSchedTitleAC = (title, schedID) => ({
+  type: SET_SCHED_TITLE,
+  payload: {
+    title,
+    schedID,
+  },
+})
+
+export const updateFailedAC = (payload) => ({
+  type: UPDATE_SCHEDULE_FAILED,
+  payload,
 })

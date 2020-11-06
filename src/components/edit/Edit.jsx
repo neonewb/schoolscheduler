@@ -1,14 +1,18 @@
-import { Divider, Typography } from '@material-ui/core'
-import React, { useEffect } from 'react'
+import { Divider } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
 import { getDocFromDBAC } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
+import EditToolBar from './EditToolBar'
+import SettingsSchedule from './SettingsSchedule'
 
 const Edit = () => {
   const classes = useStylesEdit()
+
+  const [isSetSchedOpen, setIsSetSchedOpen] = useState(false)
 
   const user = useSelector((state) => state.auth.currentUser)
 
@@ -22,7 +26,7 @@ const Edit = () => {
   const dispatch = useDispatch()
 
   let mySchedule = schedules.filter((i) => i.id === id)[0]
-  console.log(mySchedule)
+
   if (mySchedule === undefined) {
     mySchedule = schedules[0]
   }
@@ -37,13 +41,26 @@ const Edit = () => {
     return () => unsubscribeFromAuth()
   }, [history, schedules, dispatch, id])
 
-  if (isLoading || mySchedule === undefined) {
-    return <Typography>Loading...</Typography>
-  }
   return (
     <div className={classes.root}>
-      <EditNavBar scheduleTitle={mySchedule.title} user={user} schedLength={schedules.length}/>
+      <EditNavBar
+        isLoading={isLoading}
+        mySchedule={mySchedule}
+        user={user}
+        schedLength={schedules.length}
+        schedID={id}
+      />
+
       <Divider />
+
+      <EditToolBar
+        setIsSetSchedOpen={setIsSetSchedOpen}
+        isOpen={isSetSchedOpen}
+      />
+
+      <Divider />
+
+      <SettingsSchedule isOpen={isSetSchedOpen} />
     </div>
   )
 }

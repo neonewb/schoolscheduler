@@ -8,6 +8,8 @@ import {
   CHOOSE_SCHEDULE,
   SET_IS_LOADING_TRUE,
   SET_IS_LOADING_FALSE,
+  SET_SCHED_TITLE,
+  UPDATE_SCHEDULE_FAILED,
 } from './firestore.actions'
 
 const initialState = {
@@ -45,6 +47,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
 
     case ADD_DOC_TO_COLLECTION_FAILED:
     case DEL_DOC_FROM_COLLECTION_FAILED:
+    case UPDATE_SCHEDULE_FAILED:
       return { ...state, error: [payload] }
 
     case CHOOSE_SCHEDULE:
@@ -69,6 +72,20 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
 
     case SET_IS_LOADING_FALSE:
       return { ...state, isLoading: false }
+
+    case SET_SCHED_TITLE:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== payload.schedID) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            title: payload.title,
+          }
+        }),
+      }
 
     default:
       return state
