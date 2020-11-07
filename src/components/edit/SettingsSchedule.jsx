@@ -3,22 +3,18 @@ import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
 import { Divider } from '@material-ui/core'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Checkbox from '@material-ui/core/Checkbox'
 import ClassesTable from './ClassesTable'
 
 const useStyles = makeStyles({
   root: {
-    width: 500,
+    width: '100wv',
     margin: 16,
   },
   divider: {
     marginBottom: 16,
+  },
+  slider: {
+    width: 300,
   },
 })
 
@@ -50,14 +46,14 @@ const SettingsSchedule = ({ isOpen }) => {
     },
   ]
 
-
   if (isOpen) {
     return (
-      <form className={classes.root}>
+      <div className={classes.root}>
         <Typography variant='h6' id='days-slider' gutterBottom>
           Number of days
         </Typography>
         <Slider
+          className={classes.slider}
           defaultValue={6}
           // getAriaValueText={valuetext}
           aria-labelledby='days-slider'
@@ -74,6 +70,7 @@ const SettingsSchedule = ({ isOpen }) => {
           Maximum lessons per day
         </Typography>
         <Slider
+          className={classes.slider}
           defaultValue={10}
           // getAriaValueText={valuetext}
           aria-labelledby='lessons-slider'
@@ -90,7 +87,7 @@ const SettingsSchedule = ({ isOpen }) => {
           Classes
         </Typography>
         <ClassesTable />
-        
+
         <Divider className={classes.divider} />
 
         <Typography variant='h6' id='teachers' gutterBottom>
@@ -108,7 +105,7 @@ const SettingsSchedule = ({ isOpen }) => {
         <Typography variant='h6' id='load' gutterBottom>
           Load
         </Typography>
-      </form>
+      </div>
     )
   }
   return <></>

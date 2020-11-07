@@ -6,7 +6,7 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
 import { logOutAC } from '../../redux/auth/auth.actions'
@@ -20,14 +20,9 @@ import {
 import { useForm } from 'react-hook-form'
 import { Skeleton } from '@material-ui/lab'
 
-const EditNavBar = ({
-  user,
-  schedLength,
-  schedID,
-  isLoading,
-  mySchedule,
-}) => {
+const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
   const { register, handleSubmit, watch } = useForm()
+  const scheduleTitleRef = useRef()
 
   const classes = useStylesEdit()
 
@@ -36,6 +31,7 @@ const EditNavBar = ({
 
   const onSubmit = (data) => {
     dispatch(setSchedTitleAC(data.title, schedID))
+    scheduleTitleRef.current.blur()
   }
 
   const watchTitle = watch('title')
@@ -58,23 +54,28 @@ const EditNavBar = ({
   }
 
   let myScheduleTitle
-  
-  if (isLoading || mySchedule === undefined) {
-  myScheduleTitle = (<Skeleton variant='rect' width={223} height={40} />)} else {
-    myScheduleTitle = (<form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete='off'>
-    <TextField
-      className={classes.titleInput}
-      name='title'
-      type='text'
-      id='title'
-      size='small'
-      variant='outlined'
-      inputRef={register}
-      defaultValue={mySchedule.title}
-    />
-  </form>)
-  }
 
+  if (isLoading || mySchedule === undefined) {
+    myScheduleTitle = <Skeleton variant='rect' width={223} height={40} />
+  } else {
+    myScheduleTitle = (
+      <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete='off'>
+        <TextField
+          className={classes.titleInput}
+          name='title'
+          type='text'
+          id='title'
+          size='small'
+          variant='outlined'
+          inputRef={(e) => {
+            register(e)
+            scheduleTitleRef.current = e
+          }}
+          defaultValue={mySchedule.title}
+        />
+      </form>
+    )
+  }
 
   return (
     <Box className={classes.editBar}>
@@ -90,9 +91,7 @@ const EditNavBar = ({
       </Box>
 
       <Grid container justify='space-between' alignItems='center'>
-        <Grid item>
-          {myScheduleTitle}
-        </Grid>
+        <Grid item>{myScheduleTitle}</Grid>
         <Grid item>
           <Typography>{user.displayName || user.email}</Typography>
         </Grid>
