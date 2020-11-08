@@ -26,6 +26,9 @@ import {
   setIsLoadingFalse,
   SET_SCHED_TITLE,
   updateFailedAC,
+  CHANGE_NUMBER_OF_DAYS,
+  CHANGE_MAX_LESSONS_PER_DAY,
+  UPDATE_FIELD,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -84,9 +87,28 @@ function* addDocToCollectionSaga(action) {
       email: action.email,
       userid: action.userID,
       title: 'New schedule',
+      numberOfDays: 6,
+      maxLessonsPerDay: 10,
+      classes: [],
+      subjects: [],
+      teachers: [],
+      load: [],
     })
 
-    yield put(addDocToCollectionSuccessAC(response.id))
+    yield put(
+      addDocToCollectionSuccessAC(
+        response.id,
+        action.email,
+        action.userID,
+        'New schedule',
+        6,
+        10,
+        [],
+        [],
+        [],
+        []
+      )
+    )
   } catch (error) {
     yield put(addDocToCollectionFailedAC(error))
   }
@@ -149,12 +171,12 @@ function* deleteDocFromCollectionSaga(action) {
   }
 }
 
-function* setSchedTitleSaga(action) {
+function* updateFieldSaga(action) {
   const docRef = schedulesColl.doc(action.payload.schedID)
 
   try {
-    yield call([docRef, docRef.update], {title: action.payload.title})
-    console.log('Schedule Title successfully updated!');
+    yield call([docRef, docRef.update], { [action.payload.field]: action.payload.content })
+    console.log(`Schedule ${action.payload.field} successfully updated!`)
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -169,5 +191,8 @@ export function* mySaga() {
   yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
-  yield takeEvery(SET_SCHED_TITLE, setSchedTitleSaga)
+  yield takeEvery(SET_SCHED_TITLE, updateFieldSaga)
+  yield takeEvery(CHANGE_NUMBER_OF_DAYS, updateFieldSaga)
+  yield takeEvery(CHANGE_MAX_LESSONS_PER_DAY, updateFieldSaga)
+  yield takeEvery(UPDATE_FIELD, updateFieldSaga)
 }

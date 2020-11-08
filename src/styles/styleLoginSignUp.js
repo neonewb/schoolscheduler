@@ -5,6 +5,7 @@ export const useStylesLoginSignUp = makeStyles((theme) => ({
   button: {
     height: 66.69,
     fontSize: 25,
+    fontFamily: 'Comfortaa',
   },
 
   avatar: {

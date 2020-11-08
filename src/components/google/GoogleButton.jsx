@@ -10,6 +10,8 @@ const useStyles = makeStyles((theme) => ({
     },
     height: 66.69,
     fontSize: 25,
+    fontFamily: 'Comfortaa',
+
   },
 }))
 

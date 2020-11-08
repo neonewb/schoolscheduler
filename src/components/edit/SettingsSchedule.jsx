@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import { Divider } from '@material-ui/core'
+import { Button, Divider } from '@material-ui/core'
 import ClassesTable from './ClassesTable'
+import CustomClassesNames from './CustomClassesNames'
+import { teal } from '@material-ui/core/colors'
+import { useDispatch } from 'react-redux'
+import { changeNumOfDaysAC, changeMaxLessonsAC, updateFieldAC} from '../../redux/database/firestore.actions'
 
 const useStyles = makeStyles({
   root: {
@@ -16,10 +20,32 @@ const useStyles = makeStyles({
   slider: {
     width: 300,
   },
+  button: {
+    fontFamily: 'Comfortaa',
+    textTransform: 'none',
+    fontSize: '1.25rem',
+    fontWeight: 500,
+    color: teal[500],
+  },
 })
 
-const SettingsSchedule = ({ isOpen }) => {
+const SettingsSchedule = ({ isOpen, mySchedule }) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
+
+  const handleChangeNumOfDays = (event, newValue) => {
+    dispatch(updateFieldAC(mySchedule.id, 'numberOfDays', newValue))
+  }
+
+  const handleChangeMaxLessons = (event, newValue) => {
+    dispatch(updateFieldAC(mySchedule.id, 'maxLessonsPerDay', newValue))
+  }
+
+  const [isOpenCustomClassNames, setOpenCustomClassNames] = useState(false)
+
+  const handleOpenCustomClassNames = () => {
+    setOpenCustomClassNames(!isOpenCustomClassNames)
+  }
   const marksDays = [
     {
       value: 1,
@@ -55,7 +81,7 @@ const SettingsSchedule = ({ isOpen }) => {
         <Slider
           className={classes.slider}
           defaultValue={6}
-          // getAriaValueText={valuetext}
+          onChangeCommitted={handleChangeNumOfDays}
           aria-labelledby='days-slider'
           valueLabelDisplay='auto'
           step={1}
@@ -72,7 +98,7 @@ const SettingsSchedule = ({ isOpen }) => {
         <Slider
           className={classes.slider}
           defaultValue={10}
-          // getAriaValueText={valuetext}
+          onChangeCommitted={handleChangeMaxLessons}
           aria-labelledby='lessons-slider'
           valueLabelDisplay='auto'
           step={1}
@@ -82,22 +108,43 @@ const SettingsSchedule = ({ isOpen }) => {
         />
 
         <Divider className={classes.divider} />
+        {isOpenCustomClassNames ? (
+          <>
+            <Typography variant='h6' id='classes' gutterBottom>
+              Set custom class names or{' '}
+              <Button
+                className={classes.button}
+                // variant='outlined'
+                onClick={handleOpenCustomClassNames}>
+                choose classes
+              </Button>
+            </Typography>
+            <CustomClassesNames />
+          </>
+        ) : (
+          <>
+            <Typography variant='h6' id='classes' gutterBottom>
+              Choose classes or{' '}
+              <Button
+                className={classes.button}
+                // variant='outlined'
+                onClick={handleOpenCustomClassNames}>
+                set custom names
+              </Button>
+            </Typography>
+            <ClassesTable />
+          </>
+        )}
 
-        <Typography variant='h6' id='classes' gutterBottom>
-          Classes
+        <Divider className={classes.divider} />
+        <Typography variant='h6' id='subjects' gutterBottom>
+          Subjects
         </Typography>
-        <ClassesTable />
 
         <Divider className={classes.divider} />
 
         <Typography variant='h6' id='teachers' gutterBottom>
           Teachers
-        </Typography>
-
-        <Divider className={classes.divider} />
-
-        <Typography variant='h6' id='subjects' gutterBottom>
-          Subjects
         </Typography>
 
         <Divider className={classes.divider} />

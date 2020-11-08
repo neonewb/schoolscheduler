@@ -10,6 +10,9 @@ import {
   SET_IS_LOADING_FALSE,
   SET_SCHED_TITLE,
   UPDATE_SCHEDULE_FAILED,
+  CHANGE_NUMBER_OF_DAYS,
+  CHANGE_MAX_LESSONS_PER_DAY,
+  UPDATE_FIELD,
 } from './firestore.actions'
 
 const initialState = {
@@ -21,7 +24,7 @@ const initialState = {
 const firestoreReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case ADD_DOC_TO_COLLECTION_SUCCESS:
-      return { ...state, schedules: [...state.schedules, { id: payload }] }
+      return { ...state, schedules: [...state.schedules, { ...payload }] }
 
     case SET_DOC_TO_RX_STATE:
       if (state.schedules.some((e) => e.id === payload.id)) {
@@ -73,7 +76,10 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     case SET_IS_LOADING_FALSE:
       return { ...state, isLoading: false }
 
+    case UPDATE_FIELD:
     case SET_SCHED_TITLE:
+    case CHANGE_NUMBER_OF_DAYS:
+    case CHANGE_MAX_LESSONS_PER_DAY:
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
@@ -82,7 +88,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           }
           return {
             ...schedule,
-            title: payload.title,
+            [payload.field]: payload.content,
           }
         }),
       }

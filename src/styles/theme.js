@@ -3,8 +3,7 @@ import { deepPurple, red, teal } from '@material-ui/core/colors'
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: 
-      'Comfortaa',
+    fontFamily: 'Comfortaa',
   },
   palette: {
     primary: {

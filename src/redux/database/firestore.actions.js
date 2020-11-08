@@ -16,6 +16,9 @@ export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
 export const SET_SCHED_TITLE = 'app/db/SET_SCHED_TITLE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
+export const CHANGE_NUMBER_OF_DAYS = 'app/db/CHANGE_NUMBER_OF_DAYS'
+export const CHANGE_MAX_LESSONS_PER_DAY = 'app/db/CHANGE_MAX_LESSONS_PER_DAY'
+export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -23,9 +26,31 @@ export const addDocToCollectionAC = (email, userID) => ({
   userID,
 })
 
-export const addDocToCollectionSuccessAC = (payload) => ({
+export const addDocToCollectionSuccessAC = (
+  docID,
+  email,
+  userid,
+  title,
+  numberOfDays,
+  maxLessonsPerDay,
+  classes,
+  subjects,
+  teachers,
+  load
+) => ({
   type: ADD_DOC_TO_COLLECTION_SUCCESS,
-  payload,
+  payload: {
+    id: docID,
+    email,
+    userid,
+    title,
+    numberOfDays,
+    maxLessonsPerDay,
+    classes,
+    subjects,
+    teachers,
+    load,
+  },
 })
 
 export const addDocToCollectionFailedAC = (payload) => ({
@@ -63,7 +88,6 @@ export const delDocFromCollFailedAC = (payload) => ({
   payload,
 })
 
-
 export const delDocFromRxStateAC = (docID) => ({
   type: DEL_DOC_FROM_RX_STATE,
   payload: {
@@ -90,11 +114,12 @@ export const setIsLoadingFalse = () => ({
   type: SET_IS_LOADING_FALSE,
 })
 
-export const setSchedTitleAC = (title, schedID) => ({
-  type: SET_SCHED_TITLE,
+export const updateFieldAC = (schedID, field, content) => ({
+  type: UPDATE_FIELD,
   payload: {
-    title,
     schedID,
+    field,
+    content,
   },
 })
 

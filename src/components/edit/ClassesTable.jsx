@@ -86,14 +86,13 @@ const ClassesTable = () => {
     if (lettersNumber > 9) setLettersLimit(true)
   }
 
-
   const createTableHead = () => {
     let tableHead = (
       <TableRow>
         <TableCell>
           <FormControlLabel
             control={<Checkbox name={'All Grade'} color='primary' />}
-            label='Grade'
+            label='All'
           />
         </TableCell>
         <TableCell>
@@ -112,13 +111,12 @@ const ClassesTable = () => {
         {newLetters ? newLetters : null}
 
         {!lettersLimit && (
-              <TableCell>
-                <IconButton onClick={handleAddClassLetter}>
-                  <AddCircleRoundedIcon color='primary' fontSize='default' />
-                </IconButton>
-              </TableCell>
-            )
-          }
+          <TableCell>
+            <IconButton onClick={handleAddClassLetter}>
+              <AddCircleRoundedIcon color='primary' fontSize='default' />
+            </IconButton>
+          </TableCell>
+        )}
       </TableRow>
     )
     return tableHead

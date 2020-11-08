@@ -15,7 +15,7 @@ import { useDispatch } from 'react-redux'
 import { useStylesEdit } from '../../styles/stylesForEdit'
 import {
   getDocsFromDBAC,
-  setSchedTitleAC,
+  updateFieldAC,
 } from '../../redux/database/firestore.actions'
 import { useForm } from 'react-hook-form'
 import { Skeleton } from '@material-ui/lab'
@@ -30,7 +30,7 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
   const dispatch = useDispatch()
 
   const onSubmit = (data) => {
-    dispatch(setSchedTitleAC(data.title, schedID))
+    dispatch(updateFieldAC(schedID, 'title', data.title))
     scheduleTitleRef.current.blur()
   }
 
@@ -39,7 +39,7 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
   useEffect(() => {
     if (mySchedule !== undefined) {
       if (mySchedule.title && watchTitle && mySchedule.title !== watchTitle) {
-        dispatch(setSchedTitleAC(watchTitle, schedID))
+        dispatch(updateFieldAC(schedID, 'title', watchTitle))
       }
     }
   }, [dispatch, watchTitle, schedID, mySchedule])
