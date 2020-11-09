@@ -8,10 +8,7 @@ import {
   CHOOSE_SCHEDULE,
   SET_IS_LOADING_TRUE,
   SET_IS_LOADING_FALSE,
-  SET_SCHED_TITLE,
   UPDATE_SCHEDULE_FAILED,
-  CHANGE_NUMBER_OF_DAYS,
-  CHANGE_MAX_LESSONS_PER_DAY,
   UPDATE_FIELD,
 } from './firestore.actions'
 
@@ -77,9 +74,6 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       return { ...state, isLoading: false }
 
     case UPDATE_FIELD:
-    case SET_SCHED_TITLE:
-    case CHANGE_NUMBER_OF_DAYS:
-    case CHANGE_MAX_LESSONS_PER_DAY:
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {

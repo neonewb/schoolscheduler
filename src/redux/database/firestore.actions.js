@@ -13,11 +13,8 @@ export const DEL_DOC_FROM_RX_STATE = 'app/db/DEL_DOC_FROM_RX_STATE'
 export const CLEAR_RX_STATE = 'app/db/CLEAR_RX_STATE'
 export const SET_IS_LOADING_TRUE = 'app/db/SET_IS_LOADING_TRUE'
 export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
-export const SET_SCHED_TITLE = 'app/db/SET_SCHED_TITLE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
-export const CHANGE_NUMBER_OF_DAYS = 'app/db/CHANGE_NUMBER_OF_DAYS'
-export const CHANGE_MAX_LESSONS_PER_DAY = 'app/db/CHANGE_MAX_LESSONS_PER_DAY'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
 
 export const addDocToCollectionAC = (email, userID) => ({

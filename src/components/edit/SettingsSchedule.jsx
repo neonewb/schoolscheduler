@@ -7,7 +7,7 @@ import ClassesTable from './ClassesTable'
 import CustomClassesNames from './CustomClassesNames'
 import { teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
-import { changeNumOfDaysAC, changeMaxLessonsAC, updateFieldAC} from '../../redux/database/firestore.actions'
+import { updateFieldAC} from '../../redux/database/firestore.actions'
 
 const useStyles = makeStyles({
   root: {

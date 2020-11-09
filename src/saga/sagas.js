@@ -24,10 +24,7 @@ import {
   GET_DOC_FROM_DB,
   setIsLoadingTrue,
   setIsLoadingFalse,
-  SET_SCHED_TITLE,
   updateFailedAC,
-  CHANGE_NUMBER_OF_DAYS,
-  CHANGE_MAX_LESSONS_PER_DAY,
   UPDATE_FIELD,
 } from '../redux/database/firestore.actions'
 
@@ -191,8 +188,5 @@ export function* mySaga() {
   yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
-  yield takeEvery(SET_SCHED_TITLE, updateFieldSaga)
-  yield takeEvery(CHANGE_NUMBER_OF_DAYS, updateFieldSaga)
-  yield takeEvery(CHANGE_MAX_LESSONS_PER_DAY, updateFieldSaga)
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
 }
