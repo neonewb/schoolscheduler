@@ -30,6 +30,7 @@ export const addDocToCollectionSuccessAC = (
   title,
   numberOfDays,
   maxLessonsPerDay,
+  numberOfColumns,
   classes,
   subjects,
   teachers,
@@ -43,6 +44,7 @@ export const addDocToCollectionSuccessAC = (
     title,
     numberOfDays,
     maxLessonsPerDay,
+    numberOfColumns,
     classes,
     subjects,
     teachers,
@@ -124,3 +126,4 @@ export const updateFailedAC = (payload) => ({
   type: UPDATE_SCHEDULE_FAILED,
   payload,
 })
+

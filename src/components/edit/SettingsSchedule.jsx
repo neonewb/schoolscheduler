@@ -132,7 +132,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
                 set custom names
               </Button>
             </Typography>
-            <ClassesTable />
+            <ClassesTable mySchedule={mySchedule}/>
           </>
         )}
 

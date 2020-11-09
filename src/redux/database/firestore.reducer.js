@@ -10,6 +10,7 @@ import {
   SET_IS_LOADING_FALSE,
   UPDATE_SCHEDULE_FAILED,
   UPDATE_FIELD,
+  ADD_CLASSES_COLUMN
 } from './firestore.actions'
 
 const initialState = {

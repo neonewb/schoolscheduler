@@ -69,10 +69,6 @@ const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
   )
 }
 
-// const mapStateToProps = (state) => ({
-//   currentUser: state.auth.currentUser,
-// })
-
 export default connect(null, {
   setCurrentUserAC,
   clearCurrentUserAC,
