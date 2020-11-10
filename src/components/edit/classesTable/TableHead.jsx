@@ -10,55 +10,83 @@ import {
 } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded'
-import { updateFieldAC } from '../../../redux/database/firestore.actions'
-import { Controller, useForm } from 'react-hook-form'
+import {
+  checkedToSagaAC,
+  clearCheckedAC,
+  setCheckedAC,
+  updateFieldAC,
+} from '../../../redux/database/firestore.actions'
 
-const ClassesTableHead = ({ numberOfColumns, schedID }) => {
+const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
-  const { register, watch, control } = useForm()
-
-  console.log(watch())
 
   let columns = []
 
-  for (let index = 0; index < numberOfColumns; index++) {
+  const dispatch = useDispatch()
+
+  const handleAllCheck = () => {
+    dispatch(setCheckedAC(schedID, 'All classes'))
+    if (!checked.includes('All classes')) {
+      for (let i = 0; i < numberOfColumns; i++) {
+        if (!checked.includes(`All ${alphabet[i]}`)) {
+          dispatch(setCheckedAC(schedID, `All ${alphabet[i]}`))
+        }
+      }
+    } else {
+      dispatch(clearCheckedAC(schedID))
+    }
+    dispatch(checkedToSagaAC(schedID))
+  }
+
+  const handleCheck = (name) => {
+    if (checked.includes('All classes')) {
+      dispatch(setCheckedAC(schedID, 'All classes'))
+    }
+    dispatch(setCheckedAC(schedID, name))
+    dispatch(checkedToSagaAC(schedID))
+  }
+
+  for (let i = 0; i < numberOfColumns; i++) {
+    console.log('loop')
+    const name = `All ${alphabet[i]}`
     columns.push(
-      <TableCell key={index + 1 * Math.random()}>
+      <TableCell key={i + 100 * Math.random()}>
         <FormControlLabel
           control={
-            <Controller
-              name={`All ${alphabet[index]}`}
-              control={control}
-              defaultValue={false}
+            <Checkbox
+              name={name}
+              checked={
+                checked.includes(name) || checked.includes('All classes')
+              }
+              onChange={() => handleCheck(name)}
               color='primary'
-              render={(props) => (
-                <Checkbox
-                  onChange={(e) => props.onChange(e.target.checked)}
-                  checked={props.value}
-                />
-              )}
             />
           }
-          label={alphabet[index]}
+          label={alphabet[i]}
         />
       </TableCell>
     )
   }
 
-  const dispatch = useDispatch()
-
   const handleAddColumn = () => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns + 1))
+    if (checked.includes('All classes')) {
+      dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns]}`))
+      dispatch(checkedToSagaAC(schedID))
+    }
   }
 
   const handleSubtractColumn = () => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns - 1))
+    if (checked.includes(`All ${alphabet[numberOfColumns - 1]}`)) {
+      dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns - 1]}`))
+      dispatch(checkedToSagaAC(schedID))
+    }
   }
 
   if (numberOfColumns < 10) {
     columns.push(
-      <TableCell>
+      <TableCell key={100 + Math.random()}>
         <IconButton onClick={handleAddColumn}>
           <AddCircleRoundedIcon color='primary' fontSize='default' />
         </IconButton>
@@ -66,9 +94,9 @@ const ClassesTableHead = ({ numberOfColumns, schedID }) => {
     )
   }
 
-  if (numberOfColumns < 11 && numberOfColumns > 2) {
+  if (numberOfColumns > 2 && numberOfColumns < 11) {
     columns.push(
-      <TableCell>
+      <TableCell key={100 + Math.random()}>
         <IconButton onClick={handleSubtractColumn}>
           <RemoveCircleRoundedIcon color='secondary' fontSize='default' />
         </IconButton>
@@ -83,9 +111,9 @@ const ClassesTableHead = ({ numberOfColumns, schedID }) => {
           <FormControlLabel
             control={
               <Checkbox
-                inputRef={register}
                 name={'All classes'}
-                defaultValue={false}
+                checked={checked.includes('All classes')}
+                onChange={handleAllCheck}
                 color='primary'
               />
             }

@@ -7,7 +7,11 @@ import ClassesTable from './ClassesTable'
 import CustomClassesNames from './CustomClassesNames'
 import { teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
-import { updateFieldAC} from '../../redux/database/firestore.actions'
+import {
+  checkedToSagaAC,
+  clearCheckedAC,
+  updateFieldAC,
+} from '../../redux/database/firestore.actions'
 
 const useStyles = makeStyles({
   root: {
@@ -45,6 +49,8 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
 
   const handleOpenCustomClassNames = () => {
     setOpenCustomClassNames(!isOpenCustomClassNames)
+    dispatch(clearCheckedAC(mySchedule.id))
+    dispatch(checkedToSagaAC(mySchedule.id))
   }
   const marksDays = [
     {
@@ -114,7 +120,6 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
               Set custom class names or{' '}
               <Button
                 className={classes.button}
-                // variant='outlined'
                 onClick={handleOpenCustomClassNames}>
                 choose classes
               </Button>
@@ -127,12 +132,11 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
               Choose classes or{' '}
               <Button
                 className={classes.button}
-                // variant='outlined'
                 onClick={handleOpenCustomClassNames}>
                 set custom names
               </Button>
             </Typography>
-            <ClassesTable mySchedule={mySchedule}/>
+            <ClassesTable mySchedule={mySchedule} />
           </>
         )}
 

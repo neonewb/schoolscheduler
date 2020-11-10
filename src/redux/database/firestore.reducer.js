@@ -10,7 +10,8 @@ import {
   SET_IS_LOADING_FALSE,
   UPDATE_SCHEDULE_FAILED,
   UPDATE_FIELD,
-  ADD_CLASSES_COLUMN
+  SET_CHECKED,
+  CLEAR_CHECKED,
 } from './firestore.actions'
 
 const initialState = {
@@ -84,6 +85,36 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           return {
             ...schedule,
             [payload.field]: payload.content,
+          }
+        }),
+      }
+
+    case SET_CHECKED:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== payload.schedID) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            checked: schedule.checked.includes(payload.name)
+              ? schedule.checked.filter((name) => name !== payload.name)
+              : [...(schedule.checked ?? []), payload.name],
+          }
+        }),
+      }
+
+    case CLEAR_CHECKED:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== payload.schedID) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            checked: [],
           }
         }),
       }

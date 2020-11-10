@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { auth, db, googleProvider } from '../configs/firebase.config'
 import {
   SIGN_UP_USER,
@@ -26,6 +26,7 @@ import {
   setIsLoadingFalse,
   updateFailedAC,
   UPDATE_FIELD,
+  CHECKED_TO_SAGA,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -87,6 +88,7 @@ function* addDocToCollectionSaga(action) {
       numberOfDays: 6,
       maxLessonsPerDay: 10,
       numberOfColumns: 2,
+      checked: [],
       classes: [],
       subjects: [],
       teachers: [],
@@ -102,6 +104,7 @@ function* addDocToCollectionSaga(action) {
         6,
         10,
         2,
+        [],
         [],
         [],
         [],
@@ -174,8 +177,25 @@ function* updateFieldSaga(action) {
   const docRef = schedulesColl.doc(action.payload.schedID)
 
   try {
-    yield call([docRef, docRef.update], { [action.payload.field]: action.payload.content })
+    yield call([docRef, docRef.update], {
+      [action.payload.field]: action.payload.content,
+    })
     console.log(`Schedule ${action.payload.field} successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
+function* setCheckedSaga(action) {
+  const docRef = schedulesColl.doc(action.schedID)
+
+  try {
+    const checked = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].checked)
+    
+    yield call([docRef, docRef.update], {
+      checked: checked,
+    })
+    console.log(`Schedule checked successfully updated!`)
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -191,4 +211,5 @@ export function* mySaga() {
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
+  yield takeEvery(CHECKED_TO_SAGA, setCheckedSaga)
 }

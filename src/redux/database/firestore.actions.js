@@ -16,6 +16,9 @@ export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
+export const SET_CHECKED = 'app/db/SET_CHECKED'
+export const CHECKED_TO_SAGA = 'app/db/CHECKED_TO_SAGA'
+export const CLEAR_CHECKED = 'app/db/CLEAR_CHECKED'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -31,6 +34,7 @@ export const addDocToCollectionSuccessAC = (
   numberOfDays,
   maxLessonsPerDay,
   numberOfColumns,
+  checked,
   classes,
   subjects,
   teachers,
@@ -45,6 +49,7 @@ export const addDocToCollectionSuccessAC = (
     numberOfDays,
     maxLessonsPerDay,
     numberOfColumns,
+    checked,
     classes,
     subjects,
     teachers,
@@ -127,3 +132,20 @@ export const updateFailedAC = (payload) => ({
   payload,
 })
 
+export const setCheckedAC = (schedID, name) => ({
+  type: SET_CHECKED,
+  payload: {
+    schedID,
+    name,
+  },
+})
+
+export const checkedToSagaAC = (schedID) => ({
+  type: CHECKED_TO_SAGA,
+  schedID,
+})
+
+export const clearCheckedAC = (schedID) => ({
+  type: CLEAR_CHECKED,
+  payload: { schedID },
+})
