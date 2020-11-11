@@ -65,11 +65,12 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
       }
     } else {
       for (let i = 1; i < 12; i++) {
-        if (classes.includes(`${i} ${letter}`)) {
+        if (!checked.includes(`All ${i}`)) {
           dispatch(setClassAC(schedID, `${i} ${letter}`))
         }
       }
     }
+
     dispatch(setCheckedAC(schedID, `All ${letter}`))
     dispatch(checkClassToFsdbAC(schedID))
   }

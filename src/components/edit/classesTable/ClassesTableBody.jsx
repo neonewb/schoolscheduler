@@ -29,7 +29,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
       }
     } else {
       for (let i = 0; i < numberOfColumns; i++) {
-        if (classes.includes(`${num} ${alphabet[i]}`)) {
+        if (!checked.includes(`All ${alphabet[i]}`)) {
           dispatch(setClassAC(schedID, `${num} ${alphabet[i]}`))
         }
       }
@@ -38,7 +38,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
     dispatch(checkClassToFsdbAC(schedID))
   }
 
-  const handleClassCheck = ({num, letter}) => {
+  const handleClassCheck = ({ num, letter }) => {
     if (checked.includes('All classes')) {
       dispatch(setCheckedAC(schedID, 'All classes'))
     }
@@ -90,7 +90,9 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
                   checked.includes(`All ${alphabet[j]}`) ||
                   checked.includes(`All ${i + 1}`)
                 }
-                onChange={() => handleClassCheck({num: i + 1, letter: alphabet[j]})}
+                onChange={() =>
+                  handleClassCheck({ num: i + 1, letter: alphabet[j] })
+                }
                 color='primary'
               />
             }
