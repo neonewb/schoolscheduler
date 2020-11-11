@@ -4,85 +4,109 @@ import {
   TableRow,
   Checkbox,
   FormControlLabel,
-  IconButton,
 } from '@material-ui/core'
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import {
+  setCheckedAC,
+  setClassAC,
+  checkClassToFsdbAC,
+} from '../../../redux/database/firestore.actions'
 
-const ClassesTableBody = () => {
+const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+  const dispatch = useDispatch()
 
-  // const createClasses = (grade) => {
-  //   let rowsArr = []
-  //   for (let index = 1; index <= grade; index++) {
-  //     rowsArr.push({
-  //       keys: grade * Math.random(),
-  //       grade: (
-  //         <FormControlLabel
-  //           control={<Checkbox name={`${grade} class`} color='primary' />}
-  //           label={index}
-  //         />
-  //       ),
-  //     })
-  //   }
-  //   return rowsArr
-  // }
+  const handleCheck = (num) => {
+    if (checked.includes('All classes')) {
+      dispatch(setCheckedAC(schedID, 'All classes'))
+    }
+    if (!checked.includes(`All ${num}`)) {
+      for (let i = 0; i < numberOfColumns; i++) {
+        if (!classes.includes(`${num} ${alphabet[i]}`)) {
+          dispatch(setClassAC(schedID, `${num} ${alphabet[i]}`))
+        }
+      }
+    } else {
+      for (let i = 0; i < numberOfColumns; i++) {
+        if (classes.includes(`${num} ${alphabet[i]}`)) {
+          dispatch(setClassAC(schedID, `${num} ${alphabet[i]}`))
+        }
+      }
+    }
+    dispatch(setCheckedAC(schedID, `All ${num}`))
+    dispatch(checkClassToFsdbAC(schedID))
+  }
 
-  // const addClassLetter = (rows) => {
-  //   let nextLetterIndex
-  //   if (rows[0].letterIndex === undefined) {
-  //     nextLetterIndex = 0
-  //   } else if (rows[0].letterIndex === 9) {
-  //     return rows
-  //   } else {
-  //     nextLetterIndex = rows[0].letterIndex + 1
-  //   }
+  const handleClassCheck = ({num, letter}) => {
+    if (checked.includes('All classes')) {
+      dispatch(setCheckedAC(schedID, 'All classes'))
+    }
+    if (checked.includes(`All ${num}`)) {
+      dispatch(setCheckedAC(schedID, `All ${num}`))
+    }
+    if (checked.includes(`All ${letter}`)) {
+      dispatch(setCheckedAC(schedID, `All ${letter}`))
+    }
+    dispatch(setClassAC(schedID, `${num} ${letter}`))
+    dispatch(checkClassToFsdbAC(schedID))
+  }
 
-  //   let classLetter = 'classLetter' + alphabet[nextLetterIndex]
+  let rows = []
 
-  //   let rowsWithAddedClassLetter = rows.map((element, index) => {
-  //     return {
-  //       ...element,
-  //       letterIndex: nextLetterIndex,
-  //       [classLetter]: (
-  //         <FormControlLabel
-  //           control={
-  //             <Checkbox name={`${element.grade} class`} color='primary' />
-  //           }
-  //           label={`${index + 1} ${alphabet[nextLetterIndex]}`}
-  //         />
-  //       ),
-  //     }
-  //   })
-  //   return rowsWithAddedClassLetter
-  // }
+  for (let i = 0; i < 11; i++) {
+    let row = []
 
-  // let rows = createClasses(12)
-  // rows = addClassLetter(rows)
-  // rows = addClassLetter(rows)
-  // const [rowState, setRows] = useState(rows)
+    let parralelName = `All ${i + 1}`
+    row.push(
+      <TableCell key={i + 100 * Math.random()}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              name={parralelName}
+              checked={
+                checked.includes(parralelName) ||
+                checked.includes('All classes')
+              }
+              onChange={() => handleCheck(i + 1)}
+              color='primary'
+            />
+          }
+          label={i + 1}
+        />
+      </TableCell>
+    )
 
-  // let rowsMaped = rowState.map((row) => {
-  //   let tableCells = []
-  //   for (const key in row) {
-  //     if (key !== 'keys' && key !== 'letterIndex') {
-  //       tableCells.push(
-  //         <TableCell key={row.keys + Math.random()} component='th' scope='row'>
-  //           {row[key]}
-  //         </TableCell>
-  //       )
-  //     }
-  //   }
-  //   return <TableRow key={row.keys}>{tableCells}</TableRow>
-  // })
+    for (let j = 0; j < numberOfColumns; j++) {
+      let className = `${i + 1} ${alphabet[j]}`
+      row.push(
+        <TableCell key={j + 100 * Math.random()}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name={className}
+                checked={
+                  classes.includes(className) ||
+                  checked.includes(`All ${alphabet[j]}`) ||
+                  checked.includes(`All ${i + 1}`)
+                }
+                onChange={() => handleClassCheck({num: i + 1, letter: alphabet[j]})}
+                color='primary'
+              />
+            }
+            label={className}
+          />
+        </TableCell>
+      )
+    }
+    rows.push(row)
+  }
 
   return (
     <TableBody>
-      <TableRow>
-        <TableCell>a</TableCell>
-        <TableCell>a</TableCell>
-        <TableCell>a</TableCell>
-        <TableCell>a</TableCell>
-      </TableRow>
+      {rows.map((row) => (
+        <TableRow key={100 * Math.random()}>{row}</TableRow>
+      ))}
     </TableBody>
   )
 }

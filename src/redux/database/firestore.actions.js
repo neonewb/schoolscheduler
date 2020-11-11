@@ -17,8 +17,10 @@ export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
 export const SET_CHECKED = 'app/db/SET_CHECKED'
-export const CHECKED_TO_SAGA = 'app/db/CHECKED_TO_SAGA'
 export const CLEAR_CHECKED = 'app/db/CLEAR_CHECKED'
+export const SET_CLASS = 'app/db/SET_CLASS'
+export const CLEAR_CLASS = 'app/db/CLEAR_CLASS'
+export const CHECKED_CLASSES_TO_FSDB = 'app/db/CHECKED_CLASSES_TO_FSDB'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -140,12 +142,25 @@ export const setCheckedAC = (schedID, name) => ({
   },
 })
 
-export const checkedToSagaAC = (schedID) => ({
-  type: CHECKED_TO_SAGA,
+export const setClassAC = (schedID, className) => ({
+  type: SET_CLASS,
+  payload: {
+    schedID,
+    className,
+  },
+})
+
+export const checkClassToFsdbAC = (schedID) => ({
+  type: CHECKED_CLASSES_TO_FSDB,
   schedID,
 })
 
 export const clearCheckedAC = (schedID) => ({
   type: CLEAR_CHECKED,
+  payload: { schedID },
+})
+
+export const clearClassesAC = (schedID) => ({
+  type: CLEAR_CLASS,
   payload: { schedID },
 })

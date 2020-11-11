@@ -8,7 +8,7 @@ import CustomClassesNames from './CustomClassesNames'
 import { teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
-  checkedToSagaAC,
+  checkClassToFsdbAC,
   clearCheckedAC,
   updateFieldAC,
 } from '../../redux/database/firestore.actions'
@@ -50,7 +50,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
   const handleOpenCustomClassNames = () => {
     setOpenCustomClassNames(!isOpenCustomClassNames)
     dispatch(clearCheckedAC(mySchedule.id))
-    dispatch(checkedToSagaAC(mySchedule.id))
+    dispatch(checkClassToFsdbAC(mySchedule.id))
   }
   const marksDays = [
     {

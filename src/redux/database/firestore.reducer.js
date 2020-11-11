@@ -12,6 +12,8 @@ import {
   UPDATE_FIELD,
   SET_CHECKED,
   CLEAR_CHECKED,
+  SET_CLASS,
+  CLEAR_CLASS,
 } from './firestore.actions'
 
 const initialState = {
@@ -115,6 +117,36 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           return {
             ...schedule,
             checked: [],
+          }
+        }),
+      }
+
+    case CLEAR_CLASS:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== payload.schedID) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            classes: [],
+          }
+        }),
+      }
+
+    case SET_CLASS:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== payload.schedID) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            classes: schedule.classes.includes(payload.className)
+              ? schedule.classes.filter((name) => name !== payload.className)
+              : [...(schedule.classes ?? []), payload.className],
           }
         }),
       }

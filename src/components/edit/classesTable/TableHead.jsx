@@ -11,13 +11,15 @@ import {
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded'
 import {
-  checkedToSagaAC,
+  checkClassToFsdbAC,
   clearCheckedAC,
   setCheckedAC,
   updateFieldAC,
+  clearClassesAC,
+  setClassAC,
 } from '../../../redux/database/firestore.actions'
 
-const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
+const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
   let columns = []
@@ -32,22 +34,47 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
           dispatch(setCheckedAC(schedID, `All ${alphabet[i]}`))
         }
       }
+      for (let i = 1; i < 12; i++) {
+        if (!checked.includes(`All ${i}`)) {
+          dispatch(setCheckedAC(schedID, `All ${i}`))
+        }
+      }
+      for (let i = 1; i < 12; i++) {
+        for (let j = 0; j < numberOfColumns; j++) {
+          if (!classes.includes(`${i} ${alphabet[j]}`)) {
+            dispatch(setClassAC(schedID, `${i} ${alphabet[j]}`))
+          }
+        }
+      }
     } else {
       dispatch(clearCheckedAC(schedID))
+      dispatch(clearClassesAC(schedID))
     }
-    dispatch(checkedToSagaAC(schedID))
+    dispatch(checkClassToFsdbAC(schedID))
   }
 
-  const handleCheck = (name) => {
+  const handleCheck = (letter) => {
     if (checked.includes('All classes')) {
       dispatch(setCheckedAC(schedID, 'All classes'))
     }
-    dispatch(setCheckedAC(schedID, name))
-    dispatch(checkedToSagaAC(schedID))
+    if (!checked.includes(`All ${letter}`)) {
+      for (let i = 1; i < 12; i++) {
+        if (!classes.includes(`${i} ${letter}`)) {
+          dispatch(setClassAC(schedID, `${i} ${letter}`))
+        }
+      }
+    } else {
+      for (let i = 1; i < 12; i++) {
+        if (classes.includes(`${i} ${letter}`)) {
+          dispatch(setClassAC(schedID, `${i} ${letter}`))
+        }
+      }
+    }
+    dispatch(setCheckedAC(schedID, `All ${letter}`))
+    dispatch(checkClassToFsdbAC(schedID))
   }
 
   for (let i = 0; i < numberOfColumns; i++) {
-    console.log('loop')
     const name = `All ${alphabet[i]}`
     columns.push(
       <TableCell key={i + 100 * Math.random()}>
@@ -58,7 +85,7 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
               checked={
                 checked.includes(name) || checked.includes('All classes')
               }
-              onChange={() => handleCheck(name)}
+              onChange={() => handleCheck(alphabet[i])}
               color='primary'
             />
           }
@@ -72,7 +99,13 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns + 1))
     if (checked.includes('All classes')) {
       dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns]}`))
-      dispatch(checkedToSagaAC(schedID))
+      for (let i = 1; i < 12; i++) {
+        if (!classes.includes(`${i} ${alphabet[numberOfColumns]}`)) {
+          dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
+        }
+      }
+
+      dispatch(checkClassToFsdbAC(schedID))
     }
   }
 
@@ -80,7 +113,7 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked }) => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns - 1))
     if (checked.includes(`All ${alphabet[numberOfColumns - 1]}`)) {
       dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns - 1]}`))
-      dispatch(checkedToSagaAC(schedID))
+      dispatch(checkClassToFsdbAC(schedID))
     }
   }
 

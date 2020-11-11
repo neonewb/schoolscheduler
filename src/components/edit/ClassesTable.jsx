@@ -13,8 +13,14 @@ const ClassesTable = ({ mySchedule }) => {
           numberOfColumns={mySchedule.numberOfColumns}
           schedID={mySchedule.id}
           checked={mySchedule.checked}
+          classes={mySchedule.classes}
         />
-        <ClassesTableBody />
+        <ClassesTableBody 
+          numberOfColumns={mySchedule.numberOfColumns}
+          checked={mySchedule.checked}
+          schedID={mySchedule.id}
+          classes={mySchedule.classes}
+        />
       </Table>
     </TableContainer>
   )

@@ -26,7 +26,7 @@ import {
   setIsLoadingFalse,
   updateFailedAC,
   UPDATE_FIELD,
-  CHECKED_TO_SAGA,
+  CHECKED_CLASSES_TO_FSDB,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -201,6 +201,39 @@ function* setCheckedSaga(action) {
   }
 }
 
+function* setClassesSaga(action) {
+  const docRef = schedulesColl.doc(action.schedID)
+
+  try {
+    const classes = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].classes)
+    
+    yield call([docRef, docRef.update], {
+      classes: classes,
+    })
+    console.log(`Schedule classes successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
+function* setCheckedClassesSaga(action) {
+  const docRef = schedulesColl.doc(action.schedID)
+
+  try {
+    const checked = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].checked)
+
+    const classes = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].classes)
+    
+    yield call([docRef, docRef.update], {
+      classes: classes,
+      checked: checked,
+    })
+    console.log(`Schedule checked and classes successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -211,5 +244,5 @@ export function* mySaga() {
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
-  yield takeEvery(CHECKED_TO_SAGA, setCheckedSaga)
+  yield takeEvery(CHECKED_CLASSES_TO_FSDB, setCheckedClassesSaga)
 }
