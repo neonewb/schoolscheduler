@@ -105,17 +105,26 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
           dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
         }
       }
-
-      dispatch(checkClassToFsdbAC(schedID))
     }
+    for (let i = 1; i < 12; i++) {
+      if (checked.includes(`All ${i}`)) {
+        dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
+      }
+    }
+    dispatch(checkClassToFsdbAC(schedID))
   }
 
   const handleSubtractColumn = () => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns - 1))
     if (checked.includes(`All ${alphabet[numberOfColumns - 1]}`)) {
       dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns - 1]}`))
-      dispatch(checkClassToFsdbAC(schedID))
     }
+    for (let i = 1; i < 12; i++) {
+      if (classes.includes(`${i} ${alphabet[numberOfColumns - 1]}`)) {
+        dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns - 1]}`))
+      }
+    }
+    dispatch(checkClassToFsdbAC(schedID))
   }
 
   if (numberOfColumns < 10) {
