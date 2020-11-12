@@ -26,6 +26,8 @@ import {
   setIsLoadingFalse,
   updateFailedAC,
   UPDATE_FIELD,
+  CLEAR_CHECKED_AND_CLASSES,
+  ALL_CHECK,
   CHECKED_CLASSES_TO_FSDB,
 } from '../redux/database/firestore.actions'
 
@@ -186,43 +188,14 @@ function* updateFieldSaga(action) {
   }
 }
 
-function* setCheckedSaga(action) {
-  const docRef = schedulesColl.doc(action.schedID)
+function* setCheckedClassesSaga() {
+  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+
+  const docRef = schedulesColl.doc(schedule.id)
 
   try {
-    const checked = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].checked)
-    
-    yield call([docRef, docRef.update], {
-      checked: checked,
-    })
-    console.log(`Schedule checked successfully updated!`)
-  } catch (error) {
-    yield put(updateFailedAC(error))
-  }
-}
-
-function* setClassesSaga(action) {
-  const docRef = schedulesColl.doc(action.schedID)
-
-  try {
-    const classes = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].classes)
-    
-    yield call([docRef, docRef.update], {
-      classes: classes,
-    })
-    console.log(`Schedule classes successfully updated!`)
-  } catch (error) {
-    yield put(updateFailedAC(error))
-  }
-}
-
-function* setCheckedClassesSaga(action) {
-  const docRef = schedulesColl.doc(action.schedID)
-
-  try {
-    const checked = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].checked)
-
-    const classes = yield select(state => state.fsdb.schedules.filter((i) => i.id === action.schedID)[0].classes)
+    const checked = schedule.checked
+    const classes = schedule.classes
     
     yield call([docRef, docRef.update], {
       classes: classes,
@@ -245,4 +218,6 @@ export function* mySaga() {
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
   yield takeEvery(CHECKED_CLASSES_TO_FSDB, setCheckedClassesSaga)
+  yield takeEvery(ALL_CHECK, setCheckedClassesSaga)
+  yield takeEvery(CLEAR_CHECKED_AND_CLASSES, setCheckedClassesSaga)
 }

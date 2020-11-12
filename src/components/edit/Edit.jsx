@@ -4,7 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
-import { getDocFromDBAC } from '../../redux/database/firestore.actions'
+import {
+  chooseSingleAC,
+  getDocFromDBAC,
+} from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
 const SettingsSchedule = React.lazy(() => import('./SettingsSchedule'))
@@ -25,11 +28,12 @@ const Edit = () => {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  let mySchedule = schedules.filter((i) => i.id === id)[0]
+  let mySchedule = schedules.find((i) => i.id)
 
   if (mySchedule === undefined) {
     mySchedule = schedules[0]
   }
+
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged((userAuth) => {
       if (!userAuth) {
@@ -40,6 +44,12 @@ const Edit = () => {
     })
     return () => unsubscribeFromAuth()
   }, [history, schedules, dispatch, id])
+
+  useEffect(() => {
+    if (mySchedule !== undefined && !isLoading) {
+      dispatch(chooseSingleAC(mySchedule.id))
+    }
+  }, [isLoading])
 
   return (
     <div className={classes.root}>

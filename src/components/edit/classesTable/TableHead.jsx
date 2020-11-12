@@ -12,52 +12,27 @@ import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded'
 import {
   checkClassToFsdbAC,
-  clearCheckedAC,
   setCheckedAC,
   updateFieldAC,
-  clearClassesAC,
   setClassAC,
+  allCheckAC,
 } from '../../../redux/database/firestore.actions'
+import { alphabet } from '../../../utils/alphabet'
 
 const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
   let columns = []
 
   const dispatch = useDispatch()
 
   const handleAllCheck = () => {
-    dispatch(setCheckedAC(schedID, 'All classes'))
-    if (!checked.includes('All classes')) {
-      for (let i = 0; i < numberOfColumns; i++) {
-        if (!checked.includes(`All ${alphabet[i]}`)) {
-          dispatch(setCheckedAC(schedID, `All ${alphabet[i]}`))
-        }
-      }
-      for (let i = 1; i < 12; i++) {
-        if (!checked.includes(`All ${i}`)) {
-          dispatch(setCheckedAC(schedID, `All ${i}`))
-        }
-      }
-      for (let i = 1; i < 12; i++) {
-        for (let j = 0; j < numberOfColumns; j++) {
-          if (!classes.includes(`${i} ${alphabet[j]}`)) {
-            dispatch(setClassAC(schedID, `${i} ${alphabet[j]}`))
-          }
-        }
-      }
-    } else {
-      dispatch(clearCheckedAC(schedID))
-      dispatch(clearClassesAC(schedID))
-    }
-    dispatch(checkClassToFsdbAC(schedID))
+    dispatch(allCheckAC())
   }
 
   const handleCheck = (letter) => {
-    if (checked.includes('All classes')) {
-      dispatch(setCheckedAC(schedID, 'All classes'))
+    if (checked.includes('All')) {
+      dispatch(setCheckedAC(schedID, 'All'))
     }
-    if (!checked.includes(`All ${letter}`)) {
+    if (!checked.includes(letter)) {
       for (let i = 1; i < 12; i++) {
         if (!classes.includes(`${i} ${letter}`)) {
           dispatch(setClassAC(schedID, `${i} ${letter}`))
@@ -65,27 +40,25 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
       }
     } else {
       for (let i = 1; i < 12; i++) {
-        if (!checked.includes(`All ${i}`)) {
+        if (!checked.includes(i + '')) {
           dispatch(setClassAC(schedID, `${i} ${letter}`))
         }
       }
     }
 
-    dispatch(setCheckedAC(schedID, `All ${letter}`))
+    dispatch(setCheckedAC(schedID, letter))
     dispatch(checkClassToFsdbAC(schedID))
   }
 
   for (let i = 0; i < numberOfColumns; i++) {
-    const name = `All ${alphabet[i]}`
+    const name = alphabet[i]
     columns.push(
       <TableCell key={i + 100 * Math.random()}>
         <FormControlLabel
           control={
             <Checkbox
               name={name}
-              checked={
-                checked.includes(name) || checked.includes('All classes')
-              }
+              checked={checked.includes(name) || checked.includes('All')}
               onChange={() => handleCheck(alphabet[i])}
               color='primary'
             />
@@ -98,17 +71,16 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
 
   const handleAddColumn = () => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns + 1))
-    if (checked.includes('All classes')) {
-      dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns]}`))
+    if (checked.includes('All')) {
+      dispatch(setCheckedAC(schedID, alphabet[numberOfColumns]))
       for (let i = 1; i < 12; i++) {
-        if (!classes.includes(`${i} ${alphabet[numberOfColumns]}`)) {
+        dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
+      }
+    } else {
+      for (let i = 1; i < 12; i++) {
+        if (checked.includes(i)) {
           dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
         }
-      }
-    }
-    for (let i = 1; i < 12; i++) {
-      if (checked.includes(`All ${i}`)) {
-        dispatch(setClassAC(schedID, `${i} ${alphabet[numberOfColumns]}`))
       }
     }
     dispatch(checkClassToFsdbAC(schedID))
@@ -116,8 +88,8 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
 
   const handleSubtractColumn = () => {
     dispatch(updateFieldAC(schedID, 'numberOfColumns', numberOfColumns - 1))
-    if (checked.includes(`All ${alphabet[numberOfColumns - 1]}`)) {
-      dispatch(setCheckedAC(schedID, `All ${alphabet[numberOfColumns - 1]}`))
+    if (checked.includes(alphabet[numberOfColumns - 1])) {
+      dispatch(setCheckedAC(schedID, alphabet[numberOfColumns - 1]))
     }
     for (let i = 1; i < 12; i++) {
       if (classes.includes(`${i} ${alphabet[numberOfColumns - 1]}`)) {
@@ -154,8 +126,8 @@ const ClassesTableHead = ({ numberOfColumns, schedID, checked, classes }) => {
           <FormControlLabel
             control={
               <Checkbox
-                name={'All classes'}
-                checked={checked.includes('All classes')}
+                name={'All'}
+                checked={checked.includes('All')}
                 onChange={handleAllCheck}
                 color='primary'
               />

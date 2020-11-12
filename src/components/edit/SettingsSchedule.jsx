@@ -3,13 +3,12 @@ import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, Divider } from '@material-ui/core'
-import ClassesTable from './ClassesTable'
+import ClassesTable from './classesTable/ClassesTable'
 import CustomClassesNames from './CustomClassesNames'
 import { teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
-  checkClassToFsdbAC,
-  clearCheckedAC,
+  clearCheckClassAC,
   updateFieldAC,
 } from '../../redux/database/firestore.actions'
 
@@ -49,8 +48,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
 
   const handleOpenCustomClassNames = () => {
     setOpenCustomClassNames(!isOpenCustomClassNames)
-    dispatch(clearCheckedAC(mySchedule.id))
-    dispatch(checkClassToFsdbAC(mySchedule.id))
+    dispatch(clearCheckClassAC(mySchedule.id))
   }
   const marksDays = [
     {

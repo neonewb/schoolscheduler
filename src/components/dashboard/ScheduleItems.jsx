@@ -40,7 +40,7 @@ const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
   let items
 
   if (schedules.length > 0) {
-    items = schedules.map((item, index) => {
+    items = schedules.map((item) => {
       let itemClass
       if (!item.isChoosen) {
         itemClass = clsx(classes.paper, classes.fixedHeightWidth)
@@ -56,14 +56,14 @@ const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
           <Button
             className={classes.zeroPadding}
             onClick={() => {
-              chooseScheduleAC(index)
+              chooseScheduleAC(item.id)
             }}
             onDoubleClick={() => {
               handleOnDubbleClick(item.id)
             }}>
             <Paper className={itemClass}>
               <Typography align='center' component='p' variant='h4'>
-                {item.title || `New schedule ${index + 1}`}
+                {item.title || 'New schedule'}
               </Typography>
             </Paper>
           </Button>

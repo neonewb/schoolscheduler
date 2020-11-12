@@ -12,16 +12,16 @@ import {
   setClassAC,
   checkClassToFsdbAC,
 } from '../../../redux/database/firestore.actions'
+import { alphabet } from '../../../utils/alphabet'
 
 const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
   const dispatch = useDispatch()
 
   const handleCheck = (num) => {
-    if (checked.includes('All classes')) {
-      dispatch(setCheckedAC(schedID, 'All classes'))
+    if (checked.includes('All')) {
+      dispatch(setCheckedAC(schedID, 'All'))
     }
-    if (!checked.includes(`All ${num}`)) {
+    if (!checked.includes(num)) {
       for (let i = 0; i < numberOfColumns; i++) {
         if (!classes.includes(`${num} ${alphabet[i]}`)) {
           dispatch(setClassAC(schedID, `${num} ${alphabet[i]}`))
@@ -29,24 +29,24 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
       }
     } else {
       for (let i = 0; i < numberOfColumns; i++) {
-        if (!checked.includes(`All ${alphabet[i]}`)) {
+        if (!checked.includes(alphabet[i])) {
           dispatch(setClassAC(schedID, `${num} ${alphabet[i]}`))
         }
       }
     }
-    dispatch(setCheckedAC(schedID, `All ${num}`))
+    dispatch(setCheckedAC(schedID, num))
     dispatch(checkClassToFsdbAC(schedID))
   }
 
   const handleClassCheck = ({ num, letter }) => {
-    if (checked.includes('All classes')) {
-      dispatch(setCheckedAC(schedID, 'All classes'))
+    if (checked.includes('All')) {
+      dispatch(setCheckedAC(schedID, 'All'))
     }
-    if (checked.includes(`All ${num}`)) {
-      dispatch(setCheckedAC(schedID, `All ${num}`))
+    if (checked.includes(num)) {
+      dispatch(setCheckedAC(schedID, num))
     }
-    if (checked.includes(`All ${letter}`)) {
-      dispatch(setCheckedAC(schedID, `All ${letter}`))
+    if (checked.includes(letter)) {
+      dispatch(setCheckedAC(schedID, letter))
     }
     dispatch(setClassAC(schedID, `${num} ${letter}`))
     dispatch(checkClassToFsdbAC(schedID))
@@ -57,7 +57,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
   for (let i = 0; i < 11; i++) {
     let row = []
 
-    let parralelName = `All ${i + 1}`
+    let parralelName = i + 1 + ''
     row.push(
       <TableCell key={i + 100 * Math.random()}>
         <FormControlLabel
@@ -66,9 +66,9 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
               name={parralelName}
               checked={
                 checked.includes(parralelName) ||
-                checked.includes('All classes')
+                checked.includes('All')
               }
-              onChange={() => handleCheck(i + 1)}
+              onChange={() => handleCheck(i + 1 + '')}
               color='primary'
             />
           }
@@ -87,11 +87,11 @@ const ClassesTableBody = ({ numberOfColumns, checked, schedID, classes }) => {
                 name={className}
                 checked={
                   classes.includes(className) ||
-                  checked.includes(`All ${alphabet[j]}`) ||
-                  checked.includes(`All ${i + 1}`)
+                  checked.includes(alphabet[j]) ||
+                  checked.includes(i + 1 + '')
                 }
                 onChange={() =>
-                  handleClassCheck({ num: i + 1, letter: alphabet[j] })
+                  handleClassCheck({ num: i + 1 + '', letter: alphabet[j] })
                 }
                 color='primary'
               />

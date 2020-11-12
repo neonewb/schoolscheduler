@@ -14,13 +14,15 @@ export const CLEAR_RX_STATE = 'app/db/CLEAR_RX_STATE'
 export const SET_IS_LOADING_TRUE = 'app/db/SET_IS_LOADING_TRUE'
 export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
+export const CHOOSE_SINGLE_SCHEDULE = 'app/db/CHOOSE_SINGLE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
 export const SET_CHECKED = 'app/db/SET_CHECKED'
-export const CLEAR_CHECKED = 'app/db/CLEAR_CHECKED'
+export const CLEAR_CHECKED_AND_CLASSES = 'app/db/CLEAR_CHECKED_AND_CLASSES'
 export const SET_CLASS = 'app/db/SET_CLASS'
 export const CLEAR_CLASS = 'app/db/CLEAR_CLASS'
 export const CHECKED_CLASSES_TO_FSDB = 'app/db/CHECKED_CLASSES_TO_FSDB'
+export const ALL_CHECK = 'app/db/ALL_CHECK'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -105,10 +107,17 @@ export const clearRxStateAC = () => ({
   type: CLEAR_RX_STATE,
 })
 
-export const chooseScheduleAC = (docIndex) => ({
+export const chooseScheduleAC = (docID) => ({
   type: CHOOSE_SCHEDULE,
   payload: {
-    docIndex,
+    docID,
+  },
+})
+
+export const chooseSingleAC = (schedID) => ({
+  type: CHOOSE_SINGLE_SCHEDULE,
+  payload: {
+    schedID,
   },
 })
 
@@ -155,12 +164,11 @@ export const checkClassToFsdbAC = (schedID) => ({
   schedID,
 })
 
-export const clearCheckedAC = (schedID) => ({
-  type: CLEAR_CHECKED,
+export const clearCheckClassAC = (schedID) => ({
+  type: CLEAR_CHECKED_AND_CLASSES,
   payload: { schedID },
 })
 
-export const clearClassesAC = (schedID) => ({
-  type: CLEAR_CLASS,
-  payload: { schedID },
+export const allCheckAC = () => ({
+  type: ALL_CHECK
 })
