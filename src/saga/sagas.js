@@ -28,7 +28,10 @@ import {
   UPDATE_FIELD,
   CLEAR_CHECKED_AND_CLASSES,
   ALL_CHECK,
-  CHECKED_CLASSES_TO_FSDB,
+  SET_CHECK,
+  SET_CLASS,
+  ADD_COLUMN,
+  SUBTRACT_COLUMN,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -217,7 +220,10 @@ export function* mySaga() {
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
   yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
-  yield takeEvery(CHECKED_CLASSES_TO_FSDB, setCheckedClassesSaga)
   yield takeEvery(ALL_CHECK, setCheckedClassesSaga)
   yield takeEvery(CLEAR_CHECKED_AND_CLASSES, setCheckedClassesSaga)
+  yield takeEvery(SET_CHECK, setCheckedClassesSaga)
+  yield takeEvery(SET_CLASS, setCheckedClassesSaga)
+  yield takeEvery(ADD_COLUMN, setCheckedClassesSaga)
+  yield takeEvery(SUBTRACT_COLUMN, setCheckedClassesSaga)
 }

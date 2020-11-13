@@ -2,7 +2,7 @@ import React from 'react'
 import Table from '@material-ui/core/Table'
 import TableContainer from '@material-ui/core/TableContainer'
 import ClassesTableHead from './TableHead'
-import ClassesTableBody from './ClassesTableBody'
+import ClassesTableBody from './TableBody'
 
 const ClassesTable = ({ mySchedule }) => {
 

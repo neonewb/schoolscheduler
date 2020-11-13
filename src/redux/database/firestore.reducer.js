@@ -1,4 +1,5 @@
 import { alphabet } from '../../utils/alphabet'
+import { isANumber } from '../../utils/funcs'
 import {
   ADD_DOC_TO_COLLECTION_FAILED,
   ADD_DOC_TO_COLLECTION_SUCCESS,
@@ -11,11 +12,13 @@ import {
   SET_IS_LOADING_FALSE,
   UPDATE_SCHEDULE_FAILED,
   UPDATE_FIELD,
-  SET_CHECKED,
   CLEAR_CHECKED_AND_CLASSES,
   SET_CLASS,
   CHOOSE_SINGLE_SCHEDULE,
   ALL_CHECK,
+  SET_CHECK,
+  ADD_COLUMN,
+  SUBTRACT_COLUMN,
 } from './firestore.actions'
 
 const initialState = {
@@ -107,37 +110,27 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         }),
       }
 
-    case SET_CHECKED:
+    case SET_CLASS: {
+      const { num, char } = payload
+      const className = num + ' ' + char
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
-          if (schedule.id !== payload.schedID) {
-            return schedule
-          }
+          if (!schedule.isChoosen) return schedule
           return {
             ...schedule,
-            checked: schedule.checked.includes(payload.name)
-              ? schedule.checked.filter((name) => name !== payload.name)
-              : [...(schedule.checked ?? []), payload.name],
+            checked:
+              schedule.checked.filter((e) => {
+                if (e === 'All' || e === num || e === char) return false
+                else return e
+              }) ?? [],
+            classes: schedule.classes.includes(className)
+              ? schedule.classes.filter((name) => name !== className)
+              : [...(schedule.classes ?? []), className],
           }
         }),
       }
-
-    case SET_CLASS:
-      return {
-        ...state,
-        schedules: state.schedules.map((schedule) => {
-          if (schedule.id !== payload.schedID) {
-            return schedule
-          }
-          return {
-            ...schedule,
-            classes: schedule.classes.includes(payload.className)
-              ? schedule.classes.filter((name) => name !== payload.className)
-              : [...(schedule.classes ?? []), payload.className],
-          }
-        }),
-      }
+    }
 
     case CLEAR_CHECKED_AND_CLASSES:
       return {
@@ -154,7 +147,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         }),
       }
 
-    case ALL_CHECK:
+    case ALL_CHECK: {
       const schedule = state.schedules.find((e) => e.isChoosen)
 
       let checked = []
@@ -191,6 +184,131 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           }
         }),
       }
+    }
+
+    case SET_CHECK: {
+      let { checked, classes, numberOfColumns } = state.schedules.find(
+        (e) => e.isChoosen
+      )
+
+      checked = checked.filter((e) => e !== 'All')
+
+      const check = payload.check
+
+      if (!checked.includes(check)) {
+        checked.push(check)
+
+        if (isANumber(check)) {
+          for (let i = 0; i < numberOfColumns; i++) {
+            if (!classes.includes(`${check} ${alphabet[i]}`)) {
+              classes.push(`${check} ${alphabet[i]}`)
+            }
+          }
+        } else {
+          for (let i = 1; i < 12; i++) {
+            if (!classes.includes(`${i} ${check}`)) {
+              classes.push(`${i} ${check}`)
+            }
+          }
+        }
+      } else {
+        checked = checked.filter((e) => e !== check)
+
+        if (isANumber(check)) {
+          for (let i = 0; i < numberOfColumns; i++) {
+            if (!checked.includes(alphabet[i])) {
+              classes = classes.filter((e) => e !== `${check} ${alphabet[i]}`)
+            }
+          }
+        } else {
+          for (let i = 1; i < 12; i++) {
+            if (!checked.includes(i + '')) {
+              classes = classes.filter((e) => e !== `${i} ${check}`)
+            }
+          }
+        }
+      }
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          else {
+            return {
+              ...schedule,
+              checked: checked,
+              classes: classes,
+            }
+          }
+        }),
+      }
+    }
+
+    case ADD_COLUMN: {
+      let {
+        checked,
+        classes,
+        numberOfColumns: numOfCol,
+      } = state.schedules.find((e) => e.isChoosen)
+
+      if (checked.includes('All')) {
+        checked.push(alphabet[numOfCol])
+
+        for (let i = 1; i < 12; i++) {
+          classes.push(`${i} ${alphabet[numOfCol]}`)
+        }
+      } else {
+        for (let i = 1; i < 12; i++) {
+          if (checked.includes(i + '')) {
+            classes.push(`${i} ${alphabet[numOfCol]}`)
+          }
+        }
+      }
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          else {
+            return {
+              ...schedule,
+              numberOfColumns: numOfCol + 1,
+              checked: checked,
+              classes: classes,
+            }
+          }
+        }),
+      }
+    }
+
+    case SUBTRACT_COLUMN: {
+      let {
+        checked,
+        classes,
+        numberOfColumns: numOfCol,
+      } = state.schedules.find((e) => e.isChoosen)
+
+      checked = checked.filter((e) => e !== alphabet[numOfCol - 1])
+
+      for (let i = 1; i < 12; i++) {
+        classes = classes.filter((e) => e !== `${i} ${alphabet[numOfCol - 1]}`)
+      }
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          else {
+            return {
+              ...schedule,
+              numberOfColumns: numOfCol - 1,
+              checked: checked,
+              classes: classes,
+            }
+          }
+        }),
+      }
+    }
 
     default:
       return state

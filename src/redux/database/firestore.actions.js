@@ -17,12 +17,13 @@ export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
 export const CHOOSE_SINGLE_SCHEDULE = 'app/db/CHOOSE_SINGLE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
-export const SET_CHECKED = 'app/db/SET_CHECKED'
+export const SET_CHECK = 'app/db/SET_CHECK'
 export const CLEAR_CHECKED_AND_CLASSES = 'app/db/CLEAR_CHECKED_AND_CLASSES'
 export const SET_CLASS = 'app/db/SET_CLASS'
 export const CLEAR_CLASS = 'app/db/CLEAR_CLASS'
-export const CHECKED_CLASSES_TO_FSDB = 'app/db/CHECKED_CLASSES_TO_FSDB'
 export const ALL_CHECK = 'app/db/ALL_CHECK'
+export const ADD_COLUMN = 'app/db/ADD_COLUMN'
+export const SUBTRACT_COLUMN = 'app/db/SUBTRACT_COLUMN'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -143,25 +144,20 @@ export const updateFailedAC = (payload) => ({
   payload,
 })
 
-export const setCheckedAC = (schedID, name) => ({
-  type: SET_CHECKED,
+export const setCheckAC = (check) => ({
+  type: SET_CHECK,
   payload: {
-    schedID,
-    name,
+    check,
   },
 })
 
-export const setClassAC = (schedID, className) => ({
+
+export const setClassAC = (num, char) => ({
   type: SET_CLASS,
   payload: {
-    schedID,
-    className,
+    num,
+    char,
   },
-})
-
-export const checkClassToFsdbAC = (schedID) => ({
-  type: CHECKED_CLASSES_TO_FSDB,
-  schedID,
 })
 
 export const clearCheckClassAC = (schedID) => ({
@@ -170,5 +166,13 @@ export const clearCheckClassAC = (schedID) => ({
 })
 
 export const allCheckAC = () => ({
-  type: ALL_CHECK
+  type: ALL_CHECK,
+})
+
+export const addColumnAC = () => ({
+  type: ADD_COLUMN,
+})
+
+export const subtractColumnAC = () => ({
+  type: SUBTRACT_COLUMN,
 })
