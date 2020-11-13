@@ -9,6 +9,7 @@ import { teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
   clearCheckClassAC,
+  openCustomClassNamesAC,
   updateFieldAC,
 } from '../../redux/database/firestore.actions'
 
@@ -44,11 +45,10 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
     dispatch(updateFieldAC(mySchedule.id, 'maxLessonsPerDay', newValue))
   }
 
-  const [isOpenCustomClassNames, setOpenCustomClassNames] = useState(false)
 
   const handleOpenCustomClassNames = () => {
-    setOpenCustomClassNames(!isOpenCustomClassNames)
     dispatch(clearCheckClassAC(mySchedule.id))
+    dispatch(openCustomClassNamesAC())
   }
   const marksDays = [
     {
@@ -112,7 +112,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
         />
 
         <Divider className={classes.divider} />
-        {isOpenCustomClassNames ? (
+        {mySchedule.isOpenCustomClassNames ? (
           <>
             <Typography variant='h6' id='classes' gutterBottom>
               Set custom class names or{' '}
@@ -122,7 +122,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
                 choose classes
               </Button>
             </Typography>
-            <CustomClassesNames />
+            <CustomClassesNames classes={mySchedule.classes} />
           </>
         ) : (
           <>

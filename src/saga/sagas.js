@@ -32,6 +32,7 @@ import {
   SET_CLASS,
   ADD_COLUMN,
   SUBTRACT_COLUMN,
+  OPEN_CUSTOM_CLASS_NAMES,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -93,6 +94,7 @@ function* addDocToCollectionSaga(action) {
       numberOfDays: 6,
       maxLessonsPerDay: 10,
       numberOfColumns: 2,
+      isOpenCustomClassNames: false,
       checked: [],
       classes: [],
       subjects: [],
@@ -109,6 +111,7 @@ function* addDocToCollectionSaga(action) {
         6,
         10,
         2,
+        false,
         [],
         [],
         [],
@@ -196,13 +199,11 @@ function* setCheckedClassesSaga() {
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {
-    const checked = schedule.checked
-    const classes = schedule.classes
-    
+  try {    
     yield call([docRef, docRef.update], {
-      classes: classes,
-      checked: checked,
+      classes: schedule.checked,
+      checked: schedule.classes,
+      isOpenCustomClassNames: schedule.isOpenCustomClassNames
     })
     console.log(`Schedule checked and classes successfully updated!`)
   } catch (error) {
@@ -222,6 +223,7 @@ export function* mySaga() {
   yield takeEvery(UPDATE_FIELD, updateFieldSaga)
   yield takeEvery(ALL_CHECK, setCheckedClassesSaga)
   yield takeEvery(CLEAR_CHECKED_AND_CLASSES, setCheckedClassesSaga)
+  yield takeEvery(OPEN_CUSTOM_CLASS_NAMES, setCheckedClassesSaga)
   yield takeEvery(SET_CHECK, setCheckedClassesSaga)
   yield takeEvery(SET_CLASS, setCheckedClassesSaga)
   yield takeEvery(ADD_COLUMN, setCheckedClassesSaga)

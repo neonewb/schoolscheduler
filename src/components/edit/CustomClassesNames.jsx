@@ -1,61 +1,81 @@
-import { IconButton, makeStyles, TextField } from '@material-ui/core'
-import React, { useState } from 'react'
+import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
+import { Controller, useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { setCustomClassAC } from '../../redux/database/firestore.actions'
 
-const useStyles = makeStyles({
-  textField: {
+const useStyles = makeStyles((theme) => ({
+  textInput: {
+    display: 'flex',
+    alignItems: 'center',
     margin: 8,
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
   },
-})
+  classDiv: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
+  },
+}))
 
-const CustomClassesNames = () => {
-  const classes = useStyles()
+const CustomClassesNames = ({ classes }) => {
+  const classeStyle = useStyles()
 
-  const [textFields, setTextFields] = useState([
-    <TextField
-      key={Math.random()*100000}
-      className={classes.textField}
-      name='customClassName'
-      type='text'
-      size='small'
-      variant='outlined'
-      placeholder='Custom name'
-      // inputRef={(e) => {
-      //   register(e)
-      //   scheduleTitleRef.current = e
-      // }}
-      // defaultValue={mySchedule.title}
-    />,
-  ])
+  const dispatch = useDispatch()
+  const { handleSubmit, control, reset } = useForm()
 
-  const handleAddCustomClass = () => {
-    setTextFields([
-      ...textFields,
-      <TextField
-        key={Math.random()*100000}
-        className={classes.textField}
-        name='customClassName'
-        type='text'
-        size='small'
-        variant='outlined'
-        placeholder='Custom name'
+  const onSubmit = (data, e) => {
+    dispatch(setCustomClassAC(data.customClassName))
+    reset({ customClassName: '' })
+    e.target.focus()
+  }
 
-        // inputRef={(e) => {
-        //   register(e)
-        //   scheduleTitleRef.current = e
-        // }}
-        // defaultValue={mySchedule.title}
-      />,
-    ])
+  const handleDelete = () => {
+    console.log('delete')
   }
 
   return (
-    <div>
-      {textFields}
-      <IconButton onClick={handleAddCustomClass}>
-        <AddCircleRoundedIcon color='primary' fontSize='default' />
-      </IconButton>
-    </div>
+    <>
+      <div className={classeStyle.classDiv}>
+        {classes.map((e) => {
+          return (
+            <Chip
+              key={Math.random() * 1000}
+              label={e}
+              variant='outlined'
+              color='primary'
+              onDelete={handleDelete}
+            />
+          )
+        })}
+      </div>
+
+      <form
+        className={classeStyle.textInput}
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        autoComplete='off'>
+        <Controller
+          as={TextField}
+          autoFocus
+          type='text'
+          name='customClassName'
+          size='small'
+          variant='outlined'
+          placeholder='Custom name'
+          control={control}
+          defaultValue=''
+        />
+
+        <IconButton type='submit'>
+          <AddCircleRoundedIcon color='primary' fontSize='default' />
+        </IconButton>
+      </form>
+    </>
   )
 }
 

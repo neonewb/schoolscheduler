@@ -19,6 +19,8 @@ import {
   SET_CHECK,
   ADD_COLUMN,
   SUBTRACT_COLUMN,
+  OPEN_CUSTOM_CLASS_NAMES,
+  SET_CUSTOM_CLASS,
 } from './firestore.actions'
 
 const initialState = {
@@ -109,6 +111,21 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           }
         }),
       }
+
+    case SET_CUSTOM_CLASS:
+      if (payload.className) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              classes: [...schedule.classes, payload.className],
+            }
+          }),
+        }
+      }
+      return state
 
     case SET_CLASS: {
       const { num, char } = payload
@@ -304,6 +321,21 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
               numberOfColumns: numOfCol - 1,
               checked: checked,
               classes: classes,
+            }
+          }
+        }),
+      }
+    }
+
+    case OPEN_CUSTOM_CLASS_NAMES: {
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          else {
+            return {
+              ...schedule,
+              isOpenCustomClassNames: !schedule.isOpenCustomClassNames,
             }
           }
         }),
