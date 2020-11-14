@@ -20,12 +20,15 @@ export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
 export const SET_CHECK = 'app/db/SET_CHECK'
 export const CLEAR_CHECKED_AND_CLASSES = 'app/db/CLEAR_CHECKED_AND_CLASSES'
 export const SET_CUSTOM_CLASS = 'app/db/SET_CUSTOM_CLASS'
+export const DELETE_CUSTOM_CLASS = 'app/db/DELETE_CUSTOM_CLASS'
 export const SET_CLASS = 'app/db/SET_CLASS'
 export const CLEAR_CLASS = 'app/db/CLEAR_CLASS'
 export const ALL_CHECK = 'app/db/ALL_CHECK'
 export const ADD_COLUMN = 'app/db/ADD_COLUMN'
 export const SUBTRACT_COLUMN = 'app/db/SUBTRACT_COLUMN'
 export const OPEN_CUSTOM_CLASS_NAMES = 'app/db/OPEN_CUSTOM_CLASS_NAMES'
+export const SET_SUBJECT = 'app/db/SET_SUBJECT'
+export const DELETE_SUBJECT = 'app/db/DELETE_SUBJECT'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -155,13 +158,20 @@ export const setCheckAC = (check) => ({
   },
 })
 
-
 export const setCustomClassAC = (className) => ({
   type: SET_CUSTOM_CLASS,
   payload: {
     className
   },
 })
+
+export const deleteCustomClassAC = (className) => ({
+  type: DELETE_CUSTOM_CLASS,
+  payload: {
+    className
+  },
+})
+
 
 export const setClassAC = (num, char) => ({
   type: SET_CLASS,
@@ -190,4 +200,18 @@ export const subtractColumnAC = () => ({
 
 export const openCustomClassNamesAC = () => ({
   type: OPEN_CUSTOM_CLASS_NAMES,
+})
+
+export const setSubjectAC = (subject) => ({
+  type: SET_SUBJECT,
+  payload: {
+    subject
+  },
+})
+
+export const deleteSubjectAC = (subject) => ({
+  type: DELETE_SUBJECT,
+  payload: {
+    subject
+  },
 })

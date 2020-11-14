@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,7 +11,8 @@ import {
   clearCheckClassAC,
   openCustomClassNamesAC,
   updateFieldAC,
-} from '../../redux/database/firestore.actions'
+} from '../../../redux/database/firestore.actions'
+import Subjects from './Subjects'
 
 const useStyles = makeStyles({
   root: {
@@ -142,6 +143,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
         <Typography variant='h6' id='subjects' gutterBottom>
           Subjects
         </Typography>
+        <Subjects subjects={mySchedule.subjects} />
 
         <Divider className={classes.divider} />
 

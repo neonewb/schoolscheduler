@@ -10,7 +10,7 @@ import {
 } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
-const SettingsSchedule = React.lazy(() => import('./SettingsSchedule'))
+const SettingsSchedule = React.lazy(() => import('./settingsSchedule/SettingsSchedule'))
 
 const Edit = () => {
   const classes = useStylesEdit()

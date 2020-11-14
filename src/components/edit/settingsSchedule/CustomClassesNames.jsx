@@ -2,7 +2,10 @@ import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { setCustomClassAC } from '../../redux/database/firestore.actions'
+import {
+  deleteCustomClassAC,
+  setCustomClassAC,
+} from '../../../redux/database/firestore.actions'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -28,14 +31,13 @@ const CustomClassesNames = ({ classes }) => {
   const dispatch = useDispatch()
   const { handleSubmit, control, reset } = useForm()
 
-  const onSubmit = (data, e) => {
-    dispatch(setCustomClassAC(data.customClassName))
+  const onSubmit = ({ customClassName }) => {
+    dispatch(setCustomClassAC(customClassName))
     reset({ customClassName: '' })
-    e.target.focus()
   }
 
-  const handleDelete = () => {
-    console.log('delete')
+  const handleDelete = (e) => {
+    dispatch(deleteCustomClassAC(e))
   }
 
   return (
@@ -48,7 +50,9 @@ const CustomClassesNames = ({ classes }) => {
               label={e}
               variant='outlined'
               color='primary'
-              onDelete={handleDelete}
+              onDelete={() => {
+                handleDelete(e)
+              }}
             />
           )
         })}

@@ -10,8 +10,8 @@ import { useDispatch } from 'react-redux'
 import {
   setCheckAC,
   setClassAC
-} from '../../../redux/database/firestore.actions'
-import { alphabet } from '../../../utils/alphabet'
+} from '../../../../redux/database/firestore.actions'
+import { alphabet } from '../../../../utils/alphabet'
 const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
   const dispatch = useDispatch()
 

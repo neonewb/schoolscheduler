@@ -15,8 +15,8 @@ import {
   setCheckAC,
   addColumnAC,
   subtractColumnAC,
-} from '../../../redux/database/firestore.actions'
-import { alphabet } from '../../../utils/alphabet'
+} from '../../../../redux/database/firestore.actions'
+import { alphabet } from '../../../../utils/alphabet'
 
 const ClassesTableHead = ({ numberOfColumns, checked }) => {
   let columns = []

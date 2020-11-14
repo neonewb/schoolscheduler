@@ -21,6 +21,9 @@ import {
   SUBTRACT_COLUMN,
   OPEN_CUSTOM_CLASS_NAMES,
   SET_CUSTOM_CLASS,
+  DELETE_CUSTOM_CLASS,
+  SET_SUBJECT,
+  DELETE_SUBJECT,
 } from './firestore.actions'
 
 const initialState = {
@@ -112,6 +115,40 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         }),
       }
 
+    case SET_SUBJECT:
+      if (payload.subject) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              subjects: schedule.subjects.includes(payload.subject)
+              ? schedule.subjects
+              : [...(schedule.subjects ?? []), payload.subject],
+            }
+          }),
+        }
+      }
+      return state
+
+    case DELETE_SUBJECT:
+      if (payload.subject) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              subjects: [
+                ...schedule.subjects.filter((e) => e !== payload.subject),
+              ],
+            }
+          }),
+        }
+      }
+      return state
+
     case SET_CUSTOM_CLASS:
       if (payload.className) {
         return {
@@ -120,7 +157,26 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
             if (!schedule.isChoosen) return schedule
             return {
               ...schedule,
-              classes: [...schedule.classes, payload.className],
+              classes: schedule.classes.includes(payload.className)
+              ? schedule.classes
+              : [...(schedule.classes ?? []), payload.className],
+            }
+          }),
+        }
+      }
+      return state
+
+    case DELETE_CUSTOM_CLASS:
+      if (payload.className) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              classes: [
+                ...schedule.classes.filter((e) => e !== payload.className),
+              ],
             }
           }),
         }
