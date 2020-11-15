@@ -70,7 +70,7 @@ const CustomClassesNames = ({ classes }) => {
           name='customClassName'
           size='small'
           variant='outlined'
-          placeholder='Custom name'
+          label='Custom name'
           control={control}
           defaultValue=''
         />

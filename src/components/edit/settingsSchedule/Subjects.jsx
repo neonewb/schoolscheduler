@@ -6,6 +6,8 @@ import {
   setSubjectAC,
   deleteSubjectAC,
 } from '../../../redux/database/firestore.actions'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import { useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -23,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
-  short: {
-    width: 51,
-  }
 }))
 
 const Subjects = ({ subjects }) => {
@@ -34,14 +33,17 @@ const Subjects = ({ subjects }) => {
   const dispatch = useDispatch()
   const { handleSubmit, control, reset } = useForm()
 
-  const onSubmit = ({ customClassName }) => {
-    dispatch(setSubjectAC(customClassName))
-    reset({ customClassName: '' })
+  const submit = ( data ) => {
+    // console.log(data);
+    dispatch(setSubjectAC(data.subject))
+    reset({ subject: '' })
   }
 
   const handleDelete = (e) => {
     dispatch(deleteSubjectAC(e))
   }
+
+  const subjectsOptions = ['Astronomy', 'History', 'Mathematics']
 
   return (
     <>
@@ -63,19 +65,30 @@ const Subjects = ({ subjects }) => {
 
       <form
         className={classes.textInput}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(submit)}
         noValidate
         autoComplete='off'>
-
         <Controller
-          as={TextField}
-          type='text'
-          name='customClassName'
-          size='small'
-          variant='outlined'
-          placeholder='Custom name'
-          control={control}
+          name='subject'
+          as={
+            <Autocomplete
+              freeSolo
+              selectOnFocus
+              handleHomeEndKeys
+              options={subjectsOptions}
+              style={{ width: 223 }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size='small'
+                  label='Subject'
+                  variant='outlined'
+                />
+              )}
+            />
+          }
           defaultValue=''
+          control={control}
         />
 
         <IconButton type='submit'>
