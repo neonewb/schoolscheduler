@@ -37,6 +37,8 @@ import {
   DELETE_CUSTOM_CLASS,
   SET_SUBJECT,
   DELETE_SUBJECT,
+  SET_TEACHER,
+  DELETE_TEACHER,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -230,6 +232,21 @@ function* setSubjectSaga() {
   }
 }
 
+function* setTeacherSaga() {
+  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+
+  const docRef = schedulesColl.doc(schedule.id)
+
+  try {    
+    yield call([docRef, docRef.update], {
+      teachers: schedule.teachers,
+    })
+    console.log(`Schedule teachers successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -251,4 +268,6 @@ export function* mySaga() {
   yield takeEvery(SUBTRACT_COLUMN, setCheckedClassesSaga)
   yield takeEvery(SET_SUBJECT, setSubjectSaga)
   yield takeEvery(DELETE_SUBJECT, setSubjectSaga)
+  yield takeEvery(SET_TEACHER, setTeacherSaga)
+  yield takeEvery(DELETE_TEACHER, setTeacherSaga)
 }

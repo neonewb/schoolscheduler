@@ -13,6 +13,7 @@ import {
   updateFieldAC,
 } from '../../../redux/database/firestore.actions'
 import Subjects from './Subjects'
+import Teachers from './Teachers'
 
 const useStyles = makeStyles({
   root: {
@@ -150,6 +151,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
         <Typography variant='h6' id='teachers' gutterBottom>
           Teachers
         </Typography>
+        <Teachers teachers={mySchedule.teachers} />
 
         <Divider className={classes.divider} />
 

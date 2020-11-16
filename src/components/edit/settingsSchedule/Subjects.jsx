@@ -53,8 +53,6 @@ const Subjects = ({ subjects }) => {
     dispatch(deleteSubjectAC(e))
   }
 
-
-
   return (
     <>
       <div className={classes.subjectsDiv}>

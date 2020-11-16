@@ -29,6 +29,8 @@ export const SUBTRACT_COLUMN = 'app/db/SUBTRACT_COLUMN'
 export const OPEN_CUSTOM_CLASS_NAMES = 'app/db/OPEN_CUSTOM_CLASS_NAMES'
 export const SET_SUBJECT = 'app/db/SET_SUBJECT'
 export const DELETE_SUBJECT = 'app/db/DELETE_SUBJECT'
+export const SET_TEACHER = 'app/db/SET_TEACHER'
+export const DELETE_TEACHER = 'app/db/DELETE_TEACHER'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -213,5 +215,19 @@ export const deleteSubjectAC = (subject) => ({
   type: DELETE_SUBJECT,
   payload: {
     subject
+  },
+})
+
+export const setTeacherAC = (teacher) => ({
+  type: SET_TEACHER,
+  payload: {
+    teacher
+  },
+})
+
+export const deleteTeacherAC = (teacher) => ({
+  type: DELETE_TEACHER,
+  payload: {
+    teacher
   },
 })

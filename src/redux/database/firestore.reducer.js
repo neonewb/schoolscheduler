@@ -24,6 +24,8 @@ import {
   DELETE_CUSTOM_CLASS,
   SET_SUBJECT,
   DELETE_SUBJECT,
+  SET_TEACHER,
+  DELETE_TEACHER,
 } from './firestore.actions'
 
 const initialState = {
@@ -142,6 +144,40 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
               ...schedule,
               subjects: [
                 ...schedule.subjects.filter((e) => e !== payload.subject),
+              ],
+            }
+          }),
+        }
+      }
+      return state
+
+    case SET_TEACHER:
+      if (payload.teacher) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              teachers: schedule.teachers.includes(payload.teacher)
+              ? schedule.teachers
+              : [...(schedule.teachers ?? []), payload.teacher],
+            }
+          }),
+        }
+      }
+      return state
+
+    case DELETE_TEACHER:
+      if (payload.teacher) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              teachers: [
+                ...schedule.teachers.filter((e) => e !== payload.teacher),
               ],
             }
           }),

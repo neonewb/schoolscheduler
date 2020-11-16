@@ -3,8 +3,8 @@ import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import {
-  deleteCustomClassAC,
-  setCustomClassAC,
+  deleteTeacherAC,
+  setTeacherAC,
 } from '../../../redux/database/firestore.actions'
 
 const useStyles = makeStyles((theme) => ({
@@ -25,25 +25,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CustomClassesNames = ({ classes }) => {
+const Teachers = ({ teachers }) => {
   const classeStyle = useStyles()
 
   const dispatch = useDispatch()
   const { handleSubmit, control, reset } = useForm()
 
-  const onSubmit = ({ customClassName }) => {
-    dispatch(setCustomClassAC(customClassName))
-    reset({ customClassName: '' })
+  const onSubmit = ({ teacher }) => {
+    dispatch(setTeacherAC(teacher))
+    reset({ teacher: '' })
   }
 
   const handleDelete = (e) => {
-    dispatch(deleteCustomClassAC(e))
+    dispatch(deleteTeacherAC(e))
   }
 
   return (
     <>
       <div className={classeStyle.classDiv}>
-        {classes.map((e) => {
+        {teachers.map((e) => {
           return (
             <Chip
               key={Math.random() * 1000}
@@ -66,10 +66,10 @@ const CustomClassesNames = ({ classes }) => {
         <Controller
           as={TextField}
           type='text'
-          name='customClassName'
+          name='teacher'
           size='small'
           variant='outlined'
-          label='Custom name'
+          label='Teacher'
           control={control}
           defaultValue=''
         />
@@ -82,4 +82,4 @@ const CustomClassesNames = ({ classes }) => {
   )
 }
 
-export default CustomClassesNames
+export default Teachers
