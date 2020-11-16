@@ -1,6 +1,5 @@
 import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
-import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import {
   setSubjectAC,
@@ -8,6 +7,7 @@ import {
 } from '../../../redux/database/firestore.actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { useState } from 'react'
+import { subjectsOptions } from '../../../utils/subjects'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -31,19 +31,29 @@ const Subjects = ({ subjects }) => {
   const classes = useStyles()
 
   const dispatch = useDispatch()
-  const { handleSubmit, control, reset } = useForm()
 
-  const submit = ( data ) => {
-    // console.log(data);
-    dispatch(setSubjectAC(data.subject))
-    reset({ subject: '' })
+  const [value, setValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    dispatch(setSubjectAC(inputValue))
+  }
+  
+  const handleChange = (event, newValue) => {
+    dispatch(setSubjectAC(newValue))
+    setValue(newValue)
+  }
+
+  const handleInputChange = (event, newValue) => {
+    setInputValue(newValue)
   }
 
   const handleDelete = (e) => {
     dispatch(deleteSubjectAC(e))
   }
 
-  const subjectsOptions = ['Astronomy', 'History', 'Mathematics']
+
 
   return (
     <>
@@ -65,30 +75,37 @@ const Subjects = ({ subjects }) => {
 
       <form
         className={classes.textInput}
-        onSubmit={handleSubmit(submit)}
+        onSubmit={(e) => handleSubmit(e)}
         noValidate
         autoComplete='off'>
-        <Controller
-          name='subject'
-          as={
-            <Autocomplete
-              freeSolo
-              selectOnFocus
-              handleHomeEndKeys
-              options={subjectsOptions}
-              style={{ width: 223 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size='small'
-                  label='Subject'
-                  variant='outlined'
-                />
-              )}
+
+        <Autocomplete
+          openOnFocus
+          autoComplete
+          includeInputInList
+          disableCloseOnSelect
+          clearOnEscape
+          freeSolo
+          selectOnFocus
+          handleHomeEndKeys
+          options={subjectsOptions}
+          value={value}
+          onChange={(event, newValue) => {
+            handleChange(event, newValue)
+          }}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            handleInputChange(event, newInputValue);
+          }}
+          style={{ width: 223 }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size='small'
+              label='Subject'
+              variant='outlined'
             />
-          }
-          defaultValue=''
-          control={control}
+          )}
         />
 
         <IconButton type='submit'>
