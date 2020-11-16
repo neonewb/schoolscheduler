@@ -1,9 +1,4 @@
-import {
-  Button,
-  Divider,
-  Toolbar,
-  Tooltip,
-} from '@material-ui/core'
+import { Button, Divider, Toolbar, Tooltip } from '@material-ui/core'
 import React from 'react'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
@@ -11,17 +6,24 @@ import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 import PrintRoundedIcon from '@material-ui/icons/PrintRounded'
 import { useStylesEditToolBar } from '../../styles/stylesEditToolBar'
 
-const EditToolBar = ({setIsSetSchedOpen, isOpen}) => {
+const EditToolBar = ({ setSchedOpen, isOpen, mySchedule }) => {
   const classes = useStylesEditToolBar()
   const handleSettingsClick = () => {
-    setIsSetSchedOpen(!isOpen)
+    setSchedOpen(!isOpen)
   }
+
   return (
     <Toolbar className={classes.toolBar} variant='dense'>
       <Tooltip title='Settings Schedule'>
-        <Button onClick={handleSettingsClick} className={classes.button} aria-label='Settings Schedule'>
-          <SettingsRoundedIcon color='primary' fontSize='default' />
-        </Button>
+        <div>
+          <Button
+            disabled={!mySchedule}
+            onClick={handleSettingsClick}
+            className={classes.button}
+            aria-label='Settings Schedule'>
+            <SettingsRoundedIcon color='primary' fontSize='default' />
+          </Button>
+        </div>
       </Tooltip>
 
       <Divider orientation='vertical' light flexItem />
@@ -46,8 +48,6 @@ const EditToolBar = ({setIsSetSchedOpen, isOpen}) => {
           <DeleteRoundedIcon color='primary' fontSize='default' />
         </Button>
       </Tooltip>
-
-
     </Toolbar>
   )
 }

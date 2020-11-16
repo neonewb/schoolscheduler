@@ -67,6 +67,7 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
           id='title'
           size='small'
           variant='outlined'
+          onFocus={()=>{scheduleTitleRef.current.select()}}
           inputRef={(e) => {
             register(e)
             scheduleTitleRef.current = e

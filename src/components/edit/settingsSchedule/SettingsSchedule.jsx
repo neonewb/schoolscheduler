@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Button, Divider } from '@material-ui/core'
 import ClassesTable from './classesTable/ClassesTable'
 import CustomClassesNames from './CustomClassesNames'
-import { teal } from '@material-ui/core/colors'
+import { deepPurple, teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
   clearCheckClassAC,
@@ -14,6 +14,13 @@ import {
 } from '../../../redux/database/firestore.actions'
 import Subjects from './Subjects'
 import Teachers from './Teachers'
+import Load from './load/Load'
+import BookRoundedIcon from '@material-ui/icons/BookRounded'
+import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded'
+import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRounded'
+import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded'
+import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
+import HourglassFullRoundedIcon from '@material-ui/icons/HourglassFullRounded'
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +40,20 @@ const useStyles = makeStyles({
     fontWeight: 500,
     color: teal[500],
   },
+  section: {
+    display: 'flex',
+  },
+  finalButton: {
+    fontFamily: 'Comfortaa',
+    textTransform: 'none',
+    fontSize: '1.25rem',
+    margin: 12,
+  },
+  rippleColor: {
+    '& .MuiTouchRipple-child': {
+      backgroundColor: deepPurple[400],
+    },
+  },
 })
 
 const SettingsSchedule = ({ isOpen, mySchedule }) => {
@@ -46,7 +67,6 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
   const handleChangeMaxLessons = (event, newValue) => {
     dispatch(updateFieldAC(mySchedule.id, 'maxLessonsPerDay', newValue))
   }
-
 
   const handleOpenCustomClassNames = () => {
     dispatch(clearCheckClassAC(mySchedule.id))
@@ -81,9 +101,17 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
   if (isOpen) {
     return (
       <div className={classes.root}>
-        <Typography variant='h6' id='days-slider' gutterBottom>
-          Number of days
-        </Typography>
+        <div className={classes.section}>
+          <DateRangeRoundedIcon
+            className={classes.icon}
+            fontSize='large'
+            color='primary'
+          />
+          <Typography variant='h6' id='days-slider' gutterBottom>
+            Number of days
+          </Typography>
+        </div>
+
         <Slider
           className={classes.slider}
           defaultValue={6}
@@ -98,9 +126,16 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
 
         <Divider className={classes.divider} />
 
-        <Typography variant='h6' id='lessons-slider' gutterBottom>
-          Maximum lessons per day
-        </Typography>
+        <div className={classes.section}>
+          <TodayRoundedIcon
+            className={classes.icon}
+            fontSize='large'
+            color='primary'
+          />
+          <Typography variant='h6' id='lessons-slider' gutterBottom>
+            Maximum lessons per day
+          </Typography>
+        </div>
         <Slider
           className={classes.slider}
           defaultValue={10}
@@ -116,48 +151,99 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
         <Divider className={classes.divider} />
         {mySchedule.isOpenCustomClassNames ? (
           <>
-            <Typography variant='h6' id='classes' gutterBottom>
-              Set custom class names or{' '}
-              <Button
-                className={classes.button}
-                onClick={handleOpenCustomClassNames}>
-                choose classes
-              </Button>
-            </Typography>
+            <div className={classes.section}>
+              <SupervisorAccountRoundedIcon
+                className={classes.icon}
+                fontSize='large'
+                color='primary'
+              />
+              <Typography variant='h6' id='classes' gutterBottom>
+                Set custom classes or{' '}
+                <Button
+                  className={classes.button}
+                  onClick={handleOpenCustomClassNames}>
+                  choose classes
+                </Button>
+              </Typography>
+            </div>
             <CustomClassesNames classes={mySchedule.classes} />
           </>
         ) : (
           <>
-            <Typography variant='h6' id='classes' gutterBottom>
-              Choose classes or{' '}
-              <Button
-                className={classes.button}
-                onClick={handleOpenCustomClassNames}>
-                set custom names
-              </Button>
-            </Typography>
+            <div className={classes.section}>
+              <SupervisorAccountRoundedIcon
+                className={classes.icon}
+                fontSize='large'
+                color='primary'
+              />
+              <Typography variant='h6' id='classes' gutterBottom>
+                Choose classes or{' '}
+                <Button
+                  className={classes.button}
+                  onClick={handleOpenCustomClassNames}>
+                  set custom names
+                </Button>
+              </Typography>
+            </div>
             <ClassesTable mySchedule={mySchedule} />
           </>
         )}
 
         <Divider className={classes.divider} />
-        <Typography variant='h6' id='subjects' gutterBottom>
-          Subjects
-        </Typography>
+        <div className={classes.section}>
+          <BookRoundedIcon
+            className={classes.icon}
+            fontSize='large'
+            color='primary'
+          />
+          <Typography variant='h6' id='subjects' gutterBottom>
+            Subjects
+          </Typography>
+        </div>
         <Subjects subjects={mySchedule.subjects} />
 
         <Divider className={classes.divider} />
 
-        <Typography variant='h6' id='teachers' gutterBottom>
-          Teachers
-        </Typography>
+        <div className={classes.section}>
+          <SchoolRoundedIcon
+            className={classes.icon}
+            fontSize='large'
+            color='primary'
+          />
+          <Typography variant='h6' id='teachers' gutterBottom>
+            Teachers
+          </Typography>
+        </div>
         <Teachers teachers={mySchedule.teachers} />
 
         <Divider className={classes.divider} />
 
-        <Typography variant='h6' id='load' gutterBottom>
-          Load
-        </Typography>
+        <div className={classes.section}>
+          <HourglassFullRoundedIcon
+            className={classes.icon}
+            fontSize='large'
+            color='primary'
+          />
+          <Typography variant='h6' id='load' gutterBottom>
+            Load
+          </Typography>
+        </div>
+
+        <Load mySchedule={mySchedule} />
+
+        <Button
+          className={classes.finalButton}
+          color='primary'
+          variant='outlined'>
+          Auto generate
+        </Button>
+
+        <Button
+          className={`${classes.finalButton} + ${classes.rippleColor}`}
+          color='secondary'
+          variant='outlined'>
+          Manually create
+        </Button>
       </div>
     )
   }

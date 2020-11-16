@@ -10,12 +10,14 @@ import {
 } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
-const SettingsSchedule = React.lazy(() => import('./settingsSchedule/SettingsSchedule'))
+const SettingsSchedule = React.lazy(() =>
+  import('./settingsSchedule/SettingsSchedule')
+)
 
 const Edit = () => {
   const classes = useStylesEdit()
 
-  const [isSetSchedOpen, setIsSetSchedOpen] = useState(false)
+  const [isSetSchedOpen, setSchedOpen] = useState(false)
 
   const user = useSelector((state) => state.auth.currentUser)
 
@@ -64,8 +66,10 @@ const Edit = () => {
       <Divider />
 
       <EditToolBar
-        setIsSetSchedOpen={setIsSetSchedOpen}
+        setSchedOpen={setSchedOpen}
         isOpen={isSetSchedOpen}
+        isLoading={isLoading}
+        mySchedule={mySchedule}
       />
 
       <Divider />

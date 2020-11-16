@@ -40,12 +40,12 @@ const Subjects = ({ subjects }) => {
     dispatch(setSubjectAC(inputValue))
   }
   
-  const handleChange = (event, newValue) => {
+  const handleChange = (newValue) => {
     dispatch(setSubjectAC(newValue))
     setValue(newValue)
   }
 
-  const handleInputChange = (event, newValue) => {
+  const handleInputChange = (newValue) => {
     setInputValue(newValue)
   }
 
@@ -89,11 +89,11 @@ const Subjects = ({ subjects }) => {
           options={subjectsOptions}
           value={value}
           onChange={(event, newValue) => {
-            handleChange(event, newValue)
+            handleChange(newValue)
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
-            handleInputChange(event, newInputValue);
+            handleInputChange(newInputValue);
           }}
           style={{ width: 223 }}
           renderInput={(params) => (
