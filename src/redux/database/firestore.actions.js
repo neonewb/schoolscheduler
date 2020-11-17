@@ -31,6 +31,7 @@ export const SET_SUBJECT = 'app/db/SET_SUBJECT'
 export const DELETE_SUBJECT = 'app/db/DELETE_SUBJECT'
 export const SET_TEACHER = 'app/db/SET_TEACHER'
 export const DELETE_TEACHER = 'app/db/DELETE_TEACHER'
+export const SET_LOAD = 'app/db/SET_LOAD'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -163,17 +164,16 @@ export const setCheckAC = (check) => ({
 export const setCustomClassAC = (className) => ({
   type: SET_CUSTOM_CLASS,
   payload: {
-    className
+    className,
   },
 })
 
 export const deleteCustomClassAC = (className) => ({
   type: DELETE_CUSTOM_CLASS,
   payload: {
-    className
+    className,
   },
 })
-
 
 export const setClassAC = (num, char) => ({
   type: SET_CLASS,
@@ -207,27 +207,34 @@ export const openCustomClassNamesAC = () => ({
 export const setSubjectAC = (subject) => ({
   type: SET_SUBJECT,
   payload: {
-    subject
+    subject,
   },
 })
 
 export const deleteSubjectAC = (subject) => ({
   type: DELETE_SUBJECT,
   payload: {
-    subject
+    subject,
   },
 })
 
 export const setTeacherAC = (teacher) => ({
   type: SET_TEACHER,
   payload: {
-    teacher
+    teacher,
   },
 })
 
 export const deleteTeacherAC = (teacher) => ({
   type: DELETE_TEACHER,
   payload: {
-    teacher
+    teacher,
+  },
+})
+
+export const setLoadAC = (newLoad) => ({
+  type: SET_LOAD,
+  payload: {
+    newLoad: newLoad,
   },
 })

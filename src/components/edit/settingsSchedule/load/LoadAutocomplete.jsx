@@ -3,50 +3,45 @@ import { TextField } from '@material-ui/core'
 
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
-const LoadAutocomplete = ({options, label}) => {
-  if (!options) {
-    options = [...Array(10).keys()].map(String)
-    console.log(options);
+const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
+  if (options === 'numbers') {
+    options = [...Array(11).keys()].map(String).slice(1)
   }
 
   const [value, setValue] = useState('')
-  const [inputValue, setInputValue] = useState('')
+  // const [inputValue, setInputValue] = useState('')
 
   const handleChange = (newValue) => {
-    // dispatch(setSubjectAC(newValue))
+    handleNewLoad(label.toLowerCase(), newValue)
     setValue(newValue)
   }
 
-  const handleInputChange = (newValue) => {
-    setInputValue(newValue)
-  }
+  // const handleInputChange = (newValue) => {
+  //   setInputValue(newValue)
+  // }
 
   return (
     <Autocomplete
       openOnFocus
       autoComplete
+      autoSelect
+      autoHighlight
       includeInputInList
-      disableCloseOnSelect
       clearOnEscape
       selectOnFocus
       handleHomeEndKeys
       options={options}
       value={value}
-      onChange={(newValue) => {
+      onChange={(event, newValue) => {
         handleChange(newValue)
       }}
-      inputValue={inputValue}
-      onInputChange={(newInputValue) => {
-        handleInputChange(newInputValue)
-      }}
+      // inputValue={inputValue}
+      // onInputChange={(event, newInputValue) => {
+      //   handleInputChange(newInputValue)
+      // }}
       style={{ width: 223 }}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          size='small'
-          label={label}
-          variant='outlined'
-        />
+        <TextField {...params} size='small' label={label} variant='outlined' />
       )}
     />
   )

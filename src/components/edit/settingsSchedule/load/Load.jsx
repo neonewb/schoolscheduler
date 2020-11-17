@@ -1,13 +1,20 @@
-import React, { useState } from 'react'
-import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
-import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
 import {
-  setSubjectAC,
-  deleteSubjectAC,
-} from '../../../../redux/database/firestore.actions'
+  IconButton,
+  makeStyles,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@material-ui/core'
+import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
+import { useDispatch } from 'react-redux'
+
 import LoadAutocomplete from './LoadAutocomplete'
+import { setLoadAC } from '../../../../redux/database/firestore.actions'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -18,65 +25,97 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(0.5),
     },
   },
-  subjectsDiv: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
-  },
 }))
 
 const Load = ({ mySchedule }) => {
-  let { classes, subjects, teachers } = mySchedule
+  let { classes, subjects, teachers, load } = mySchedule
   const styles = useStyles()
 
   const dispatch = useDispatch()
 
+  const [newLoad, setNewLoad] = useState({})
+
+  const handleNewLoad = (key, value) => {
+    setNewLoad({
+      ...newLoad,
+      [key]: value,
+    })
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    // dispatch(setSubjectAC(inputValue))
+    console.log(newLoad)
+    dispatch(setLoadAC(newLoad))
   }
 
   const handleDelete = (e) => {
     // dispatch(deleteSubjectAC(e))
   }
 
+  useEffect(() => {
+    console.log(newLoad)
+    // for (const [key, value] of Object.entries(newLoad)) {
+    //   console.log(`${key}: ${value}`)
+    // }
+  }, [newLoad])
+
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
       <>
-        <div className={styles.subjectsDiv}>
-          {/* {subjects.map((e) => {
-            return (
-              <Chip
-                key={Math.random() * 1000}
-                label={e}
-                variant='outlined'
-                color='primary'
-                onDelete={() => {
-                  handleDelete(e)
-                }}
-              />
-            )
-          })} */}
-        </div>
-
         <form
           className={styles.textInput}
           onSubmit={(e) => handleSubmit(e)}
           noValidate
           autoComplete='off'>
-
-          <LoadAutocomplete label={'Teacher'} options={teachers} />
-          <LoadAutocomplete label={'Subject'} options={subjects} />
-          <LoadAutocomplete label={'Classes'} options={classes} />
-          <LoadAutocomplete label={'№ lessons/week'} />
-
+          <LoadAutocomplete
+            label={'Teacher'}
+            options={teachers}
+            handleNewLoad={handleNewLoad}
+          />
+          <LoadAutocomplete
+            label={'Subject'}
+            options={subjects}
+            handleNewLoad={handleNewLoad}
+          />
+          <LoadAutocomplete
+            label={'Classes'}
+            options={classes}
+            handleNewLoad={handleNewLoad}
+          />
+          <LoadAutocomplete
+            label={'Lessons/week'}
+            options={'numbers'}
+            handleNewLoad={handleNewLoad}
+          />
 
           <IconButton type='submit'>
             <AddCircleRoundedIcon color='primary' fontSize='default' />
           </IconButton>
         </form>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Teacher</TableCell>
+                <TableCell>Subject</TableCell>
+                <TableCell>Classes</TableCell>
+                <TableCell>Lessons/week</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {load.map((e) => {
+                return (
+                  <TableRow key={Math.random() * 1000}>
+                    <TableCell>{e.teacher}</TableCell>
+                    <TableCell>{e.subject}</TableCell>
+                    <TableCell>{e.classes}</TableCell>
+                    <TableCell>{e['lessons/week']}</TableCell>
+                  </TableRow>
+                )
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </>
     )
   } else {

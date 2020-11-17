@@ -26,6 +26,7 @@ import {
   DELETE_SUBJECT,
   SET_TEACHER,
   DELETE_TEACHER,
+  SET_LOAD,
 } from './firestore.actions'
 
 const initialState = {
@@ -126,8 +127,8 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
             return {
               ...schedule,
               subjects: schedule.subjects.includes(payload.subject)
-              ? schedule.subjects
-              : [...(schedule.subjects ?? []), payload.subject],
+                ? schedule.subjects
+                : [...(schedule.subjects ?? []), payload.subject],
             }
           }),
         }
@@ -160,8 +161,8 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
             return {
               ...schedule,
               teachers: schedule.teachers.includes(payload.teacher)
-              ? schedule.teachers
-              : [...(schedule.teachers ?? []), payload.teacher],
+                ? schedule.teachers
+                : [...(schedule.teachers ?? []), payload.teacher],
             }
           }),
         }
@@ -185,6 +186,30 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
       return state
 
+    case SET_LOAD:
+      let {
+        teacher,
+        subject,
+        classes,
+        'lessons/week': numLessons,
+      } = payload.newLoad
+      if (teacher && subject && classes && numLessons) {
+        return {
+          ...state,
+          schedules: state.schedules.map((schedule) => {
+            if (!schedule.isChoosen) return schedule
+            return {
+              ...schedule,
+              load: [...(schedule.load ?? []), payload.newLoad],
+              // schedule.load.includes(payload.teacher)
+              // ? schedule.load
+              // : [...(schedule.load ?? []), payload.teacher],
+            }
+          }),
+        }
+      }
+      return state
+
     case SET_CUSTOM_CLASS:
       if (payload.className) {
         return {
@@ -194,8 +219,8 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
             return {
               ...schedule,
               classes: schedule.classes.includes(payload.className)
-              ? schedule.classes
-              : [...(schedule.classes ?? []), payload.className],
+                ? schedule.classes
+                : [...(schedule.classes ?? []), payload.className],
             }
           }),
         }

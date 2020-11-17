@@ -39,7 +39,7 @@ const Subjects = ({ subjects }) => {
     event.preventDefault()
     dispatch(setSubjectAC(inputValue))
   }
-  
+
   const handleChange = (newValue) => {
     dispatch(setSubjectAC(newValue))
     setValue(newValue)
@@ -76,7 +76,6 @@ const Subjects = ({ subjects }) => {
         onSubmit={(e) => handleSubmit(e)}
         noValidate
         autoComplete='off'>
-
         <Autocomplete
           openOnFocus
           autoComplete
@@ -93,7 +92,7 @@ const Subjects = ({ subjects }) => {
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
-            handleInputChange(newInputValue);
+            handleInputChange(newInputValue)
           }}
           style={{ width: 223 }}
           renderInput={(params) => (
