@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom'
 import { Button, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import clsx from 'clsx'
+import { useDispatch } from 'react-redux'
+import { chooseSingleAC } from '../../redux/database/firestore.actions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,10 +35,14 @@ const useStyles = makeStyles((theme) => ({
 
 const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   const history = useHistory()
-  const handleOnDubbleClick = (id) => history.push(`/edit/${id}`)
+  const handleOnDubbleClick = (id) => {
+    history.push(`/edit/${id}`)
+    dispatch(chooseSingleAC(id))
 
+}
   let items
 
   if (schedules.length > 0) {

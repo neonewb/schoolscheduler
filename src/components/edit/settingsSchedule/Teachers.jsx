@@ -46,7 +46,7 @@ const Teachers = ({ teachers }) => {
         {teachers.map((e) => {
           return (
             <Chip
-              key={Math.random() * 1000}
+              key={e}
               label={e}
               variant='outlined'
               color='primary'

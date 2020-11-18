@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { TextField } from '@material-ui/core'
-
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
 const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
@@ -9,16 +8,11 @@ const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
   }
 
   const [value, setValue] = useState('')
-  // const [inputValue, setInputValue] = useState('')
 
   const handleChange = (newValue) => {
     handleNewLoad(label.toLowerCase(), newValue)
     setValue(newValue)
   }
-
-  // const handleInputChange = (newValue) => {
-  //   setInputValue(newValue)
-  // }
 
   return (
     <Autocomplete
@@ -35,10 +29,6 @@ const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
       onChange={(event, newValue) => {
         handleChange(newValue)
       }}
-      // inputValue={inputValue}
-      // onInputChange={(event, newInputValue) => {
-      //   handleInputChange(newInputValue)
-      // }}
       style={{ width: 223 }}
       renderInput={(params) => (
         <TextField {...params} size='small' label={label} variant='outlined' />

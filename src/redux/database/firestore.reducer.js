@@ -1,5 +1,6 @@
 import { alphabet } from '../../utils/alphabet'
 import { isANumber } from '../../utils/funcs'
+import { nanoid } from 'nanoid'
 import {
   ADD_DOC_TO_COLLECTION_FAILED,
   ADD_DOC_TO_COLLECTION_SUCCESS,
@@ -27,6 +28,8 @@ import {
   SET_TEACHER,
   DELETE_TEACHER,
   SET_LOAD,
+  CANCEL_CHOICE,
+  DELETE_LOAD,
 } from './firestore.actions'
 
 const initialState = {
@@ -77,6 +80,17 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           return {
             ...schedule,
             isChoosen: !schedule.isChoosen,
+          }
+        }),
+      }
+
+    case CANCEL_CHOICE:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          return {
+            ...schedule,
+            isChoosen: false,
           }
         }),
       }
@@ -186,29 +200,53 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
       return state
 
-    case SET_LOAD:
-      let {
-        teacher,
-        subject,
-        classes,
-        'lessons/week': numLessons,
-      } = payload.newLoad
-      if (teacher && subject && classes && numLessons) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              load: [...(schedule.load ?? []), payload.newLoad],
-              // schedule.load.includes(payload.teacher)
-              // ? schedule.load
-              // : [...(schedule.load ?? []), payload.teacher],
-            }
-          }),
+    case SET_LOAD: {
+      const schedule = state.schedules.find((e) => e.isChoosen)
+      let { teacher, subject, classes, lessons } = payload.newLoad
+
+      if (teacher && subject && classes && lessons) {
+        let isIncludesLoad = false
+        schedule.load.forEach((e) => {
+          if (
+            e.teacher === teacher &&
+            e.subject === subject &&
+            e.classes === classes &&
+            e.lessons === lessons
+          ) {
+            isIncludesLoad = true
+          }
+        })
+        if (!isIncludesLoad) {
+          return {
+            ...state,
+            schedules: state.schedules.map((schedule) => {
+              if (!schedule.isChoosen) return schedule
+              return {
+                ...schedule,
+                load: [
+                  ...(schedule.load ?? []),
+                  { ...payload.newLoad, id: nanoid() },
+                ],
+              }
+            }),
+          }
         }
+        return state
       }
       return state
+    }
+
+    case DELETE_LOAD:
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            load: [...schedule.load.filter((e) => e.id !== payload.id)],
+          }
+        }),
+      }
 
     case SET_CUSTOM_CLASS:
       if (payload.className) {

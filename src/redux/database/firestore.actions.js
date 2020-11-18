@@ -14,6 +14,7 @@ export const CLEAR_RX_STATE = 'app/db/CLEAR_RX_STATE'
 export const SET_IS_LOADING_TRUE = 'app/db/SET_IS_LOADING_TRUE'
 export const SET_IS_LOADING_FALSE = 'app/db/SET_IS_LOADING_FALSE'
 export const CHOOSE_SCHEDULE = 'app/db/CHOOSE_SCHEDULE'
+export const CANCEL_CHOICE = 'app/db/CANCEL_CHOICE'
 export const CHOOSE_SINGLE_SCHEDULE = 'app/db/CHOOSE_SINGLE_SCHEDULE'
 export const UPDATE_SCHEDULE_FAILED = 'app/db/UPDATE_SCHEDULE_FAILED'
 export const UPDATE_FIELD = 'app/db/UPDATE_FIELD'
@@ -32,6 +33,7 @@ export const DELETE_SUBJECT = 'app/db/DELETE_SUBJECT'
 export const SET_TEACHER = 'app/db/SET_TEACHER'
 export const DELETE_TEACHER = 'app/db/DELETE_TEACHER'
 export const SET_LOAD = 'app/db/SET_LOAD'
+export const DELETE_LOAD = 'app/db/DELETE_LOAD'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -123,6 +125,10 @@ export const chooseScheduleAC = (docID) => ({
   payload: {
     docID,
   },
+})
+
+export const cancelСhoiceAC = () => ({
+  type: CANCEL_CHOICE,
 })
 
 export const chooseSingleAC = (schedID) => ({
@@ -236,5 +242,12 @@ export const setLoadAC = (newLoad) => ({
   type: SET_LOAD,
   payload: {
     newLoad: newLoad,
+  },
+})
+
+export const deleteLoadAC = (id) => ({
+  type: DELETE_LOAD,
+  payload: {
+    id
   },
 })

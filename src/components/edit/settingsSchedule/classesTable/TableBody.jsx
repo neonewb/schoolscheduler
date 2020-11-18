@@ -9,7 +9,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import {
   setCheckAC,
-  setClassAC
+  setClassAC,
 } from '../../../../redux/database/firestore.actions'
 import { alphabet } from '../../../../utils/alphabet'
 const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
@@ -30,7 +30,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
 
     let parralelName = i + 1 + ''
     row.push(
-      <TableCell key={i + 100 * Math.random()}>
+      <TableCell key={i + 123 * 100 + parralelName}>
         <FormControlLabel
           control={
             <Checkbox
@@ -48,7 +48,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
     for (let j = 0; j < numberOfColumns; j++) {
       let className = `${i + 1} ${alphabet[j]}`
       row.push(
-        <TableCell key={j + 100 * Math.random()}>
+        <TableCell key={j + 123 * 100 + className}>
           <FormControlLabel
             control={
               <Checkbox
@@ -70,8 +70,8 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
 
   return (
     <TableBody>
-      {rows.map((row) => (
-        <TableRow key={100 * Math.random()}>{row}</TableRow>
+      {rows.map((row, index) => (
+        <TableRow key={index+123*123}>{row}</TableRow>
       ))}
     </TableBody>
   )

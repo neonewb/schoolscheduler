@@ -59,7 +59,7 @@ const Subjects = ({ subjects }) => {
         {subjects.map((e) => {
           return (
             <Chip
-              key={Math.random() * 1000}
+              key={e}
               label={e}
               variant='outlined'
               color='primary'

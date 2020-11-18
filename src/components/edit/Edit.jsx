@@ -5,7 +5,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
 import {
-  chooseSingleAC,
   getDocFromDBAC,
 } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
@@ -30,11 +29,7 @@ const Edit = () => {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  let mySchedule = schedules.find((i) => i.id)
-
-  if (mySchedule === undefined) {
-    mySchedule = schedules[0]
-  }
+  let mySchedule = schedules.find((i) => i.id === id)
 
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged((userAuth) => {
@@ -46,12 +41,6 @@ const Edit = () => {
     })
     return () => unsubscribeFromAuth()
   }, [history, schedules, dispatch, id])
-
-  useEffect(() => {
-    if (mySchedule !== undefined && !isLoading) {
-      dispatch(chooseSingleAC(mySchedule.id))
-    }
-  }, [isLoading])
 
   return (
     <div className={classes.root}>

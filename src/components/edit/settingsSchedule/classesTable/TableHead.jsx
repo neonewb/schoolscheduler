@@ -7,6 +7,7 @@ import {
   TableCell,
   TableRow,
   TableHead,
+  makeStyles,
 } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import RemoveCircleRoundedIcon from '@material-ui/icons/RemoveCircleRounded'
@@ -17,8 +18,18 @@ import {
   subtractColumnAC,
 } from '../../../../redux/database/firestore.actions'
 import { alphabet } from '../../../../utils/alphabet'
+import { deepPurple } from '@material-ui/core/colors'
+
+const useStyles = makeStyles({
+  rippleColor: {
+    '& .MuiTouchRipple-child': {
+      backgroundColor: deepPurple[400],
+    },
+  },
+})
 
 const ClassesTableHead = ({ numberOfColumns, checked }) => {
+  const styles = useStyles()
   let columns = []
 
   const dispatch = useDispatch()
@@ -34,7 +45,7 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
   for (let i = 0; i < numberOfColumns; i++) {
     const name = alphabet[i]
     columns.push(
-      <TableCell key={i + 100 * Math.random()}>
+      <TableCell key={name + i + 123 * 100}>
         <FormControlLabel
           control={
             <Checkbox
@@ -60,7 +71,7 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
 
   if (numberOfColumns < 10) {
     columns.push(
-      <TableCell key={100 + Math.random()}>
+      <TableCell key={'AddColumn'}>
         <IconButton onClick={handleAddColumn}>
           <AddCircleRoundedIcon color='primary' fontSize='default' />
         </IconButton>
@@ -70,8 +81,8 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
 
   if (numberOfColumns > 2 && numberOfColumns < 11) {
     columns.push(
-      <TableCell key={100 + Math.random()}>
-        <IconButton onClick={handleSubtractColumn}>
+      <TableCell key={'SubtractColumn'}>
+        <IconButton className={styles.rippleColor} onClick={handleSubtractColumn}>
           <RemoveCircleRoundedIcon color='secondary' fontSize='default' />
         </IconButton>
       </TableCell>

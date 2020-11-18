@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   IconButton,
   makeStyles,
@@ -8,13 +8,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
 } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import { useDispatch } from 'react-redux'
-
 import LoadAutocomplete from './LoadAutocomplete'
-import { setLoadAC } from '../../../../redux/database/firestore.actions'
+import { deleteLoadAC, setLoadAC } from '../../../../redux/database/firestore.actions'
+import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -24,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(0.5),
     },
+  },
+  table: {
+    width: 1050,
   },
 }))
 
@@ -44,20 +46,12 @@ const Load = ({ mySchedule }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(newLoad)
     dispatch(setLoadAC(newLoad))
   }
 
-  const handleDelete = (e) => {
-    // dispatch(deleteSubjectAC(e))
+  const handleDelete = (id) => {
+    dispatch(deleteLoadAC(id))
   }
-
-  useEffect(() => {
-    console.log(newLoad)
-    // for (const [key, value] of Object.entries(newLoad)) {
-    //   console.log(`${key}: ${value}`)
-    // }
-  }, [newLoad])
 
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
@@ -83,7 +77,7 @@ const Load = ({ mySchedule }) => {
             handleNewLoad={handleNewLoad}
           />
           <LoadAutocomplete
-            label={'Lessons/week'}
+            label={'Lessons'}
             options={'numbers'}
             handleNewLoad={handleNewLoad}
           />
@@ -92,24 +86,34 @@ const Load = ({ mySchedule }) => {
             <AddCircleRoundedIcon color='primary' fontSize='default' />
           </IconButton>
         </form>
-        <TableContainer>
+
+        <TableContainer className={styles.table}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Teacher</TableCell>
                 <TableCell>Subject</TableCell>
-                <TableCell>Classes</TableCell>
+                <TableCell>Class</TableCell>
                 <TableCell>Lessons/week</TableCell>
+                <TableCell>Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {load.map((e) => {
                 return (
-                  <TableRow key={Math.random() * 1000}>
+                  <TableRow key={e.id}>
                     <TableCell>{e.teacher}</TableCell>
                     <TableCell>{e.subject}</TableCell>
                     <TableCell>{e.classes}</TableCell>
-                    <TableCell>{e['lessons/week']}</TableCell>
+                    <TableCell>{e.lessons}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        onClick={() => {
+                          handleDelete(e.id)
+                        }}>
+                        <CancelRoundedIcon color='primary'  />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 )
               })}

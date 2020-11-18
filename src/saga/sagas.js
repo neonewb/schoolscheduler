@@ -39,6 +39,9 @@ import {
   DELETE_SUBJECT,
   SET_TEACHER,
   DELETE_TEACHER,
+  chooseSingleAC,
+  SET_LOAD,
+  DELETE_LOAD,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -130,6 +133,7 @@ function* addDocToCollectionSaga(action) {
   }
 }
 
+// Fetch single doc
 function* getDocFromDBSaga(action) {
   try {
     yield put(setIsLoadingTrue())
@@ -139,6 +143,7 @@ function* getDocFromDBSaga(action) {
 
     if (mySchedule.exists) {
       yield put(setDocToRxStateAC({ id: mySchedule.id, ...mySchedule.data() }))
+      yield put(chooseSingleAC(mySchedule.id))
       yield put(setIsLoadingFalse())
     } else {
       // doc.data() will be undefined in this case
@@ -151,6 +156,7 @@ function* getDocFromDBSaga(action) {
   }
 }
 
+// Fetch multiple doc
 function* getDocsFromDBSaga(action) {
   try {
     const mySchedules = schedulesColl
@@ -247,6 +253,21 @@ function* setTeacherSaga() {
   }
 }
 
+function* setLoadSaga() {
+  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+
+  const docRef = schedulesColl.doc(schedule.id)
+
+  try {    
+    yield call([docRef, docRef.update], {
+      load: schedule.load,
+    })
+    console.log(`Schedule load successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -270,4 +291,6 @@ export function* mySaga() {
   yield takeEvery(DELETE_SUBJECT, setSubjectSaga)
   yield takeEvery(SET_TEACHER, setTeacherSaga)
   yield takeEvery(DELETE_TEACHER, setTeacherSaga)
+  yield takeEvery(SET_LOAD, setLoadSaga)
+  yield takeEvery(DELETE_LOAD, setLoadSaga)
 }

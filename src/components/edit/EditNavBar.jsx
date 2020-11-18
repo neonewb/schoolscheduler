@@ -16,6 +16,7 @@ import { useStylesEdit } from '../../styles/stylesForEdit'
 import {
   getDocsFromDBAC,
   updateFieldAC,
+  cancelСhoiceAC,
 } from '../../redux/database/firestore.actions'
 import { useForm } from 'react-hook-form'
 import { Skeleton } from '@material-ui/lab'
@@ -47,6 +48,7 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
   const handleDashboardClick = () => {
     history.push('/dashboard')
     if (schedLength < 2) dispatch(getDocsFromDBAC(user.email, user.uid))
+    dispatch(cancelСhoiceAC())
   }
 
   const handleLogOut = () => {
