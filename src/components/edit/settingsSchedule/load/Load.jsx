@@ -1,21 +1,16 @@
 import React, { useState } from 'react'
-import {
-  IconButton,
-  makeStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@material-ui/core'
+import { IconButton, makeStyles } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import { useDispatch } from 'react-redux'
 import LoadAutocomplete from './LoadAutocomplete'
-import { deleteLoadAC, setLoadAC } from '../../../../redux/database/firestore.actions'
+import {
+  deleteLoadAC,
+  setLoadAC,
+} from '../../../../redux/database/firestore.actions'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { getNumbersArray } from '../../../../utils/funcs'
 import LoadMultipleAutocomplete from './LoadMultipleAutocomplete'
+import { DataGrid } from '@material-ui/data-grid'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -58,6 +53,49 @@ const Load = ({ mySchedule }) => {
 
   const numbers = getNumbersArray(10)
 
+  const [selection, setSelection] = useState([])
+  console.log(selection)
+  const columns = [
+    { field: 'teacher', headerName: 'Teacher', width: 200 },
+    { field: 'subject', headerName: 'Subject', width: 200 },
+    { field: 'className', headerName: 'Class' },
+    {
+      field: 'lessons',
+      headerName: 'Lessons/week',
+    },
+    {
+      field: 'id',
+      headerName: 'Delete',
+      sortable: false,
+      renderCell: (params) => (
+        <IconButton
+          onClick={() => {
+            handleDelete(params.value)
+          }}>
+          <CancelRoundedIcon color='primary' />
+        </IconButton>
+      ),
+    },
+  ]
+
+  const rows = load.map((e) => {
+    return {
+      teacher: e.teacher,
+      subject: e.subject,
+      className: e.className,
+      lessons: e.lessons,
+      id: e.id,
+      delete: (
+        <IconButton
+          onClick={() => {
+            handleDelete(e.id)
+          }}>
+          <CancelRoundedIcon color='primary' />
+        </IconButton>
+      ),
+    }
+  })
+
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
       <>
@@ -92,39 +130,16 @@ const Load = ({ mySchedule }) => {
           </IconButton>
         </form>
 
-        <TableContainer className={styles.table}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Teacher</TableCell>
-                <TableCell>Subject</TableCell>
-                <TableCell>Class</TableCell>
-                <TableCell>Lessons/week</TableCell>
-                <TableCell>Delete</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {load.map((e) => {
-                return (
-                  <TableRow key={e.id}>
-                    <TableCell>{e.teacher}</TableCell>
-                    <TableCell>{e.subject}</TableCell>
-                    <TableCell>{e.className}</TableCell>
-                    <TableCell>{e.lessons}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        onClick={() => {
-                          handleDelete(e.id)
-                        }}>
-                        <CancelRoundedIcon color='primary'  />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <div style={{ height: '80vh', width: 780 }}>
+          <DataGrid
+            onSelectionChange={(newSelection) => {
+              setSelection(newSelection.rowIds)
+            }}
+            checkboxSelection
+            columns={columns}
+            rows={rows}
+          />
+        </div>
       </>
     )
   } else {

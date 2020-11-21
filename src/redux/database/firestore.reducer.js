@@ -336,12 +336,10 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
-          else {
-            return {
-              ...schedule,
-              checked: checked,
-              classes: classes,
-            }
+          return {
+            ...schedule,
+            checked: checked,
+            classes: classes,
           }
         }),
       }
@@ -394,12 +392,10 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
-          else {
-            return {
-              ...schedule,
-              checked: checked,
-              classes: classes,
-            }
+          return {
+            ...schedule,
+            checked: checked,
+            classes: classes,
           }
         }),
       }
@@ -428,13 +424,11 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
-          else {
-            return {
-              ...schedule,
-              numberOfColumns: numOfCol + 1,
-              checked: checked,
-              classes: classes,
-            }
+          return {
+            ...schedule,
+            numberOfColumns: numOfCol + 1,
+            checked: checked,
+            classes: classes,
           }
         }),
       }
@@ -455,13 +449,11 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
-          else {
-            return {
-              ...schedule,
-              numberOfColumns: numOfCol - 1,
-              checked: checked,
-              classes: classes,
-            }
+          return {
+            ...schedule,
+            numberOfColumns: numOfCol - 1,
+            checked: checked,
+            classes: classes,
           }
         }),
       }
@@ -472,11 +464,9 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
-          else {
-            return {
-              ...schedule,
-              isOpenCustomClassNames: !schedule.isOpenCustomClassNames,
-            }
+          return {
+            ...schedule,
+            isOpenCustomClassNames: !schedule.isOpenCustomClassNames,
           }
         }),
       }
