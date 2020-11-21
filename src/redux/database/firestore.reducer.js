@@ -1,5 +1,9 @@
 import { alphabet } from '../../utils/alphabet'
-import { isANumber } from '../../utils/funcs'
+import {
+  getChoosenSchedule,
+  isANumber,
+  isLoadIncludesItem,
+} from '../../utils/funcs'
 import { nanoid } from 'nanoid'
 import {
   ADD_DOC_TO_COLLECTION_FAILED,
@@ -133,107 +137,96 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
 
     case SET_SUBJECT:
-      if (payload.subject) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              subjects: schedule.subjects.includes(payload.subject)
-                ? schedule.subjects
-                : [...(schedule.subjects ?? []), payload.subject],
-            }
-          }),
-        }
+      if (!payload.subject) return state
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            subjects: schedule.subjects.includes(payload.subject)
+              ? schedule.subjects
+              : [...(schedule.subjects ?? []), payload.subject],
+          }
+        }),
       }
-      return state
 
     case DELETE_SUBJECT:
-      if (payload.subject) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              subjects: [
-                ...schedule.subjects.filter((e) => e !== payload.subject),
-              ],
-            }
-          }),
-        }
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            subjects: [
+              ...schedule.subjects.filter((e) => e !== payload.subject),
+            ],
+          }
+        }),
       }
-      return state
 
     case SET_TEACHER:
-      if (payload.teacher) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              teachers: schedule.teachers.includes(payload.teacher)
-                ? schedule.teachers
-                : [...(schedule.teachers ?? []), payload.teacher],
-            }
-          }),
-        }
+      if (!payload.teacher) return state
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            teachers: schedule.teachers.includes(payload.teacher)
+              ? schedule.teachers
+              : [...(schedule.teachers ?? []), payload.teacher],
+          }
+        }),
       }
-      return state
 
     case DELETE_TEACHER:
-      if (payload.teacher) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              teachers: [
-                ...schedule.teachers.filter((e) => e !== payload.teacher),
-              ],
-            }
-          }),
-        }
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            teachers: [
+              ...schedule.teachers.filter((e) => e !== payload.teacher),
+            ],
+          }
+        }),
       }
-      return state
 
     case SET_LOAD: {
-      const schedule = state.schedules.find((e) => e.isChoosen)
-      let { teacher, subject, classes, lessons } = payload.newLoad
+      const { teacher, subject, classes, lessons } = payload.newLoad
+      if (!(teacher && subject && classes && lessons)) return state
 
-      if (teacher && subject && classes && lessons) {
-        let isIncludesLoad = false
-        schedule.load.forEach((e) => {
-          if (
-            e.teacher === teacher &&
-            e.subject === subject &&
-            e.classes === classes &&
-            e.lessons === lessons
-          ) {
-            isIncludesLoad = true
-          }
-        })
-        if (!isIncludesLoad) {
-          return {
-            ...state,
-            schedules: state.schedules.map((schedule) => {
-              if (!schedule.isChoosen) return schedule
-              return {
-                ...schedule,
-                load: [
-                  ...(schedule.load ?? []),
-                  { ...payload.newLoad, id: nanoid() },
-                ],
-              }
-            }),
-          }
+      const schedule = getChoosenSchedule(state)
+
+      let loadArray = classes.map((className) => {
+        return {
+          teacher,
+          subject,
+          className,
+          lessons,
+          id: nanoid(),
         }
-        return state
+      })
+
+      loadArray = loadArray.filter((item) => {
+        if (isLoadIncludesItem(item, schedule)) return false
+        return item
+      })
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            load: [...(schedule.load ?? []), ...loadArray],
+          }
+        }),
       }
-      return state
     }
 
     case DELETE_LOAD:
@@ -249,38 +242,34 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
 
     case SET_CUSTOM_CLASS:
-      if (payload.className) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              classes: schedule.classes.includes(payload.className)
-                ? schedule.classes
-                : [...(schedule.classes ?? []), payload.className],
-            }
-          }),
-        }
+      if (!payload.className) return state
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            classes: schedule.classes.includes(payload.className)
+              ? schedule.classes
+              : [...(schedule.classes ?? []), payload.className],
+          }
+        }),
       }
-      return state
 
     case DELETE_CUSTOM_CLASS:
-      if (payload.className) {
-        return {
-          ...state,
-          schedules: state.schedules.map((schedule) => {
-            if (!schedule.isChoosen) return schedule
-            return {
-              ...schedule,
-              classes: [
-                ...schedule.classes.filter((e) => e !== payload.className),
-              ],
-            }
-          }),
-        }
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            classes: [
+              ...schedule.classes.filter((e) => e !== payload.className),
+            ],
+          }
+        }),
       }
-      return state
 
     case SET_CLASS: {
       const { num, char } = payload
@@ -320,7 +309,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
 
     case ALL_CHECK: {
-      const schedule = state.schedules.find((e) => e.isChoosen)
+      const schedule = getChoosenSchedule(state)
 
       let checked = []
       let classes = []
@@ -417,11 +406,9 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     }
 
     case ADD_COLUMN: {
-      let {
-        checked,
-        classes,
-        numberOfColumns: numOfCol,
-      } = state.schedules.find((e) => e.isChoosen)
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+        state
+      )
 
       if (checked.includes('All')) {
         checked.push(alphabet[numOfCol])
@@ -454,11 +441,9 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     }
 
     case SUBTRACT_COLUMN: {
-      let {
-        checked,
-        classes,
-        numberOfColumns: numOfCol,
-      } = state.schedules.find((e) => e.isChoosen)
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+        state
+      )
 
       checked = checked.filter((e) => e !== alphabet[numOfCol - 1])
 

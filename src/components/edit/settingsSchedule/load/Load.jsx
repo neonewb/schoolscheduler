@@ -14,9 +14,12 @@ import { useDispatch } from 'react-redux'
 import LoadAutocomplete from './LoadAutocomplete'
 import { deleteLoadAC, setLoadAC } from '../../../../redux/database/firestore.actions'
 import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
+import { getNumbersArray } from '../../../../utils/funcs'
+import LoadMultipleAutocomplete from './LoadMultipleAutocomplete'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
+    minWidth: 1000,
     display: 'flex',
     alignItems: 'center',
     margin: 8,
@@ -53,6 +56,8 @@ const Load = ({ mySchedule }) => {
     dispatch(deleteLoadAC(id))
   }
 
+  const numbers = getNumbersArray(10)
+
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
       <>
@@ -71,14 +76,14 @@ const Load = ({ mySchedule }) => {
             options={subjects}
             handleNewLoad={handleNewLoad}
           />
-          <LoadAutocomplete
+          <LoadMultipleAutocomplete
             label={'Classes'}
             options={classes}
             handleNewLoad={handleNewLoad}
           />
           <LoadAutocomplete
             label={'Lessons'}
-            options={'numbers'}
+            options={numbers}
             handleNewLoad={handleNewLoad}
           />
 
@@ -104,7 +109,7 @@ const Load = ({ mySchedule }) => {
                   <TableRow key={e.id}>
                     <TableCell>{e.teacher}</TableCell>
                     <TableCell>{e.subject}</TableCell>
-                    <TableCell>{e.classes}</TableCell>
+                    <TableCell>{e.className}</TableCell>
                     <TableCell>{e.lessons}</TableCell>
                     <TableCell>
                       <IconButton

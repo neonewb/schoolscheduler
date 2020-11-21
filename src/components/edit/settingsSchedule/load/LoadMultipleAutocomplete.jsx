@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { TextField } from '@material-ui/core'
+import { Checkbox, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
-const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
-  const [value, setValue] = useState('')
+const LoadMultipleAutocomplete = ({ options, label, handleNewLoad }) => {
+  const [value, setValue] = useState([])
 
   const handleChange = (newValue) => {
     handleNewLoad(label.toLowerCase(), newValue)
@@ -12,16 +12,24 @@ const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
 
   return (
     <Autocomplete
+      multiple
+      disableCloseOnSelect
+      limitTags={1}
+      size='small'
       openOnFocus
       autoComplete
-      autoSelect
       autoHighlight
       includeInputInList
-      clearOnEscape
       selectOnFocus
       handleHomeEndKeys
       options={options}
       value={value}
+      renderOption={(option, { selected }) => (
+        <React.Fragment>
+          <Checkbox color='primary' checked={selected} />
+          {option}
+        </React.Fragment>
+      )}
       onChange={(event, newValue) => {
         handleChange(newValue)
       }}
@@ -33,4 +41,4 @@ const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
   )
 }
 
-export default LoadAutocomplete
+export default LoadMultipleAutocomplete

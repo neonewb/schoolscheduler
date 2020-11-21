@@ -241,7 +241,7 @@ export const deleteTeacherAC = (teacher) => ({
 export const setLoadAC = (newLoad) => ({
   type: SET_LOAD,
   payload: {
-    newLoad: newLoad,
+    newLoad,
   },
 })
 
