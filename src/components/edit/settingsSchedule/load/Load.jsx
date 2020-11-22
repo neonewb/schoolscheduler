@@ -7,10 +7,9 @@ import {
   deleteLoadAC,
   setLoadAC,
 } from '../../../../redux/database/firestore.actions'
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded'
 import { getNumbersArray } from '../../../../utils/funcs'
 import LoadMultipleAutocomplete from './LoadMultipleAutocomplete'
-import { DataGrid } from '@material-ui/data-grid'
+import MUIDataTable from 'mui-datatables'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -47,54 +46,68 @@ const Load = ({ mySchedule }) => {
     dispatch(setLoadAC(newLoad))
   }
 
-  const handleDelete = (id) => {
-    dispatch(deleteLoadAC(id))
-  }
-
   const numbers = getNumbersArray(10)
 
-  const [selection, setSelection] = useState([])
-  console.log(selection)
   const columns = [
-    { field: 'teacher', headerName: 'Teacher', width: 200 },
-    { field: 'subject', headerName: 'Subject', width: 200 },
-    { field: 'className', headerName: 'Class' },
     {
-      field: 'lessons',
-      headerName: 'Lessons/week',
+      name: 'teacher',
+      label: 'Teacher',
+      options: {
+        filter: true,
+        sort: true,
+      },
     },
     {
-      field: 'id',
-      headerName: 'Delete',
-      sortable: false,
-      renderCell: (params) => (
-        <IconButton
-          onClick={() => {
-            handleDelete(params.value)
-          }}>
-          <CancelRoundedIcon color='primary' />
-        </IconButton>
-      ),
+      name: 'subject',
+      label: 'Subject',
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'className',
+      label: 'Class',
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'lessons',
+      label: 'Lessons/week',
+      options: {
+        filter: true,
+        sort: true,
+      },
     },
   ]
 
-  const rows = load.map((e) => {
+  const data = load.map((e) => {
     return {
       teacher: e.teacher,
       subject: e.subject,
       className: e.className,
       lessons: e.lessons,
       id: e.id,
-      delete: (
-        <IconButton
-          onClick={() => {
-            handleDelete(e.id)
-          }}>
-          <CancelRoundedIcon color='primary' />
-        </IconButton>
-      ),
     }
   })
+
+  const handleDeleteLoad = (rowsDeleted) => {
+    const idsToDelete = rowsDeleted.data.map((d) => data[d.dataIndex].id)
+    console.log(idsToDelete)
+    dispatch(deleteLoadAC(idsToDelete))
+  }
+
+  const options = {
+    caseSensitive: true,
+    download: false,
+    draggableColumns: { enabled: true, transitionTime: 100 },
+    filterType: 'checkbox',
+    jumpToPage: true,
+    print: false,
+    onRowsDelete: handleDeleteLoad,
+  }
 
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
@@ -130,16 +143,7 @@ const Load = ({ mySchedule }) => {
           </IconButton>
         </form>
 
-        <div style={{ height: '80vh', width: 780 }}>
-          <DataGrid
-            onSelectionChange={(newSelection) => {
-              setSelection(newSelection.rowIds)
-            }}
-            checkboxSelection
-            columns={columns}
-            rows={rows}
-          />
-        </div>
+        <MUIDataTable columns={columns} data={data} options={options} />
       </>
     )
   } else {

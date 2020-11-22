@@ -230,13 +230,19 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     }
 
     case DELETE_LOAD:
+      let {load: newLoad} = getChoosenSchedule(state)
+
+      payload.id.forEach((element) => {
+        newLoad = newLoad.filter((e) => e.id !== element)
+      })
+
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
           return {
             ...schedule,
-            load: [...schedule.load.filter((e) => e.id !== payload.id)],
+            load: [...newLoad],
           }
         }),
       }
