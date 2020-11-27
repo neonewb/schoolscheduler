@@ -34,6 +34,7 @@ import {
   SET_LOAD,
   CANCEL_CHOICE,
   DELETE_LOAD,
+  MANUALLY_CREATE_SCHEDULE,
 } from './firestore.actions'
 
 const initialState = {
@@ -230,7 +231,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
     }
 
     case DELETE_LOAD:
-      let {load: newLoad} = getChoosenSchedule(state)
+      let { load: newLoad } = getChoosenSchedule(state)
 
       payload.id.forEach((element) => {
         newLoad = newLoad.filter((e) => e.id !== element)
@@ -465,7 +466,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
       }
     }
 
-    case OPEN_CUSTOM_CLASS_NAMES: {
+    case OPEN_CUSTOM_CLASS_NAMES:
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
@@ -473,6 +474,39 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           return {
             ...schedule,
             isOpenCustomClassNames: !schedule.isOpenCustomClassNames,
+          }
+        }),
+      }
+
+    case MANUALLY_CREATE_SCHEDULE: {
+      let { classes, teachers } = getChoosenSchedule(state)
+
+      classes = classes.map((e) => {
+        return {
+          name: e,
+          lessons: []
+        }
+      })
+
+      teachers = teachers.map((e) => {
+        return {
+          name: e,
+          lessons: []
+        }
+      })
+
+      let sched = {
+        classes: [...classes],
+        techers: [...teachers],
+      }
+
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+          return {
+            ...schedule,
+            sched
           }
         }),
       }

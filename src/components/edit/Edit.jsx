@@ -4,11 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
-import {
-  getDocFromDBAC,
-} from '../../redux/database/firestore.actions'
+import { getDocFromDBAC } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
+import DnDSchedule from './dndSchedule/DnDSchedule'
 const SettingsSchedule = React.lazy(() =>
   import('./settingsSchedule/SettingsSchedule')
 )
@@ -64,8 +63,14 @@ const Edit = () => {
       <Divider />
 
       <Suspense fallback={<></>}>
-        <SettingsSchedule isOpen={isSetSchedOpen} mySchedule={mySchedule} />
+        <SettingsSchedule
+          isOpen={isSetSchedOpen}
+          setSchedOpen={setSchedOpen}
+          mySchedule={mySchedule}
+        />
       </Suspense>
+
+      {!isSetSchedOpen && <DnDSchedule mySchedule={mySchedule} />}
     </div>
   )
 }

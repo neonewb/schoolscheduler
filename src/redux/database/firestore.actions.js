@@ -34,6 +34,7 @@ export const SET_TEACHER = 'app/db/SET_TEACHER'
 export const DELETE_TEACHER = 'app/db/DELETE_TEACHER'
 export const SET_LOAD = 'app/db/SET_LOAD'
 export const DELETE_LOAD = 'app/db/DELETE_LOAD'
+export const MANUALLY_CREATE_SCHEDULE = 'app/db/MANUALLY_CREATE_SCHEDULE'
 
 export const addDocToCollectionAC = (email, userID) => ({
   type: ADD_DOC_TO_COLLECTION,
@@ -251,3 +252,8 @@ export const deleteLoadAC = (id) => ({
     id
   },
 })
+
+export const manuallyCreateScheduleAC = () => ({
+  type: MANUALLY_CREATE_SCHEDULE,
+})
+

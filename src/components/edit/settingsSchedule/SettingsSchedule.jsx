@@ -9,18 +9,19 @@ import { deepPurple, teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
   clearCheckClassAC,
+  manuallyCreateScheduleAC,
   openCustomClassNamesAC,
   updateFieldAC,
 } from '../../../redux/database/firestore.actions'
 import Subjects from './Subjects'
 import Teachers from './Teachers'
-import Load from './load/Load'
 import BookRoundedIcon from '@material-ui/icons/BookRounded'
 import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded'
 import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRounded'
 import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded'
 import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
 import HourglassFullRoundedIcon from '@material-ui/icons/HourglassFullRounded'
+const Load = React.lazy(() => import('./load/Load'))
 
 const useStyles = makeStyles({
   root: {
@@ -56,7 +57,7 @@ const useStyles = makeStyles({
   },
 })
 
-const SettingsSchedule = ({ isOpen, mySchedule }) => {
+const SettingsSchedule = ({ isOpen, mySchedule, setSchedOpen }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -97,6 +98,11 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
       label: '20',
     },
   ]
+
+  const handleManuallyCreate = () => {
+    setSchedOpen(!isOpen)
+    dispatch(manuallyCreateScheduleAC())
+  }
 
   if (isOpen) {
     return (
@@ -240,6 +246,7 @@ const SettingsSchedule = ({ isOpen, mySchedule }) => {
 
         <Button
           className={`${classes.finalButton} + ${classes.rippleColor}`}
+          onClick={handleManuallyCreate}
           color='secondary'
           variant='outlined'>
           Manually create
