@@ -12,6 +12,7 @@ import {
   setClassAC,
 } from '../../../../redux/database/firestore.actions'
 import { alphabet } from '../../../../utils/alphabet'
+
 const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
   const dispatch = useDispatch()
 
@@ -71,7 +72,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
   return (
     <TableBody>
       {rows.map((row, index) => (
-        <TableRow key={index+123*123}>{row}</TableRow>
+        <TableRow key={index + 123 * 123}>{row}</TableRow>
       ))}
     </TableBody>
   )

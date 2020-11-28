@@ -15,7 +15,7 @@ const ClassesTable = ({ mySchedule }) => {
           checked={mySchedule.checked}
           classes={mySchedule.classes}
         />
-        <ClassesTableBody 
+        <ClassesTableBody
           numberOfColumns={mySchedule.numberOfColumns}
           checked={mySchedule.checked}
           schedID={mySchedule.id}

@@ -26,6 +26,11 @@ const useStyles = makeStyles({
       backgroundColor: deepPurple[400],
     },
   },
+  cellWidth: {
+    width: 150,
+    minWidth: 150,
+    maxWidth: 150,
+  },
 })
 
 const ClassesTableHead = ({ numberOfColumns, checked }) => {
@@ -45,7 +50,7 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
   for (let i = 0; i < numberOfColumns; i++) {
     const name = alphabet[i]
     columns.push(
-      <TableCell key={name + i + 123 * 100}>
+      <TableCell className={styles.cellWidth} key={name + i + 123 * 100}>
         <FormControlLabel
           control={
             <Checkbox
@@ -82,7 +87,9 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
   if (numberOfColumns > 2 && numberOfColumns < 11) {
     columns.push(
       <TableCell key={'SubtractColumn'}>
-        <IconButton className={styles.rippleColor} onClick={handleSubtractColumn}>
+        <IconButton
+          className={styles.rippleColor}
+          onClick={handleSubtractColumn}>
           <RemoveCircleRoundedIcon color='secondary' fontSize='default' />
         </IconButton>
       </TableCell>
@@ -92,7 +99,7 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>
+        <TableCell className={styles.cellWidth}>
           <FormControlLabel
             control={
               <Checkbox
