@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
 import DayScheduleTable from './DayScheduleTable'
-import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
+import { ScrollSync } from 'react-scroll-sync'
 
 const useStyles = makeStyles({
   days: {

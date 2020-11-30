@@ -6,11 +6,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@material-ui/core'
 import React from 'react'
 import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../utils/funcs'
 import { ScrollSyncPane } from 'react-scroll-sync'
+import { Droppable } from 'react-beautiful-dnd'
 
 const useStyles = makeStyles({
   table: {
@@ -41,13 +43,19 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
   for (let i = 0; i < classes.length; i++) {
     let row = []
 
+    // Class names
     row.push(<TableCell key={classes[i] + i}>{classes[i]}</TableCell>)
 
+    // Lessons
     for (let j = 0; j < maxLessonsPerDay; j++) {
       row.push(
-        <TableCell
-          className={styles.cell}
-          key={j + 123 * 100 + classes[i]}></TableCell>
+        <Droppable key={j + 123 * 100 + classes[i]} droppableId='lesson'>
+          {(provided, snapshot) => (
+            <TableCell
+              ref={provided.innerRef}
+              className={styles.cell}></TableCell>
+          )}
+        </Droppable>
       )
     }
     rows.push(row)
@@ -55,7 +63,7 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
 
   return (
     <div className={styles.table}>
-      {daysOfTheWeek[dayNum]}
+      <Typography>{daysOfTheWeek[dayNum]}</Typography>
       <ScrollSyncPane>
         <TableContainer className={styles.container}>
           <Table stickyHeader size='small' aria-label='Day table'>
