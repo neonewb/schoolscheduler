@@ -11,7 +11,6 @@ import {
 import React from 'react'
 import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../utils/funcs'
-import { ScrollSyncPane } from 'react-scroll-sync'
 import { Droppable } from 'react-beautiful-dnd'
 
 const useStyles = makeStyles({
@@ -21,7 +20,7 @@ const useStyles = makeStyles({
     textAlign: 'center',
   },
   container: {
-    maxHeight: '70vh',
+    maxHeight: '65vh',
   },
   cell: {
     width: 50,
@@ -32,9 +31,10 @@ const useStyles = makeStyles({
 })
 
 const DayScheduleTable = ({ dayNum, mySchedule }) => {
-  let { maxLessonsPerDay, classes } = mySchedule
-  const styles = useStyles()
+  let { maxLessonsPerDay, classes, timeTable } = mySchedule
+  let { classes: classesLessons, teacher } = timeTable
 
+  const styles = useStyles()
   let headSchedule = getNumbersArray(maxLessonsPerDay)
   headSchedule.unshift('class')
 
@@ -49,11 +49,17 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
     // Lessons
     for (let j = 0; j < maxLessonsPerDay; j++) {
       row.push(
-        <Droppable key={j + 123 * 100 + classes[i]} droppableId='lesson'>
+        <Droppable
+          key={j + 123 * 100 + classes[i]}
+          droppableId={classes[i] + j}>
           {(provided, snapshot) => (
             <TableCell
               ref={provided.innerRef}
-              className={styles.cell}></TableCell>
+              //key={j + 123 * 100 + classes[i]}
+              className={styles.cell}
+              {...provided.droppableProps}>
+              {provided.placeholder}
+            </TableCell>
           )}
         </Droppable>
       )
@@ -64,24 +70,23 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
   return (
     <div className={styles.table}>
       <Typography>{daysOfTheWeek[dayNum]}</Typography>
-      <ScrollSyncPane>
-        <TableContainer className={styles.container}>
-          <Table stickyHeader size='small' aria-label='Day table'>
-            <TableHead>
-              <TableRow>
-                {headSchedule.map((number) => {
-                  return <TableCell key={number + 'head'}>{number}</TableCell>
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row, index) => (
-                <TableRow key={index + 123 * 123}>{row}</TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </ScrollSyncPane>
+
+      <TableContainer className={styles.container}>
+        <Table stickyHeader size='small' aria-label='Day table'>
+          <TableHead>
+            <TableRow>
+              {headSchedule.map((number) => {
+                return <TableCell key={number + 'head'}>{number}</TableCell>
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index + 123 * 123}>{row}</TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

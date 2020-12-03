@@ -6,22 +6,32 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 const useStyles = makeStyles({
   footer: {
     width: '100%',
-    overflow: 'auto',
+    minWidth: 600,
+    height: '16vh',
     display: 'flex',
-    padding: 8,
+    alignItems: 'center',
+    padding: 10,
   },
   lessons: {
     display: 'flex',
-    flexWrap: 'wrap',
+    width: '100%',
+    maxWidth: '100%',
+    height: 90,
+    overflow: 'auto',
   },
   lessonPaper: {
     width: 50,
+    minWidth: 50,
+    maxWidth: 50,
     height: 50,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     margin: 8,
   },
+  margin: {
+    marginRight: 8
+  }
 })
 
 const DnDScheduleFooter = ({ mySchedule }) => {
@@ -30,31 +40,36 @@ const DnDScheduleFooter = ({ mySchedule }) => {
 
   return (
     <div className={styles.footer}>
-      <Typography>Lessons:</Typography>
-      <Droppable droppableId='footer'>
-        {(provided, snapshot) => (
-          <div ref={provided.innerRef} className={styles.lessons}>
-            {load.map((e, index) => {
-              return (
-                <Draggable key={e.id} draggableId={e.id} index={index}>
-                  {(provided, snapshot) => (
-                    <Paper
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className={styles.lessonPaper}>
-                      <Typography align={'center'}>
-                        {e.subject[0] + e.subject[1]}
-                      </Typography>
-                    </Paper>
-                  )}
-                </Draggable>
-              )
-            })}
-          </div>
-        )}
-      </Droppable>
-    </div>
+    <Typography className={styles.margin}>Lessons:</Typography>
+
+    <Droppable droppableId='footer' direction='horizontal'>
+      {(provided, snapshot) => (
+        
+        <div ref={provided.innerRef} 
+        className={styles.lessons} 
+        {...provided.droppableProps}>
+          {load.map((e, index) => (
+
+            <Draggable key={e.id} draggableId={e.id} index={index}>
+              {(provided, snapshot) => (
+
+                <Paper
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  className={styles.lessonPaper}>
+                  <Typography align={'center'}>
+                    {e.subject[0] + e.subject[1]}
+                  </Typography>
+                </Paper>
+              )}
+            </Draggable>
+          ))}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+   </div>
   )
 }
 

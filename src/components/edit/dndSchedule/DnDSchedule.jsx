@@ -4,21 +4,33 @@ import DnDScheduleFooter from './DnDScheduleFooter'
 import { DragDropContext } from 'react-beautiful-dnd'
 
 const DnDSchedule = ({ mySchedule }) => {
-
   const onDragEnd = useCallback((result, provided) => {
-    console.log('onDragEnd')
+    const { source, destination } = result
     console.log(result)
-    console.log(provided)
+
+    // dropped outside the list
+    if (!destination) {
+      return
+    }
+
+    console.log('onDragEnd')
+    console.log(source.droppableId)
+    console.log(destination.droppableId)
+
+
   }, [])
 
   return (
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
+      <div>
+
         {mySchedule && <DnDScheduleBody mySchedule={mySchedule} />}
+      </div>
         {mySchedule && <DnDScheduleFooter mySchedule={mySchedule} />}
       </DragDropContext>
     </div>
   )
 }
 
-export default DnDSchedule
+export default React.memo(DnDSchedule)

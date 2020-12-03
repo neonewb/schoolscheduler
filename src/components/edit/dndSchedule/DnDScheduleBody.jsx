@@ -1,15 +1,14 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
+import { Droppable } from 'react-beautiful-dnd'
 import DayScheduleTable from './DayScheduleTable'
-import { ScrollSync } from 'react-scroll-sync'
 
 const useStyles = makeStyles({
   days: {
-    width: '99vw',
+    width: '100%',
+    minWidth: 600,
     display: 'flex',
     overflow: 'auto',
-    marginLeft: 8,
-    marginRigth: 8,
   },
 })
 
@@ -25,11 +24,7 @@ const DnDScheduleBody = ({ mySchedule }) => {
     )
   }
 
-  return (
-    <ScrollSync>
-      <div className={styles.days}>{daysArr}</div>
-    </ScrollSync>
-  )
+  return <div className={styles.days}>{daysArr}</div>
 }
 
 export default DnDScheduleBody

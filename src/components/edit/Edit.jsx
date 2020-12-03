@@ -7,9 +7,11 @@ import { useStylesEdit } from '../../styles/stylesForEdit'
 import { getDocFromDBAC } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
-import DnDSchedule from './dndSchedule/DnDSchedule'
 const SettingsSchedule = React.lazy(() =>
   import('./settingsSchedule/SettingsSchedule')
+)
+const DnDSchedule = React.lazy(() =>
+  import('./dndSchedule/DnDSchedule')
 )
 
 const Edit = () => {
@@ -70,7 +72,9 @@ const Edit = () => {
         />
       </Suspense>
 
-      {!isSetSchedOpen && <DnDSchedule mySchedule={mySchedule} />}
+      {!isSetSchedOpen && <Suspense fallback={<></>}>
+        <DnDSchedule mySchedule={mySchedule} />
+      </Suspense>}
     </div>
   )
 }

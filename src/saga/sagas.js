@@ -42,6 +42,7 @@ import {
   chooseSingleAC,
   SET_LOAD,
   DELETE_LOAD,
+  MANUALLY_CREATE_SCHEDULE,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -109,6 +110,7 @@ function* addDocToCollectionSaga(action) {
       subjects: [],
       teachers: [],
       load: [],
+      timeTable: [],
     })
 
     yield put(
@@ -121,6 +123,7 @@ function* addDocToCollectionSaga(action) {
         10,
         2,
         false,
+        [],
         [],
         [],
         [],
@@ -268,6 +271,21 @@ function* setLoadSaga() {
   }
 }
 
+function* setTimeTableSaga() {
+  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+
+  const docRef = schedulesColl.doc(schedule.id)
+
+  try {    
+    yield call([docRef, docRef.update], {
+      timeTable: schedule.timeTable,
+    })
+    console.log(`Schedule timeTable successfully updated!`)
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* mySaga() {
   yield takeEvery(SIGN_UP_USER, signUpSaga)
   yield takeEvery(LOG_IN_USER, logInSaga)
@@ -293,4 +311,5 @@ export function* mySaga() {
   yield takeEvery(DELETE_TEACHER, setTeacherSaga)
   yield takeEvery(SET_LOAD, setLoadSaga)
   yield takeEvery(DELETE_LOAD, setLoadSaga)
+  yield takeEvery(MANUALLY_CREATE_SCHEDULE, setTimeTableSaga)
 }

@@ -495,7 +495,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
         }
       })
 
-      let sched = {
+      let newTimeTable = {
         classes: [...classes],
         techers: [...teachers],
       }
@@ -506,7 +506,7 @@ const firestoreReducer = (state = initialState, { type, payload }) => {
           if (!schedule.isChoosen) return schedule
           return {
             ...schedule,
-            sched
+            timeTable: newTimeTable
           }
         }),
       }

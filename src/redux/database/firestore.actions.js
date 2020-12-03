@@ -55,7 +55,8 @@ export const addDocToCollectionSuccessAC = (
   classes,
   subjects,
   teachers,
-  load
+  load,
+  timeTable
 ) => ({
   type: ADD_DOC_TO_COLLECTION_SUCCESS,
   payload: {
@@ -72,6 +73,7 @@ export const addDocToCollectionSuccessAC = (
     subjects,
     teachers,
     load,
+    timeTable,
   },
 })
 
@@ -249,11 +251,10 @@ export const setLoadAC = (newLoad) => ({
 export const deleteLoadAC = (id) => ({
   type: DELETE_LOAD,
   payload: {
-    id
+    id,
   },
 })
 
 export const manuallyCreateScheduleAC = () => ({
   type: MANUALLY_CREATE_SCHEDULE,
 })
-

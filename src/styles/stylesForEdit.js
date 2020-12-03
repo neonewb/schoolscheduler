@@ -1,13 +1,19 @@
 import { makeStyles } from '@material-ui/core'
 
 export const useStylesEdit = makeStyles((theme) => ({
+  html: {
+  overflowY: 'hidden'
+  },
   root: {
-    height: '100vh',
-    width: '100vw',
+    height: '100%',
+    maxHeight: '100%',
+    width: '100%',
+    maxWidth: '100%',
+    minWidth: 600,
   },
   editBar: {
     display: 'flex',
-    minWidth: 400,
+    minWidth: 600,
   },
   dashboardIcon: {
     display: 'inline',
