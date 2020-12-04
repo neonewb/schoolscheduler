@@ -7,10 +7,15 @@ const useStyles = makeStyles({
   footer: {
     width: '100%',
     minWidth: 600,
-    height: '16vh',
+    height: '10vh',
     display: 'flex',
     alignItems: 'center',
     padding: 10,
+    position: 'sticky',
+    // top: 100,
+    bottom: '0%',
+    background: 'white',
+    zIndex: 5,
   },
   lessons: {
     display: 'flex',
@@ -39,7 +44,7 @@ const DnDScheduleFooter = ({ mySchedule }) => {
   const styles = useStyles()
 
   return (
-    <div className={styles.footer}>
+    <Paper elevation={24} className={styles.footer}>
     <Typography className={styles.margin}>Lessons:</Typography>
 
     <Droppable droppableId='footer' direction='horizontal'>
@@ -69,7 +74,7 @@ const DnDScheduleFooter = ({ mySchedule }) => {
         </div>
       )}
     </Droppable>
-   </div>
+   </Paper>
   )
 }
 

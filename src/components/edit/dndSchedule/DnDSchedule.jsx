@@ -13,9 +13,6 @@ const DnDSchedule = ({ mySchedule }) => {
       return
     }
 
-    console.log('onDragEnd')
-    console.log(source.droppableId)
-    console.log(destination.droppableId)
 
 
   }, [])
@@ -24,7 +21,6 @@ const DnDSchedule = ({ mySchedule }) => {
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
       <div>
-
         {mySchedule && <DnDScheduleBody mySchedule={mySchedule} />}
       </div>
         {mySchedule && <DnDScheduleFooter mySchedule={mySchedule} />}

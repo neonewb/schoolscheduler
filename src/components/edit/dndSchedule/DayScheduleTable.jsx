@@ -1,7 +1,6 @@
 import {
   makeStyles,
   Table,
-  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -11,7 +10,8 @@ import {
 import React from 'react'
 import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../utils/funcs'
-import { Droppable } from 'react-beautiful-dnd'
+import { nanoid } from 'nanoid'
+import DroppableComponent from './DroppableComponent'
 
 const useStyles = makeStyles({
   table: {
@@ -19,14 +19,21 @@ const useStyles = makeStyles({
     margin: 8,
     textAlign: 'center',
   },
-  container: {
-    maxHeight: '65vh',
+  contain: {
+    // maxHeight: '60vh',
   },
-  cell: {
+  classesNames: {
     width: 50,
-    maxWidth: 50,
-    minWidth: 50,
     height: 50,
+  },
+  rowDivs: {
+    display: 'flex',
+  },
+  droppableDiv: {
+    width: 50,
+    height: 50,
+    background: 'red',
+    margin: 1,
   },
 })
 
@@ -35,6 +42,7 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
   let { classes: classesLessons, teacher } = timeTable
 
   const styles = useStyles()
+
   let headSchedule = getNumbersArray(maxLessonsPerDay)
   headSchedule.unshift('class')
 
@@ -44,34 +52,27 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
     let row = []
 
     // Class names
-    row.push(<TableCell key={classes[i] + i}>{classes[i]}</TableCell>)
+    row.push(
+      <div className={styles.classesNames} key={classes[i] + i}>
+        {classes[i]}
+      </div>
+    )
 
     // Lessons
     for (let j = 0; j < maxLessonsPerDay; j++) {
-      row.push(
-        <Droppable
-          key={j + 123 * 100 + classes[i]}
-          droppableId={classes[i] + j}>
-          {(provided, snapshot) => (
-            <TableCell
-              ref={provided.innerRef}
-              //key={j + 123 * 100 + classes[i]}
-              className={styles.cell}
-              {...provided.droppableProps}>
-              {provided.placeholder}
-            </TableCell>
-          )}
-        </Droppable>
-      )
+      const id = nanoid()
+      row.push(<DroppableComponent key={id} id={id} />)
     }
     rows.push(row)
   }
+
+  const id = nanoid()
 
   return (
     <div className={styles.table}>
       <Typography>{daysOfTheWeek[dayNum]}</Typography>
 
-      <TableContainer className={styles.container}>
+      <TableContainer>
         <Table stickyHeader size='small' aria-label='Day table'>
           <TableHead>
             <TableRow>
@@ -80,13 +81,19 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
               })}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index + 123 * 123}>{row}</TableRow>
-            ))}
-          </TableBody>
         </Table>
       </TableContainer>
+
+      <div className={styles.contain}>
+        {rows.map((row) => {
+          const cellId = nanoid()
+          return (
+            <div className={styles.rowDivs} key={cellId}>
+              {row}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

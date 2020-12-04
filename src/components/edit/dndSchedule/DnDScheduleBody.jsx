@@ -1,6 +1,5 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
-import { Droppable } from 'react-beautiful-dnd'
 import DayScheduleTable from './DayScheduleTable'
 
 const useStyles = makeStyles({
