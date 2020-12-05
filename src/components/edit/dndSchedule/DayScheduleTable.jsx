@@ -1,39 +1,69 @@
 import {
   makeStyles,
+  Paper,
   Table,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
   Typography,
+  withStyles,
 } from '@material-ui/core'
+import MuiTableCell from '@material-ui/core/TableCell'
 import React from 'react'
 import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
+import { grey } from '@material-ui/core/colors'
+
+const TableCell = withStyles({
+  root: {
+    borderBottom: 'none',
+  },
+})(MuiTableCell)
 
 const useStyles = makeStyles({
   table: {
     width: '100%',
-    margin: 8,
+    padding: 8,
     textAlign: 'center',
   },
   contain: {
-    // maxHeight: '60vh',
+    marginTop: 8,
+    height: '60vh',
+    maxHeight: '60vh',
   },
   classesNames: {
     width: 50,
     height: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   rowDivs: {
     display: 'flex',
+    alignItems: 'center',
   },
   droppableDiv: {
     width: 50,
     height: 50,
-    background: 'red',
     margin: 1,
+  },
+  tableHeader: {
+    padding: 4,
+    position: 'sticky',
+    top: 0,
+    background: 'white',
+    zIndex: 2,
+    borderBottom: 'none',
+  },
+  tableHeadCell: {
+    width: 50,
+    maxWidth: 50,
+    minWidth: 50,
+    '&:first-child': {
+      paddingLeft: 0
+    },
   },
 })
 
@@ -44,7 +74,7 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
   const styles = useStyles()
 
   let headSchedule = getNumbersArray(maxLessonsPerDay)
-  headSchedule.unshift('class')
+  headSchedule.unshift('Class')
 
   let rows = []
 
@@ -54,7 +84,7 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
     // Class names
     row.push(
       <div className={styles.classesNames} key={classes[i] + i}>
-        {classes[i]}
+        <Typography align='center'>{classes[i]}</Typography>
       </div>
     )
 
@@ -66,23 +96,30 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
     rows.push(row)
   }
 
-  const id = nanoid()
-
   return (
     <div className={styles.table}>
-      <Typography>{daysOfTheWeek[dayNum]}</Typography>
+      <Paper elevation={2} className={styles.tableHeader}>
+        <Typography>{daysOfTheWeek[dayNum]}</Typography>
 
-      <TableContainer>
-        <Table stickyHeader size='small' aria-label='Day table'>
-          <TableHead>
-            <TableRow>
-              {headSchedule.map((number) => {
-                return <TableCell key={number + 'head'}>{number}</TableCell>
-              })}
-            </TableRow>
-          </TableHead>
-        </Table>
-      </TableContainer>
+        <TableContainer>
+          <Table stickyHeader size='small' aria-label='Day table'>
+            <TableHead>
+              <TableRow>
+                {headSchedule.map((number) => {
+                  return (
+                    <TableCell
+                      align='center'
+                      className={styles.tableHeadCell}
+                      key={number + 'head'}>
+                      <Typography>{number}</Typography>
+                    </TableCell>
+                  )
+                })}
+              </TableRow>
+            </TableHead>
+          </Table>
+        </TableContainer>
+      </Paper>
 
       <div className={styles.contain}>
         {rows.map((row) => {

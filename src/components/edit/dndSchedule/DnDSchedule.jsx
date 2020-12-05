@@ -1,30 +1,27 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import DnDScheduleBody from './DnDScheduleBody'
 import DnDScheduleFooter from './DnDScheduleFooter'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { makeStyles } from '@material-ui/core'
+
+const useStyles = makeStyles({
+  DnDScheduleDiv: {
+    height: '400px',
+    maxHeight: '40vh'
+  },
+})
 
 const DnDSchedule = ({ mySchedule }) => {
-  const onDragEnd = useCallback((result, provided) => {
-    const { source, destination } = result
-    console.log(result)
-
-    // dropped outside the list
-    if (!destination) {
-      return
-    }
-
-
-
-  }, [])
+  const styles = useStyles()
 
   return (
-    <div>
-      <DragDropContext onDragEnd={onDragEnd}>
-      <div>
-        {mySchedule && <DnDScheduleBody mySchedule={mySchedule} />}
-      </div>
+    <div className={styles.DnDScheduleDiv}>
+      <DndProvider backend={HTML5Backend}>
+        <div >{mySchedule && <DnDScheduleBody mySchedule={mySchedule} />}</div>
+
         {mySchedule && <DnDScheduleFooter mySchedule={mySchedule} />}
-      </DragDropContext>
+      </DndProvider>
     </div>
   )
 }

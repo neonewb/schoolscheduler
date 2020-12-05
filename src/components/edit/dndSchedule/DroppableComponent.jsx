@@ -1,28 +1,49 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
-import { Droppable } from 'react-beautiful-dnd'
+import { useDrop } from 'react-dnd'
+import { DragItemTypes } from '../../../utils/DragItemsTypes'
+import grey from '@material-ui/core/colors/grey';
 
 const useStyles = makeStyles({
-droppableDiv: {
-  width: 50,
-  height: 50,
-  background: 'green',
-  margin: 1,
-}})
+  droppableDiv: {
+    width: 50,
+    height: 50,
+    margin: 1,
+    border: '1px solid ' + grey[300],
+    borderRadius: 2,
+    '&:hover': {
+      backgroundColor: grey[300]
+    }
+  },
+})
 
-const DroppableComponent = ({id}) => {
+const DroppableComponent = ({ id }) => {
   const styles = useStyles()
+  const [{ canDrop, isOver }, drop] = useDrop({
+    accept: DragItemTypes.LESSON,
+    drop: () => ({ name: 'TableCell' }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  })
+
+  const isActive = canDrop && isOver
+  let backgroundColor = ''
+  if (isActive) {
+    backgroundColor = 'darkgreen'
+  } else if (canDrop) {
+    backgroundColor = 'darkkhaki'
+  }
+
   return (
-    <Droppable key={id} droppableId={id}>
-          {(provided, snapshot) => (
-            <div
-              className={styles.droppableDiv}
-              ref={provided.innerRef}
-              {...provided.droppableProps}>
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+    <div
+      key={id}
+      ref={drop}
+      className={styles.droppableDiv}
+      style={{ backgroundColor }}>
+
+    </div>
   )
 }
 
