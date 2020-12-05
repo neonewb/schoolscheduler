@@ -14,7 +14,6 @@ import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
-import { grey } from '@material-ui/core/colors'
 
 const TableCell = withStyles({
   root: {
@@ -68,8 +67,12 @@ const useStyles = makeStyles({
 })
 
 const DayScheduleTable = ({ dayNum, mySchedule }) => {
-  let { maxLessonsPerDay, classes, timeTable } = mySchedule
-  let { classes: classesLessons, teacher } = timeTable
+  let { 
+    maxLessonsPerDay, 
+    classes, 
+    // timeTable 
+  } = mySchedule
+  // let { classes: classesLessons, teacher } = timeTable
 
   const styles = useStyles()
 
