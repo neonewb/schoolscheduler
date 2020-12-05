@@ -1,15 +1,11 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { auth, db, googleProvider } from '../configs/firebase.config'
 import {
-  SIGN_UP_USER,
+  logOutUserFailedAC,
   signUpUserFailedAC,
   signUpUserSuccessAC,
   logInUserSuccessAC,
   logInUserFailedAC,
-  LOG_IN_USER,
-  LOG_OUT_USER,
-  logOutUserFailedAC,
-  LOG_IN_WITH_GOOGLE,
 } from '../redux/auth/auth.actions'
 import {
   addDocToCollectionFailedAC,
@@ -52,10 +48,9 @@ function* signUpSaga(action) {
       action.payload.email,
       action.payload.password
     )
-    yield put(signUpUserSuccessAC(response))
+    yield put(signUpUserSuccessAC(response.user))
   } catch (error) {
-    const error_message = { code: error.code, message: error.message }
-    yield put(signUpUserFailedAC(error_message))
+    yield put(signUpUserFailedAC(error.message))
   }
 }
 
@@ -66,10 +61,9 @@ function* logInSaga(action) {
       action.payload.email,
       action.payload.password
     )
-    yield put(logInUserSuccessAC(response))
+    yield put(logInUserSuccessAC(response.user))
   } catch (error) {
-    const error_message = { code: error.code, message: error.message }
-    yield put(logInUserFailedAC(error_message))
+    yield put(logInUserFailedAC(error.message))
   }
 }
 
@@ -78,18 +72,16 @@ function* logOutSaga() {
     yield call([auth, auth.signOut])
     yield put(clearRxStateAC())
   } catch (error) {
-    const error_message = { code: error.code, message: error.message }
-    yield put(logOutUserFailedAC(error_message))
+    yield put(logOutUserFailedAC(error.message))
   }
 }
 
 function* logInWithGoogleSaga() {
   try {
     const response = yield call([auth, auth.signInWithPopup], googleProvider)
-    yield put(logInUserSuccessAC(response))
+    yield put(logInUserSuccessAC(response.user))
   } catch (error) {
-    const error_message = { code: error.code, message: error.message }
-    yield put(logInUserFailedAC(error_message))
+    yield put(logInUserFailedAC(error.message))
   }
 }
 
@@ -150,7 +142,7 @@ function* getDocFromDBSaga(action) {
       yield put(setIsLoadingFalse())
     } else {
       // doc.data() will be undefined in this case
-      console.log('No such document!')
+      console.error('No such document!')
       yield put(setIsLoadingFalse())
     }
   } catch (error) {
@@ -287,10 +279,10 @@ function* setTimeTableSaga() {
 }
 
 export function* mySaga() {
-  yield takeEvery(SIGN_UP_USER, signUpSaga)
-  yield takeEvery(LOG_IN_USER, logInSaga)
-  yield takeEvery(LOG_OUT_USER, logOutSaga)
-  yield takeEvery(LOG_IN_WITH_GOOGLE, logInWithGoogleSaga)
+  yield takeEvery('SIGN_UP_USER', signUpSaga)
+  yield takeEvery('LOG_IN_USER', logInSaga)
+  yield takeEvery('LOG_OUT_USER', logOutSaga)
+  yield takeEvery('LOG_IN_WITH_GOOGLE', logInWithGoogleSaga)
   yield takeEvery(ADD_DOC_TO_COLLECTION, addDocToCollectionSaga)
   yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
   yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)

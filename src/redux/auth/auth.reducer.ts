@@ -1,17 +1,7 @@
-import { AuthActionsTypes } from './auth.actions'
-import {
-  SET_CURRENT_USER,
-  CLEAR_CURRENT_USER,
-  SIGN_UP_USER_SUCCESS,
-  SIGN_UP_USER_FAILED,
-  LOG_OUT_USER_FAILED,
-  LOG_IN_USER_SUCCESS,
-} from './auth.actions'
-// import * as AuthActions from './auth.actions'
+import { InferActionsTypes } from './../redux.store'
+import * as AuthActions from './auth.actions'
 
-// type InferValueTypes<T> = T extends { [key: string]: infer U } ? U : never
-
-// type AuthActionsTypes = ReturnType<InferValueTypes<typeof AuthActions>>
+type AuthActionsTypes = InferActionsTypes<typeof AuthActions>
 
 const initialState = {
   currentUser: {
@@ -29,9 +19,10 @@ const authReducer = (
   action: AuthActionsTypes
 ): initialStateT => {
   switch (action.type) {
-    case SET_CURRENT_USER:
-    case SIGN_UP_USER_SUCCESS:
-    case LOG_IN_USER_SUCCESS: {
+
+    case 'SET_CURRENT_USER':
+    case 'SIGN_UP_USER_SUCCESS':
+    case 'LOG_IN_USER_SUCCESS': {
       const { email, uid, displayName, photoURL } = action.payload.currentUser
 
       return {
@@ -45,7 +36,7 @@ const authReducer = (
       }
     }
 
-    case CLEAR_CURRENT_USER:
+    case 'CLEAR_CURRENT_USER':
       return {
         ...state,
         currentUser: {
@@ -55,11 +46,13 @@ const authReducer = (
           photoURL: null,
         },
       }
-
-    case LOG_OUT_USER_FAILED:
-    case SIGN_UP_USER_FAILED:
-      console.error(action.payload.error)
+    
+    case 'LOG_IN_USER_FAILED':
+    case 'LOG_OUT_USER_FAILED':
+    case 'SIGN_UP_USER_FAILED':
+      console.error(action.error)
       return state
+
     default:
       return state
   }

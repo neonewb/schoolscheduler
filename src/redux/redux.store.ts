@@ -12,11 +12,19 @@ const middlewares = [logger, saga]
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  fsdb: firestoreReducer
+  fsdb: firestoreReducer,
 })
 
 type RootReducerType = typeof rootReducer // (globalState: AppStateType) => AppStateType
 export type AppStateType = ReturnType<RootReducerType>
+
+type InferValueTypes<T> = T extends { [key: string]: infer U }
+  ? U
+  : never
+
+export type InferActionsTypes<
+  T extends { [key: string]: (...args: any[]) => any }
+> = ReturnType<InferValueTypes<T>>
 
 let store = createStore(
   rootReducer,
