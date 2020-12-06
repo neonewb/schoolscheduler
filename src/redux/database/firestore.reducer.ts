@@ -7,20 +7,28 @@ import {
 import { nanoid } from 'nanoid'
 import { InferActionsTypes } from './../redux.store'
 import * as FirestoreActions from './firestore.actions'
-import {ScheduleT, LoadT} from './firestore.actions'
+import { ScheduleT, LoadT, TimeTableT } from './firestore.actions'
 
 type FirestoreActionsTypes = InferActionsTypes<typeof FirestoreActions>
 
 const initialState = {
   schedules: [] as Array<ScheduleT>,
-  isLoading: false,
+  isLoading: false as boolean,
   error: null as null | string,
 } as const
 
-const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) => {
+export type firestoreInitialStateT = typeof initialState
+
+const firestoreReducer = (
+  state = initialState,
+  action: FirestoreActionsTypes
+): firestoreInitialStateT => {
   switch (action.type) {
     case 'ADD_DOC_TO_COLLECTION_SUCCESS':
-      return { ...state, schedules: [...state.schedules, { ...action.payload}] }
+      return {
+        ...state,
+        schedules: [...state.schedules, { ...action.payload }],
+      }
 
     case 'SET_DOC_TO_RX_STATE':
       if (state.schedules.some((e) => e.id === action.payload.schedule.id)) {
@@ -40,7 +48,9 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
     case 'DEL_DOC_FROM_RX_STATE':
       return {
         ...state,
-        schedules: [...state.schedules.filter((i) => i.id !== action.payload.docID)],
+        schedules: [
+          ...state.schedules.filter((i) => i.id !== action.payload.docID),
+        ],
       }
 
     case 'ADD_DOC_TO_COLLECTION_FAILED':
@@ -89,7 +99,7 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
       }
 
     case 'CLEAR_RX_STATE':
-      return { schedules: [], error: null }
+      return { schedules: [], isLoading: false, error: null }
 
     case 'SET_IS_LOADING_TRUE':
       return { ...state, isLoading: true }
@@ -206,7 +216,7 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
 
     case 'DELETE_LOAD':
       let newLoad: Array<LoadT> = getChoosenSchedule(state).load
-      
+
       action.payload.ids.forEach((element) => {
         newLoad = newLoad.filter((e) => e.id !== element)
       })
@@ -355,7 +365,9 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
         if (isANumber(check)) {
           for (let i = 0; i < numberOfColumns; i++) {
             if (!checked.includes(alphabet[i])) {
-              classes = classes.filter((e: string) => e !== `${check} ${alphabet[i]}`)
+              classes = classes.filter(
+                (e: string) => e !== `${check} ${alphabet[i]}`
+              )
             }
           }
         } else {
@@ -381,9 +393,7 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
     }
 
     case 'ADD_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
-        state
-      )
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(state)
 
       if (checked.includes('All')) {
         checked.push(alphabet[numOfCol])
@@ -414,14 +424,14 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
     }
 
     case 'SUBTRACT_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
-        state
-      )
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(state)
 
       checked = checked.filter((e: string) => e !== alphabet[numOfCol - 1])
 
       for (let i = 1; i < 12; i++) {
-        classes = classes.filter((e: string) => e !== `${i} ${alphabet[numOfCol - 1]}`)
+        classes = classes.filter(
+          (e: string) => e !== `${i} ${alphabet[numOfCol - 1]}`
+        )
       }
 
       return {
@@ -453,23 +463,23 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
     case 'MANUALLY_CREATE_SCHEDULE': {
       let { classes, teachers } = getChoosenSchedule(state)
 
-      classes = classes.map((e: string) => {
+      const classesTT = classes.map((e: string) => {
         return {
           name: e,
-          lessons: []
+          lessons: [],
         }
       })
 
-      teachers = teachers.map((e: string) => {
+      const teachersTT = teachers.map((e: string) => {
         return {
           name: e,
-          lessons: []
+          lessons: [],
         }
       })
 
-      let newTimeTable = {
-        classes: [...classes],
-        techers: [...teachers],
+      const newTimeTable: TimeTableT = {
+        classesTT: [...classesTT],
+        teachersTT: [...teachersTT],
       }
 
       return {
@@ -478,7 +488,7 @@ const firestoreReducer = (state = initialState, action: FirestoreActionsTypes) =
           if (!schedule.isChoosen) return schedule
           return {
             ...schedule,
-            timeTable: newTimeTable
+            timeTable: newTimeTable,
           }
         }),
       }

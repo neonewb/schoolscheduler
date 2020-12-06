@@ -11,8 +11,8 @@ const saga = createSagaMiddleware()
 const middlewares = [logger, saga]
 
 const rootReducer = combineReducers({
-  auth: authReducer,
   fsdb: firestoreReducer,
+  auth: authReducer,
 })
 
 type RootReducerType = typeof rootReducer // (globalState: AppStateType) => AppStateType

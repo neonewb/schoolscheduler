@@ -35,10 +35,10 @@ const Load = ({ mySchedule }) => {
   const [newLoad, setNewLoad] = useState({})
 
   const handleNewLoad = (key, value) => {
-    setNewLoad({
-      ...newLoad,
+    setNewLoad(prevState => ({
+      ...prevState,
       [key]: value,
-    })
+    }))
   }
 
   const handleSubmit = (event) => {

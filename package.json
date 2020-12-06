@@ -16,8 +16,6 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/redux": "^3.6.0",
-    "@types/redux-devtools-extension": "^2.13.2",
-    "@types/redux-logger": "^3.0.8",
     "firebase": "^7.24.0",
     "firebase-tools": "^8.14.1",
     "mui-datatables": "^3.7.1",
@@ -37,6 +35,8 @@
     "yup": "^0.29.3"
   },
   "devDependencies": {
+    "@types/redux-logger": "^3.0.8",
+    "@types/redux-devtools-extension": "^2.13.2",
     "line-replace": "^2.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6"

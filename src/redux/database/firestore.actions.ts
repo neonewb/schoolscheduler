@@ -34,9 +34,9 @@ type TeacherT = {
   name: string
 }
 
-type TimeTableT = {
-  classes: Array<ClassT>
-  teacher: Array<TeacherT>
+export type TimeTableT = {
+  classesTT: Array<ClassT>
+  teachersTT: Array<TeacherT>
 }
 
 export type ScheduleT = {
@@ -53,7 +53,7 @@ export type ScheduleT = {
   subjects: Array<SubjectT>,
   teachers: Array<string>,
   load: Array<LoadT>,
-  timeTable: TimeTableT
+  timeTable?: TimeTableT
   isChoosen: boolean
 }
 
