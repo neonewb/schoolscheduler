@@ -10,35 +10,14 @@ import {
 import {
   addDocToCollectionFailedAC,
   addDocToCollectionSuccessAC,
-  ADD_DOC_TO_COLLECTION,
-  DEL_DOC_FROM_COLLECTION,
   delDocFromCollFailedAC,
   delDocFromRxStateAC,
   clearRxStateAC,
-  GET_DOCS_FROM_DB,
   setDocToRxStateAC,
-  GET_DOC_FROM_DB,
   setIsLoadingTrue,
   setIsLoadingFalse,
   updateFailedAC,
-  UPDATE_FIELD,
-  CLEAR_CHECKED_AND_CLASSES,
-  ALL_CHECK,
-  SET_CHECK,
-  SET_CLASS,
-  ADD_COLUMN,
-  SUBTRACT_COLUMN,
-  OPEN_CUSTOM_CLASS_NAMES,
-  SET_CUSTOM_CLASS,
-  DELETE_CUSTOM_CLASS,
-  SET_SUBJECT,
-  DELETE_SUBJECT,
-  SET_TEACHER,
-  DELETE_TEACHER,
   chooseSingleAC,
-  SET_LOAD,
-  DELETE_LOAD,
-  MANUALLY_CREATE_SCHEDULE,
 } from '../redux/database/firestore.actions'
 
 function* signUpSaga(action) {
@@ -87,11 +66,11 @@ function* logInWithGoogleSaga() {
 
 const schedulesColl = db.collection('schedules')
 
-function* addDocToCollectionSaga(action) {
+function* addDocToCollectionSaga({payload}) {
   try {
     const response = yield call([schedulesColl, schedulesColl.add], {
-      email: action.email,
-      userid: action.userID,
+      email: payload.email,
+      userid: payload.userID,
       title: 'New schedule',
       numberOfDays: 6,
       maxLessonsPerDay: 10,
@@ -108,8 +87,8 @@ function* addDocToCollectionSaga(action) {
     yield put(
       addDocToCollectionSuccessAC(
         response.id,
-        action.email,
-        action.userID,
+        payload.email,
+        payload.userID,
         'New schedule',
         6,
         10,
@@ -129,17 +108,21 @@ function* addDocToCollectionSaga(action) {
 }
 
 // Fetch single doc
-function* getDocFromDBSaga(action) {
+function* getDocFromDBSaga({payload}) {
   try {
     yield put(setIsLoadingTrue())
-    const docRef = schedulesColl.doc(action.docID)
+    const docRef = schedulesColl.doc(payload.docID)
 
     const mySchedule = yield call([docRef, docRef.get])
 
     if (mySchedule.exists) {
-      yield put(setDocToRxStateAC({ id: mySchedule.id, ...mySchedule.data() }))
-      yield put(chooseSingleAC(mySchedule.id))
-      yield put(setIsLoadingFalse())
+      const schedule = mySchedule.data()
+      schedule.id = mySchedule.id
+      if (schedule.email === payload.email) {
+        yield put(setDocToRxStateAC(schedule))
+        yield put(chooseSingleAC(mySchedule.id))
+        yield put(setIsLoadingFalse())
+      }
     } else {
       // doc.data() will be undefined in this case
       console.error('No such document!')
@@ -152,11 +135,11 @@ function* getDocFromDBSaga(action) {
 }
 
 // Fetch multiple doc
-function* getDocsFromDBSaga(action) {
+function* getDocsFromDBSaga({payload}) {
   try {
     const mySchedules = schedulesColl
-      .where('email', '==', action.email)
-      .where('userid', '==', action.userID)
+      .where('email', '==', payload.email)
+      .where('userid', '==', payload.userID)
 
     const querySnapshot = yield call([mySchedules, mySchedules.get])
 
@@ -177,12 +160,12 @@ function* getDocsFromDBSaga(action) {
   }
 }
 
-function* deleteDocFromCollectionSaga(action) {
-  const docRef = schedulesColl.doc(action.docID)
+function* deleteDocFromCollectionSaga({payload}) {
+  const docRef = schedulesColl.doc(payload.docID)
 
   try {
     yield call([docRef, docRef.delete])
-    yield put(delDocFromRxStateAC(action.docID))
+    yield put(delDocFromRxStateAC(payload.docID))
   } catch (error) {
     yield put(delDocFromCollFailedAC(error))
   }
@@ -283,25 +266,25 @@ export function* mySaga() {
   yield takeEvery('LOG_IN_USER', logInSaga)
   yield takeEvery('LOG_OUT_USER', logOutSaga)
   yield takeEvery('LOG_IN_WITH_GOOGLE', logInWithGoogleSaga)
-  yield takeEvery(ADD_DOC_TO_COLLECTION, addDocToCollectionSaga)
-  yield takeEvery(GET_DOC_FROM_DB, getDocFromDBSaga)
-  yield takeEvery(GET_DOCS_FROM_DB, getDocsFromDBSaga)
-  yield takeEvery(DEL_DOC_FROM_COLLECTION, deleteDocFromCollectionSaga)
-  yield takeEvery(UPDATE_FIELD, updateFieldSaga)
-  yield takeEvery(ALL_CHECK, setCheckedClassesSaga)
-  yield takeEvery(CLEAR_CHECKED_AND_CLASSES, setCheckedClassesSaga)
-  yield takeEvery(OPEN_CUSTOM_CLASS_NAMES, setCheckedClassesSaga)
-  yield takeEvery(SET_CHECK, setCheckedClassesSaga)
-  yield takeEvery(SET_CLASS, setCheckedClassesSaga)
-  yield takeEvery(SET_CUSTOM_CLASS, setCheckedClassesSaga)
-  yield takeEvery(DELETE_CUSTOM_CLASS, setCheckedClassesSaga)
-  yield takeEvery(ADD_COLUMN, setCheckedClassesSaga)
-  yield takeEvery(SUBTRACT_COLUMN, setCheckedClassesSaga)
-  yield takeEvery(SET_SUBJECT, setSubjectSaga)
-  yield takeEvery(DELETE_SUBJECT, setSubjectSaga)
-  yield takeEvery(SET_TEACHER, setTeacherSaga)
-  yield takeEvery(DELETE_TEACHER, setTeacherSaga)
-  yield takeEvery(SET_LOAD, setLoadSaga)
-  yield takeEvery(DELETE_LOAD, setLoadSaga)
-  yield takeEvery(MANUALLY_CREATE_SCHEDULE, setTimeTableSaga)
+  yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionSaga)
+  yield takeEvery('GET_DOC_FROM_DB', getDocFromDBSaga)
+  yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBSaga)
+  yield takeEvery('DEL_DOC_FROM_COLLECTION', deleteDocFromCollectionSaga)
+  yield takeEvery('UPDATE_FIELD', updateFieldSaga)
+  yield takeEvery('ALL_CHECK', setCheckedClassesSaga)
+  yield takeEvery('CLEAR_CHECKED_AND_CLASSES', setCheckedClassesSaga)
+  yield takeEvery('OPEN_CUSTOM_CLASS_NAMES', setCheckedClassesSaga)
+  yield takeEvery('SET_CHECK', setCheckedClassesSaga)
+  yield takeEvery('SET_CLASS', setCheckedClassesSaga)
+  yield takeEvery('SET_CUSTOM_CLASS', setCheckedClassesSaga)
+  yield takeEvery('DELETE_CUSTOM_CLASS', setCheckedClassesSaga)
+  yield takeEvery('ADD_COLUMN', setCheckedClassesSaga)
+  yield takeEvery('SUBTRACT_COLUMN', setCheckedClassesSaga)
+  yield takeEvery('SET_SUBJECT', setSubjectSaga)
+  yield takeEvery('DELETE_SUBJECT', setSubjectSaga)
+  yield takeEvery('SET_TEACHER', setTeacherSaga)
+  yield takeEvery('DELETE_TEACHER', setTeacherSaga)
+  yield takeEvery('SET_LOAD', setLoadSaga)
+  yield takeEvery('DELETE_LOAD', setLoadSaga)
+  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTableSaga)
 }

@@ -37,7 +37,7 @@ const Edit = () => {
       if (!userAuth) {
         history.push('/login')
       } else if (userAuth && schedules.length === 0) {
-        dispatch(getDocFromDBAC(userAuth.email, userAuth.uid, id))
+        dispatch(getDocFromDBAC(userAuth.email, id))
       }
     })
     return () => unsubscribeFromAuth()

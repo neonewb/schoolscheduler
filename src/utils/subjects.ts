@@ -22,4 +22,6 @@ export const subjectsOptions = [
   'Sociology',
   'Technology',
   'The world',
-]
+] as const
+
+export type SubjectT = string | typeof subjectsOptions 

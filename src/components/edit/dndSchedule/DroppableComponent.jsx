@@ -3,6 +3,7 @@ import React from 'react'
 import { useDrop } from 'react-dnd'
 import { DragItemTypes } from '../../../utils/DragItemsTypes'
 import grey from '@material-ui/core/colors/grey';
+import theme from '../../../styles/theme';
 
 const useStyles = makeStyles({
   droppableDiv: {
@@ -31,10 +32,8 @@ const DroppableComponent = ({ id }) => {
   const isActive = canDrop && isOver
   let backgroundColor = ''
   if (isActive) {
-    backgroundColor = 'darkgreen'
-  } else if (canDrop) {
-    backgroundColor = 'darkkhaki'
-  }
+    backgroundColor = theme.palette.primary.main
+  } 
 
   return (
     <div

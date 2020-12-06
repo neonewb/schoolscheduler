@@ -102,7 +102,6 @@ const Load = ({ mySchedule }) => {
   const options = {
     caseSensitive: true,
     download: false,
-    draggableColumns: { enabled: true, transitionTime: 100 },
     filterType: 'checkbox',
     jumpToPage: true,
     print: false,

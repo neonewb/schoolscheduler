@@ -6,4 +6,6 @@ export const daysOfTheWeek = [
   'Friday',
   'Saturday',
   'Sunday',
-]
+] as const
+
+export type DaysOfTheWeekT = typeof daysOfTheWeek

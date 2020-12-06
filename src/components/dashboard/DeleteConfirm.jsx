@@ -17,7 +17,7 @@ const DeleteConfirm = ({
       handleClose()
     }
     choosenSchedules.forEach( i => {
-      deleteDocFromCollectionAC(currentUser.email, currentUser.uid, i.id)
+      deleteDocFromCollectionAC(i.id)
     })
     handleClose()
   }
