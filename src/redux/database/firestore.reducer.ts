@@ -8,8 +8,9 @@ import { nanoid } from 'nanoid'
 import { InferActionsTypes } from './../redux.store'
 import * as FirestoreActions from './firestore.actions'
 import { ScheduleT, LoadT, TimeTableT } from './firestore.actions'
+import { Reducer } from 'redux'
 
-type FirestoreActionsTypes = InferActionsTypes<typeof FirestoreActions>
+type FsdbActionsTypes = InferActionsTypes<typeof FirestoreActions>
 
 const initialState = {
   schedules: [] as Array<ScheduleT>,
@@ -17,12 +18,12 @@ const initialState = {
   error: null as null | string,
 } as const
 
-export type firestoreInitialStateT = typeof initialState
+export type FsdbInitialStateT = typeof initialState
 
-const firestoreReducer = (
+const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
   state = initialState,
-  action: FirestoreActionsTypes
-): firestoreInitialStateT => {
+  action
+) => {
   switch (action.type) {
     case 'ADD_DOC_TO_COLLECTION_SUCCESS':
       return {
@@ -393,7 +394,9 @@ const firestoreReducer = (
     }
 
     case 'ADD_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(state)
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+        state
+      )
 
       if (checked.includes('All')) {
         checked.push(alphabet[numOfCol])
@@ -424,7 +427,9 @@ const firestoreReducer = (
     }
 
     case 'SUBTRACT_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(state)
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+        state
+      )
 
       checked = checked.filter((e: string) => e !== alphabet[numOfCol - 1])
 

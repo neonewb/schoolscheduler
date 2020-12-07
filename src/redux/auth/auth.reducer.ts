@@ -1,3 +1,4 @@
+import { Reducer } from 'redux'
 import { InferActionsTypes } from './../redux.store'
 import * as AuthActions from './auth.actions'
 
@@ -12,14 +13,13 @@ const initialState = {
   },
 }
 
-type initialStateT = typeof initialState
+type AuthInitialStateT = typeof initialState
 
-const authReducer = (
+const authReducer: Reducer<AuthInitialStateT, AuthActionsTypes> = (
   state = initialState,
-  action: AuthActionsTypes
-): initialStateT => {
+  action
+) => {
   switch (action.type) {
-
     case 'SET_CURRENT_USER':
     case 'SIGN_UP_USER_SUCCESS':
     case 'LOG_IN_USER_SUCCESS': {
@@ -46,7 +46,7 @@ const authReducer = (
           photoURL: null,
         },
       }
-    
+
     case 'LOG_IN_USER_FAILED':
     case 'LOG_OUT_USER_FAILED':
     case 'SIGN_UP_USER_FAILED':

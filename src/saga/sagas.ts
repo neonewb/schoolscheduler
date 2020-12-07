@@ -1,3 +1,4 @@
+import { AppStateType } from './../redux/redux.store';
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { auth, db, googleProvider } from '../configs/firebase.config'
 import {
@@ -6,6 +7,8 @@ import {
   signUpUserSuccessAC,
   logInUserSuccessAC,
   logInUserFailedAC,
+  SignUpUserT,
+  LogInUserT,
 } from '../redux/auth/auth.actions'
 import {
   addDocToCollectionFailedAC,
@@ -18,9 +21,15 @@ import {
   setIsLoadingFalse,
   updateFailedAC,
   chooseSingleAC,
+  AddDocToCollectionT,
+  GetDocFromDBT,
+  GetDocsFromDBT,
+  DeleteDocFromCollectionT,
+  UpdateFieldT,
+  ScheduleT,
 } from '../redux/database/firestore.actions'
 
-function* signUpSaga(action) {
+function* signUpSaga(action: SignUpUserT) {
   try {
     const response = yield call(
       [auth, auth.createUserWithEmailAndPassword],
@@ -33,7 +42,7 @@ function* signUpSaga(action) {
   }
 }
 
-function* logInSaga(action) {
+function* logInSaga(action: LogInUserT) {
   try {
     const response = yield call(
       [auth, auth.signInWithEmailAndPassword],
@@ -66,7 +75,8 @@ function* logInWithGoogleSaga() {
 
 const schedulesColl = db.collection('schedules')
 
-function* addDocToCollectionSaga({payload}) {
+function* addDocToCollectionSaga(action: AddDocToCollectionT) {
+  const payload = action.payload
   try {
     const response = yield call([schedulesColl, schedulesColl.add], {
       email: payload.email,
@@ -99,7 +109,7 @@ function* addDocToCollectionSaga({payload}) {
         [],
         [],
         [],
-        []
+        {}
       )
     )
   } catch (error) {
@@ -108,7 +118,8 @@ function* addDocToCollectionSaga({payload}) {
 }
 
 // Fetch single doc
-function* getDocFromDBSaga({payload}) {
+function* getDocFromDBSaga(action: GetDocFromDBT) {
+  const payload = action.payload
   try {
     yield put(setIsLoadingTrue())
     const docRef = schedulesColl.doc(payload.docID)
@@ -116,7 +127,7 @@ function* getDocFromDBSaga({payload}) {
     const mySchedule = yield call([docRef, docRef.get])
 
     if (mySchedule.exists) {
-      const schedule = mySchedule.data()
+      const schedule:ScheduleT = mySchedule.data()
       schedule.id = mySchedule.id
       if (schedule.email === payload.email) {
         yield put(setDocToRxStateAC(schedule))
@@ -135,7 +146,8 @@ function* getDocFromDBSaga({payload}) {
 }
 
 // Fetch multiple doc
-function* getDocsFromDBSaga({payload}) {
+function* getDocsFromDBSaga(action: GetDocsFromDBT) {
+  const payload = action.payload
   try {
     const mySchedules = schedulesColl
       .where('email', '==', payload.email)
@@ -143,9 +155,9 @@ function* getDocsFromDBSaga({payload}) {
 
     const querySnapshot = yield call([mySchedules, mySchedules.get])
 
-    let arrDoc = []
+    let arrDoc: Array<ScheduleT> = []
 
-    querySnapshot.forEach(function (doc) {
+    querySnapshot.forEach(function (doc: any) {
       arrDoc.push({
         id: doc.id,
         ...doc.data(),
@@ -160,7 +172,9 @@ function* getDocsFromDBSaga({payload}) {
   }
 }
 
-function* deleteDocFromCollectionSaga({payload}) {
+function* deleteDocFromCollectionSaga(action: DeleteDocFromCollectionT) {
+  const payload = action.payload
+
   const docRef = schedulesColl.doc(payload.docID)
 
   try {
@@ -171,10 +185,11 @@ function* deleteDocFromCollectionSaga({payload}) {
   }
 }
 
-function* updateFieldSaga(action) {
+function* updateFieldSaga(action: UpdateFieldT) {
   const docRef = schedulesColl.doc(action.payload.schedID)
 
   try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       [action.payload.field]: action.payload.content,
     })
@@ -185,15 +200,18 @@ function* updateFieldSaga(action) {
 }
 
 function* setCheckedClassesSaga() {
-  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+  const schedule:ScheduleT = yield select((state: AppStateType) =>
+    state.fsdb.schedules.find((e) => e.isChoosen)
+  )
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {    
+  try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       classes: schedule.classes,
       checked: schedule.checked,
-      isOpenCustomClassNames: schedule.isOpenCustomClassNames
+      isOpenCustomClassNames: schedule.isOpenCustomClassNames,
     })
     console.log(`Schedule checked and classes successfully updated!`)
   } catch (error) {
@@ -202,11 +220,14 @@ function* setCheckedClassesSaga() {
 }
 
 function* setSubjectSaga() {
-  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+  const schedule:ScheduleT = yield select((state: AppStateType) =>
+    state.fsdb.schedules.find((e) => e.isChoosen)
+  )
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {    
+  try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       subjects: schedule.subjects,
     })
@@ -217,11 +238,14 @@ function* setSubjectSaga() {
 }
 
 function* setTeacherSaga() {
-  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+  const schedule:ScheduleT = yield select((state: AppStateType) =>
+    state.fsdb.schedules.find((e) => e.isChoosen)
+  )
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {    
+  try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       teachers: schedule.teachers,
     })
@@ -232,11 +256,14 @@ function* setTeacherSaga() {
 }
 
 function* setLoadSaga() {
-  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+  const schedule:ScheduleT = yield select((state: AppStateType) =>
+    state.fsdb.schedules.find((e) => e.isChoosen)
+  )
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {    
+  try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       load: schedule.load,
     })
@@ -247,11 +274,14 @@ function* setLoadSaga() {
 }
 
 function* setTimeTableSaga() {
-  const schedule = yield select(state => state.fsdb.schedules.find((e) => e.isChoosen))
+  const schedule:ScheduleT = yield select((state: AppStateType) =>
+    state.fsdb.schedules.find((e) => e.isChoosen)
+  )
 
   const docRef = schedulesColl.doc(schedule.id)
 
-  try {    
+  try {
+    //@ts-ignore
     yield call([docRef, docRef.update], {
       timeTable: schedule.timeTable,
     })

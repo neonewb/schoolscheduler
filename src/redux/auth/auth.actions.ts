@@ -18,6 +18,7 @@ export const clearCurrentUserAC = () =>
     type: 'CLEAR_CURRENT_USER',
   } as const)
 
+export type SignUpUserT = ReturnType<typeof signUpUserAC>
 export const signUpUserAC = (email: string, password: string) =>
   ({
     type: 'SIGN_UP_USER',
@@ -52,6 +53,7 @@ export const logOutUserFailedAC = (error: string) =>
     error,
   } as const)
 
+export type LogInUserT = ReturnType<typeof logInUserAC>
 export const logInUserAC = (email: string, password: string) =>
   ({
     type: 'LOG_IN_USER',
