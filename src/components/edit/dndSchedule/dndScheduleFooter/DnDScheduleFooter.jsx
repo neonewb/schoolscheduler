@@ -1,6 +1,6 @@
 import { Paper } from '@material-ui/core'
 import { makeStyles, Typography } from '@material-ui/core'
-import { grey } from '@material-ui/core/colors'
+import { teal } from '@material-ui/core/colors'
 import React from 'react'
 import DraggableLesson from './DraggableLesson'
 
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     alignItems: 'center',
     margin: 8,
     '&:hover': {
-      background: grey[300],
+      background: teal[50],
       cursor: 'grab'
     }
   },

@@ -1,17 +1,17 @@
 import React from 'react'
-import { Button, Grid, makeStyles } from '@material-ui/core'
+import { Button, Grid, makeStyles, Typography } from '@material-ui/core'
 import GoogleIcon from './GoogleIcon'
+import { teal } from '@material-ui/core/colors'
 
 const useStyles = makeStyles((theme) => ({
   googleButton: {
-    backgroundColor: 'white',
+    backgroundColor: teal[50],
     '&:hover': {
-      backgroundColor: 'white',
-    },
+      backgroundColor: teal[100],
+    },    
     height: 66.69,
     fontSize: 25,
     fontFamily: 'Comfortaa',
-
   },
 }))
 
@@ -26,7 +26,9 @@ const GoogleButton = ({ callBackFn }) => {
         fullWidth
         size='large'
         variant='contained'>
-        Sign in with google
+        <Typography variant='h5'>
+          Sign in with google
+        </Typography>
       </Button>
     </Grid>
   )

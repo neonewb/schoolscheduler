@@ -1,6 +1,6 @@
 import React from 'react'
-import DnDScheduleBody from './DnDScheduleBody'
-import DnDScheduleFooter from './DnDScheduleFooter'
+import DnDScheduleBody from './dndScheduleBody/DnDScheduleBody'
+import DnDScheduleFooter from './dndScheduleFooter/DnDScheduleFooter'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from '@material-ui/core'

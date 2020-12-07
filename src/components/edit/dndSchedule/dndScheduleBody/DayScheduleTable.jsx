@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core'
 import MuiTableCell from '@material-ui/core/TableCell'
 import React from 'react'
-import { daysOfTheWeek } from '../../../utils/daysOfTheWeek'
-import { getNumbersArray } from '../../../utils/funcs'
+import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
+import { getNumbersArray } from '../../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
 

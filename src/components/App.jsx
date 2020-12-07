@@ -12,7 +12,7 @@ import {
   setCurrentUserAC,
 } from '../redux/auth/auth.actions'
 import { makeStyles } from '@material-ui/core'
-const Edit = React.lazy(() => import('./edit/Edit'))
+import Edit from './edit/Edit'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,9 +58,7 @@ const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
       </Route>
 
       <Route path='/edit/:id'>
-        <Suspense fallback={<></>}>
           <Edit />
-        </Suspense>
       </Route>
     </Grid>
   )

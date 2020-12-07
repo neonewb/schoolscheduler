@@ -1,5 +1,5 @@
 import { Divider } from '@material-ui/core'
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
@@ -7,12 +7,8 @@ import { useStylesEdit } from '../../styles/stylesForEdit'
 import { getDocFromDBAC } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
-const SettingsSchedule = React.lazy(() =>
-  import('./settingsSchedule/SettingsSchedule')
-)
-const DnDSchedule = React.lazy(() =>
-  import('./dndSchedule/DnDSchedule')
-)
+import SettingsSchedule from './settingsSchedule/SettingsSchedule'
+import DnDSchedule from './dndSchedule/DnDSchedule'
 
 const Edit = () => {
   const classes = useStylesEdit()
@@ -64,17 +60,15 @@ const Edit = () => {
 
       <Divider />
 
-      <Suspense fallback={<></>}>
+      {isSetSchedOpen ? (
         <SettingsSchedule
           isOpen={isSetSchedOpen}
           setSchedOpen={setSchedOpen}
           mySchedule={mySchedule}
         />
-      </Suspense>
-
-      {!isSetSchedOpen && <Suspense fallback={<></>}>
+      ) : (
         <DnDSchedule mySchedule={mySchedule} />
-      </Suspense>}
+      )}
     </div>
   )
 }

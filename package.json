@@ -8,13 +8,16 @@
     "@material-ui/data-grid": "^4.0.0-alpha.10",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
+    "@redux-saga/types": "^1.1.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
+    "@types/react-dnd": "^3.0.2",
     "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.6",
     "@types/redux": "^3.6.0",
     "firebase": "^7.24.0",
     "firebase-tools": "^8.14.1",
@@ -35,8 +38,8 @@
     "yup": "^0.29.3"
   },
   "devDependencies": {
-    "@types/redux-logger": "^3.0.8",
     "@types/redux-devtools-extension": "^2.13.2",
+    "@types/redux-logger": "^3.0.8",
     "line-replace": "^2.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-logger": "^3.0.6"

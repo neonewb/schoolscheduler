@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core'
 import React from 'react'
 import { useDrop } from 'react-dnd'
-import { DragItemTypes } from '../../../utils/DragItemsTypes'
+import { DragItemTypes } from '../../../../utils/DragItemsTypes'
 import grey from '@material-ui/core/colors/grey';
-import theme from '../../../styles/theme';
+import theme from '../../../../styles/theme';
+import { teal } from '@material-ui/core/colors';
 
 const useStyles = makeStyles({
   droppableDiv: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles({
     border: '1px solid ' + grey[300],
     borderRadius: 2,
     '&:hover': {
-      backgroundColor: grey[300]
+      backgroundColor: teal[50]
     }
   },
 })
@@ -22,7 +23,7 @@ const DroppableComponent = ({ id }) => {
   const styles = useStyles()
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: DragItemTypes.LESSON,
-    drop: () => ({ name: 'TableCell' }),
+    drop: () => ({ name: id }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

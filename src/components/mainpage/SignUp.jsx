@@ -132,7 +132,8 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
                 fullWidth
                 size='large'
                 variant='contained'
-                color='primary'>
+                // color='primary'
+                >
                 Sign Up
               </Button>
             </Grid>

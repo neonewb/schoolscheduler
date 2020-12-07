@@ -128,9 +128,11 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                 size='large'
                 fullWidth
                 variant='contained'
-                color='primary'
+                // color='primary'
                 className={classes.button}>
+                <Typography variant='h5'>
                 Log In
+                </Typography>
               </Button>
             </Grid>
           </Grid>

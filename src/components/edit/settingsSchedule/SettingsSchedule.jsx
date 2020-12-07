@@ -21,7 +21,7 @@ import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRo
 import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded'
 import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
 import HourglassFullRoundedIcon from '@material-ui/icons/HourglassFullRounded'
-const Load = React.lazy(() => import('./load/Load'))
+import Load from './load/Load'
 
 const useStyles = makeStyles({
   root: {
