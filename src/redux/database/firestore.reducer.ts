@@ -46,11 +46,11 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
         ],
       }
 
-    case 'DEL_DOC_FROM_RX_STATE':
+    case 'DEL_DOCS_FROM_RX_STATE':
       return {
         ...state,
         schedules: [
-          ...state.schedules.filter((i) => i.id !== action.payload.docID),
+          ...state.schedules.filter((i) => !i.isChoosen),
         ],
       }
 

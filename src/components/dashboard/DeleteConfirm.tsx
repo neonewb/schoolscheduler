@@ -1,26 +1,25 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
-import React from 'react'
-import { useSelector } from 'react-redux'
+import React, { FC } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteDocsFromCollectionAC } from '../../redux/database/firestore.actions'
 
-const selectChoosenSchedules = state => state.fsdb.schedules.filter((i) => i.isChoosen === true)
+type DeleteConfirmT = {
+  isOpen: boolean
+  handleClose: () => void
+}
 
-const DeleteConfirm = ({
-  deleteDocFromCollectionAC,
-  currentUser,
+const DeleteConfirm: FC<DeleteConfirmT> = ({
   isOpen,
   handleClose,
 }) => {
-  const choosenSchedules = useSelector(selectChoosenSchedules)
+  
+  const dispatch = useDispatch()
+
   const deleteConfirm = () => {
-    if (choosenSchedules.length === 0) {
-      console.log('nothing choosen')
-      handleClose()
-    }
-    choosenSchedules.forEach( i => {
-      deleteDocFromCollectionAC(i.id)
-    })
+    dispatch(deleteDocsFromCollectionAC())
     handleClose()
   }
+  
   return (
     <Dialog
       open={isOpen}

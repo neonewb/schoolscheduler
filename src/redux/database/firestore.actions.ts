@@ -127,13 +127,9 @@ export const setDocToRxStateAC = (schedule: ScheduleT) =>
     payload: { schedule },
   } as const)
 
-export type DeleteDocFromCollectionT = ReturnType<typeof deleteDocFromCollectionAC>
-export const deleteDocFromCollectionAC = (docID: string) =>
+export const deleteDocsFromCollectionAC = () =>
   ({
-    type: 'DEL_DOC_FROM_COLLECTION',
-    payload: {
-      docID,
-    },
+    type: 'DEL_DOCS_FROM_COLLECTION',
   } as const)
 
 export const delDocFromCollFailedAC = (error: string) =>
@@ -142,12 +138,9 @@ export const delDocFromCollFailedAC = (error: string) =>
     error,
   } as const)
 
-export const delDocFromRxStateAC = (docID: string) =>
+export const delDocsFromRxStateAC = () =>
   ({
-    type: 'DEL_DOC_FROM_RX_STATE',
-    payload: {
-      docID,
-    },
+    type: 'DEL_DOCS_FROM_RX_STATE',
   } as const)
 
 export const clearRxStateAC = () =>

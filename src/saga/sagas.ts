@@ -1,5 +1,5 @@
-import { AppStateType } from './../redux/redux.store';
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { AppStateType } from './../redux/redux.store'
+import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 import { auth, db, googleProvider } from '../configs/firebase.config'
 import {
   logOutUserFailedAC,
@@ -14,7 +14,7 @@ import {
   addDocToCollectionFailedAC,
   addDocToCollectionSuccessAC,
   delDocFromCollFailedAC,
-  delDocFromRxStateAC,
+  delDocsFromRxStateAC,
   clearRxStateAC,
   setDocToRxStateAC,
   setIsLoadingTrue,
@@ -24,12 +24,11 @@ import {
   AddDocToCollectionT,
   GetDocFromDBT,
   GetDocsFromDBT,
-  DeleteDocFromCollectionT,
   UpdateFieldT,
   ScheduleT,
 } from '../redux/database/firestore.actions'
 
-function* signUpSaga(action: SignUpUserT) {
+function* signUpS(action: SignUpUserT) {
   try {
     const response = yield call(
       [auth, auth.createUserWithEmailAndPassword],
@@ -42,7 +41,7 @@ function* signUpSaga(action: SignUpUserT) {
   }
 }
 
-function* logInSaga(action: LogInUserT) {
+function* logInS(action: LogInUserT) {
   try {
     const response = yield call(
       [auth, auth.signInWithEmailAndPassword],
@@ -55,7 +54,7 @@ function* logInSaga(action: LogInUserT) {
   }
 }
 
-function* logOutSaga() {
+function* logOutS() {
   try {
     yield call([auth, auth.signOut])
     yield put(clearRxStateAC())
@@ -64,7 +63,7 @@ function* logOutSaga() {
   }
 }
 
-function* logInWithGoogleSaga() {
+function* logInWithGoogleS() {
   try {
     const response = yield call([auth, auth.signInWithPopup], googleProvider)
     yield put(logInUserSuccessAC(response.user))
@@ -75,7 +74,7 @@ function* logInWithGoogleSaga() {
 
 const schedulesColl = db.collection('schedules')
 
-function* addDocToCollectionSaga(action: AddDocToCollectionT) {
+function* addDocToCollectionS(action: AddDocToCollectionT) {
   const payload = action.payload
   try {
     const response = yield call([schedulesColl, schedulesColl.add], {
@@ -118,7 +117,7 @@ function* addDocToCollectionSaga(action: AddDocToCollectionT) {
 }
 
 // Fetch single doc
-function* getDocFromDBSaga(action: GetDocFromDBT) {
+function* getDocFromDBS(action: GetDocFromDBT) {
   const payload = action.payload
   try {
     yield put(setIsLoadingTrue())
@@ -127,7 +126,7 @@ function* getDocFromDBSaga(action: GetDocFromDBT) {
     const mySchedule = yield call([docRef, docRef.get])
 
     if (mySchedule.exists) {
-      const schedule:ScheduleT = mySchedule.data()
+      const schedule: ScheduleT = mySchedule.data()
       schedule.id = mySchedule.id
       if (schedule.email === payload.email) {
         yield put(setDocToRxStateAC(schedule))
@@ -146,7 +145,7 @@ function* getDocFromDBSaga(action: GetDocFromDBT) {
 }
 
 // Fetch multiple doc
-function* getDocsFromDBSaga(action: GetDocsFromDBT) {
+function* getDocsFromDBS(action: GetDocsFromDBT) {
   const payload = action.payload
   try {
     const mySchedules = schedulesColl
@@ -172,20 +171,26 @@ function* getDocsFromDBSaga(action: GetDocsFromDBT) {
   }
 }
 
-function* deleteDocFromCollectionSaga(action: DeleteDocFromCollectionT) {
-  const payload = action.payload
+function* deleteDocsFromCollectionS() {
+  const choosenSchedules: Array<ScheduleT> = yield select(
+    (state: AppStateType) => state.fsdb.schedules.filter((i) => i.isChoosen)
+  )
 
-  const docRef = schedulesColl.doc(payload.docID)
+  yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
+  yield put(delDocsFromRxStateAC())
+}
+
+function* deleteDocFromCollectionS(id: string) {
+  console.log(id)
+  const docRef = schedulesColl.doc(id)
 
   try {
     yield call([docRef, docRef.delete])
-    yield put(delDocFromRxStateAC(payload.docID))
   } catch (error) {
     yield put(delDocFromCollFailedAC(error))
   }
 }
-
-function* updateFieldSaga(action: UpdateFieldT) {
+function* updateFieldS(action: UpdateFieldT) {
   const docRef = schedulesColl.doc(action.payload.schedID)
 
   try {
@@ -199,8 +204,8 @@ function* updateFieldSaga(action: UpdateFieldT) {
   }
 }
 
-function* setCheckedClassesSaga() {
-  const schedule:ScheduleT = yield select((state: AppStateType) =>
+function* setCheckedClassesS() {
+  const schedule: ScheduleT = yield select((state: AppStateType) =>
     state.fsdb.schedules.find((e) => e.isChoosen)
   )
 
@@ -219,8 +224,8 @@ function* setCheckedClassesSaga() {
   }
 }
 
-function* setSubjectSaga() {
-  const schedule:ScheduleT = yield select((state: AppStateType) =>
+function* setSubjectS() {
+  const schedule: ScheduleT = yield select((state: AppStateType) =>
     state.fsdb.schedules.find((e) => e.isChoosen)
   )
 
@@ -237,8 +242,8 @@ function* setSubjectSaga() {
   }
 }
 
-function* setTeacherSaga() {
-  const schedule:ScheduleT = yield select((state: AppStateType) =>
+function* setTeacherS() {
+  const schedule: ScheduleT = yield select((state: AppStateType) =>
     state.fsdb.schedules.find((e) => e.isChoosen)
   )
 
@@ -255,8 +260,8 @@ function* setTeacherSaga() {
   }
 }
 
-function* setLoadSaga() {
-  const schedule:ScheduleT = yield select((state: AppStateType) =>
+function* setLoadS() {
+  const schedule: ScheduleT = yield select((state: AppStateType) =>
     state.fsdb.schedules.find((e) => e.isChoosen)
   )
 
@@ -273,8 +278,8 @@ function* setLoadSaga() {
   }
 }
 
-function* setTimeTableSaga() {
-  const schedule:ScheduleT = yield select((state: AppStateType) =>
+function* setTimeTableS() {
+  const schedule: ScheduleT = yield select((state: AppStateType) =>
     state.fsdb.schedules.find((e) => e.isChoosen)
   )
 
@@ -292,29 +297,29 @@ function* setTimeTableSaga() {
 }
 
 export function* mySaga() {
-  yield takeEvery('SIGN_UP_USER', signUpSaga)
-  yield takeEvery('LOG_IN_USER', logInSaga)
-  yield takeEvery('LOG_OUT_USER', logOutSaga)
-  yield takeEvery('LOG_IN_WITH_GOOGLE', logInWithGoogleSaga)
-  yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionSaga)
-  yield takeEvery('GET_DOC_FROM_DB', getDocFromDBSaga)
-  yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBSaga)
-  yield takeEvery('DEL_DOC_FROM_COLLECTION', deleteDocFromCollectionSaga)
-  yield takeEvery('UPDATE_FIELD', updateFieldSaga)
-  yield takeEvery('ALL_CHECK', setCheckedClassesSaga)
-  yield takeEvery('CLEAR_CHECKED_AND_CLASSES', setCheckedClassesSaga)
-  yield takeEvery('OPEN_CUSTOM_CLASS_NAMES', setCheckedClassesSaga)
-  yield takeEvery('SET_CHECK', setCheckedClassesSaga)
-  yield takeEvery('SET_CLASS', setCheckedClassesSaga)
-  yield takeEvery('SET_CUSTOM_CLASS', setCheckedClassesSaga)
-  yield takeEvery('DELETE_CUSTOM_CLASS', setCheckedClassesSaga)
-  yield takeEvery('ADD_COLUMN', setCheckedClassesSaga)
-  yield takeEvery('SUBTRACT_COLUMN', setCheckedClassesSaga)
-  yield takeEvery('SET_SUBJECT', setSubjectSaga)
-  yield takeEvery('DELETE_SUBJECT', setSubjectSaga)
-  yield takeEvery('SET_TEACHER', setTeacherSaga)
-  yield takeEvery('DELETE_TEACHER', setTeacherSaga)
-  yield takeEvery('SET_LOAD', setLoadSaga)
-  yield takeEvery('DELETE_LOAD', setLoadSaga)
-  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTableSaga)
+  yield takeEvery('SIGN_UP_USER', signUpS)
+  yield takeEvery('LOG_IN_USER', logInS)
+  yield takeEvery('LOG_OUT_USER', logOutS)
+  yield takeEvery('LOG_IN_WITH_GOOGLE', logInWithGoogleS)
+  yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionS)
+  yield takeEvery('GET_DOC_FROM_DB', getDocFromDBS)
+  yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBS)
+  yield takeEvery('DEL_DOCS_FROM_COLLECTION', deleteDocsFromCollectionS)
+  yield takeEvery('UPDATE_FIELD', updateFieldS)
+  yield takeEvery('ALL_CHECK', setCheckedClassesS)
+  yield takeEvery('CLEAR_CHECKED_AND_CLASSES', setCheckedClassesS)
+  yield takeEvery('OPEN_CUSTOM_CLASS_NAMES', setCheckedClassesS)
+  yield takeEvery('SET_CHECK', setCheckedClassesS)
+  yield takeEvery('SET_CLASS', setCheckedClassesS)
+  yield takeEvery('SET_CUSTOM_CLASS', setCheckedClassesS)
+  yield takeEvery('DELETE_CUSTOM_CLASS', setCheckedClassesS)
+  yield takeEvery('ADD_COLUMN', setCheckedClassesS)
+  yield takeEvery('SUBTRACT_COLUMN', setCheckedClassesS)
+  yield takeEvery('SET_SUBJECT', setSubjectS)
+  yield takeEvery('DELETE_SUBJECT', setSubjectS)
+  yield takeEvery('SET_TEACHER', setTeacherS)
+  yield takeEvery('DELETE_TEACHER', setTeacherS)
+  yield takeEvery('SET_LOAD', setLoadS)
+  yield takeEvery('DELETE_LOAD', setLoadS)
+  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTableS)
 }

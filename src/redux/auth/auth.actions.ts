@@ -1,4 +1,4 @@
-type CurrentUserT = {
+export type CurrentUserT = {
   email: null | string
   uid: null | string
   displayName: null | string

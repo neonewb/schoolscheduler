@@ -1,6 +1,6 @@
-import * as React from "react"
+import React, { FC } from "react"
 
-function GoogleIcon(props) {
+const GoogleIcon:FC = (props) => {
   return (
     <svg viewBox="0 0 48 48" width={50} height={50} {...props}>
       <path

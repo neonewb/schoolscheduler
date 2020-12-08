@@ -1,5 +1,5 @@
-const { makeStyles } = require('@material-ui/core')
-const { teal } = require('@material-ui/core/colors')
+import { makeStyles } from '@material-ui/core'
+import { teal } from '@material-ui/core/colors'
 
 const drawerWidth = 240
 

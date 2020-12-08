@@ -1,11 +1,11 @@
-import React, { Suspense, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import MainPageLeft from './mainpage/MainPageLeft'
 import SignUp from './mainpage/SignUp'
 import LogIn from './mainpage/LogIn'
 import { Redirect, Route } from 'react-router-dom'
 import Dashboard from './dashboard/Dashboard'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { auth } from '../configs/firebase.config'
 import {
   clearCurrentUserAC,
@@ -23,18 +23,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
+const App: FC = () => {
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    let unsubscribeFromAuth = null
-    unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
+    const unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
       if (user) {
-        setCurrentUserAC(user)
+        dispatch(setCurrentUserAC(user))
       } else {
-        clearCurrentUserAC()
+        dispatch(clearCurrentUserAC())
       }
     })
     return () => unsubscribeFromAuth()
-  }, [setCurrentUserAC, clearCurrentUserAC])
+  }, [dispatch])
 
   const classes = useStyles()
   return (
@@ -58,13 +59,10 @@ const App = ({ setCurrentUserAC, clearCurrentUserAC }) => {
       </Route>
 
       <Route path='/edit/:id'>
-          <Edit />
+        <Edit />
       </Route>
     </Grid>
   )
 }
 
-export default connect(null, {
-  setCurrentUserAC,
-  clearCurrentUserAC,
-})(App)
+export default App

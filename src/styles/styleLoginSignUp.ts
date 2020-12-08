@@ -6,9 +6,9 @@ export const useStylesLoginSignUp = makeStyles((theme) => ({
     height: 66.69,
     fontSize: 25,
     fontFamily: 'Comfortaa',
-    backgroundColor: teal[50],
+    backgroundColor: teal[100],
     '&:hover': {
-      backgroundColor: teal[100],
+      backgroundColor: teal[200],
     },
   },
 
@@ -25,6 +25,7 @@ export const useStylesLoginSignUp = makeStyles((theme) => ({
       fontSize: 25,
       fontFamily: 'Comfortaa',
     },
+    background: '#f5fffe'
   },
   paper: {
     margin: theme.spacing(8, 3),

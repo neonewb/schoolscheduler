@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -8,15 +8,15 @@ import Tooltip from '@material-ui/core/Tooltip'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 
-export const MainListItems = ({ handleClickDel }) => {
+type MainListItemsPropsT = {
+  handleClickDel: () => void
+}
+
+export const MainListItems: FC<MainListItemsPropsT> = ({ handleClickDel }) => {
   return (
     <div>
       <Tooltip title='Delete schedule' placement='right'>
-        <ListItem
-          button
-          onClick={() => {
-            handleClickDel()
-          }}>
+        <ListItem button onClick={handleClickDel}>
           <ListItemIcon>
             <DeleteRoundedIcon color='primary' fontSize='large' />
           </ListItemIcon>
@@ -34,8 +34,7 @@ export const MainListItems = ({ handleClickDel }) => {
       </Tooltip>
 
       <Tooltip title='Support' placement='right'>
-        <ListItem
-          button>
+        <ListItem button>
           <ListItemIcon>
             <HelpRoundedIcon color='primary' fontSize='large' />
           </ListItemIcon>

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { connect, useSelector } from 'react-redux'
-import { logOutAC } from '../../redux/auth/auth.actions'
+import React, { FC, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { logOutAC, CurrentUserT } from '../../redux/auth/auth.actions'
 import clsx from 'clsx'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Drawer from '@material-ui/core/Drawer'
@@ -23,27 +23,21 @@ import theme from '../../styles/theme'
 import { Button } from '@material-ui/core'
 import {
   addDocToCollectionAC,
-  deleteDocFromCollectionAC,
   getDocsFromDBAC,
-  chooseScheduleAC,
+  ScheduleT,
 } from '../../redux/database/firestore.actions'
 import ScheduleItems from './ScheduleItems'
 import DeleteConfirm from './DeleteConfirm'
 import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesDashboard } from '../../styles/stylesDashboard'
+import { AppStateType } from '../../redux/redux.store'
 
-const Dashboard = ({
-  currentUser,
-  logOutAC,
-  addDocToCollectionAC,
-  schedules,
-  deleteDocFromCollectionAC,
-  getDocsFromDBAC,
-  chooseScheduleAC,
-}) => {
+const Dashboard: FC = () => {
   const classes = useStylesDashboard()
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
+
+  const dispatch = useDispatch()
 
   const [isOpenMenu, setOpenMenu] = React.useState(false)
   const handleDrawerOpen = () => {
@@ -55,22 +49,23 @@ const Dashboard = ({
 
   const history = useHistory()
 
-  const fsdb = useSelector((state) => state.fsdb.schedules)
+  const schedules = useSelector<AppStateType, Array<ScheduleT>>((state) => state.fsdb.schedules)
+  const currentUser = useSelector<AppStateType, CurrentUserT>((state) => state.auth.currentUser)
 
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {
-      if (user && fsdb.length === 0) {
-        getDocsFromDBAC(user.email, user.uid)
+      if (user && schedules.length === 0) {
+        dispatch(getDocsFromDBAC(user.email!, user.uid!))
       } else if (!user) {
         history.push('/login')
       }
     })
 
     return () => unsubscribeFromAuth()
-  }, [getDocsFromDBAC, history, fsdb])
+  }, [history, schedules, dispatch])
 
   const handleAddClick = () => {
-    addDocToCollectionAC(currentUser.email, currentUser.uid)
+    dispatch(addDocToCollectionAC(currentUser.email!, currentUser.uid!))
   }
 
   const [isOpenDelDialog, setOpenDelDialog] = useState(false)
@@ -84,7 +79,7 @@ const Dashboard = ({
   }
 
   const logOut = () => {
-    logOutAC()
+    dispatch(logOutAC())
   }
 
   return (
@@ -178,14 +173,11 @@ const Dashboard = ({
 
             <ScheduleItems
               schedules={schedules}
-              chooseScheduleAC={chooseScheduleAC}
             />
           </Grid>
         </Container>
       </main>
       <DeleteConfirm
-        deleteDocFromCollectionAC={deleteDocFromCollectionAC}
-        currentUser={currentUser}
         isOpen={isOpenDelDialog}
         handleClose={handleClose}
       />
@@ -193,15 +185,4 @@ const Dashboard = ({
   )
 }
 
-const mapStateToProps = (state) => ({
-  currentUser: state.auth.currentUser,
-  schedules: state.fsdb.schedules,
-})
-
-export default connect(mapStateToProps, {
-  logOutAC,
-  addDocToCollectionAC,
-  deleteDocFromCollectionAC,
-  getDocsFromDBAC,
-  chooseScheduleAC,
-})(Dashboard)
+export default Dashboard

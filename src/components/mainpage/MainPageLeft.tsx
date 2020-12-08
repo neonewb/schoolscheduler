@@ -1,5 +1,5 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
-import React from 'react'
+import React, { FC } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   mainPage: {
@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const MainPageLeft = () => {
+const MainPageLeft: FC = () => {
   const classes = useStyles()
 
   return (

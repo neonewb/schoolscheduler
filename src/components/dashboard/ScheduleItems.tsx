@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import clsx from 'clsx'
 import { useDispatch } from 'react-redux'
-import { chooseSingleAC } from '../../redux/database/firestore.actions'
+import {
+  chooseScheduleAC,
+  chooseSingleAC,
+  ScheduleT,
+} from '../../redux/database/firestore.actions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -33,16 +37,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
+type ScheduleItemsProps = {
+  schedules: Array<ScheduleT>
+}
+
+const ScheduleItems: FC<ScheduleItemsProps> = ({ schedules }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
-
   const history = useHistory()
-  const handleOnDubbleClick = (id) => {
+
+  const handleDubbleClick = (id: string) => {
     history.push(`/edit/${id}`)
     dispatch(chooseSingleAC(id))
+  }
 
-}
+  const handleClick = (id: string) => {
+    dispatch(chooseScheduleAC(id))
+  }
+
   let items
 
   if (schedules.length > 0) {
@@ -62,10 +74,10 @@ const ScheduleItems = ({ schedules, chooseScheduleAC }) => {
           <Button
             className={classes.zeroPadding}
             onClick={() => {
-              chooseScheduleAC(item.id)
+              handleClick(item.id)
             }}
             onDoubleClick={() => {
-              handleOnDubbleClick(item.id)
+              handleDubbleClick(item.id)
             }}>
             <Paper className={itemClass}>
               <Typography align='center' component='p' variant='h4'>

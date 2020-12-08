@@ -5,10 +5,10 @@ import store from './redux/redux.store'
 import { BrowserRouter as Router } from 'react-router-dom'
 import reportWebVitals from './reportWebVitals'
 
-import theme from './styles/theme.js'
+import theme from './styles/theme'
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
 
-import App from './components/App.jsx'
+import App from './components/App'
 
 ReactDOM.render(
   <React.StrictMode>

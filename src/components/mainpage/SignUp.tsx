@@ -11,16 +11,17 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { Link as RLink, useHistory } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { logInWithGoogleAC, signUpUserAC } from '../../redux/auth/auth.actions'
+import { useDispatch } from 'react-redux'
+import { signUpUserAC } from '../../redux/auth/auth.actions'
 import { schemaSU } from '../../utils/yupSchema'
-import GoogleButton from '../google/GoogleButton'
-import { useEffect } from 'react'
+import GoogleButton from '../../utils/google/GoogleButton'
+import { FC, useEffect } from 'react'
 import { auth } from '../../configs/firebase.config'
 import { useStylesLoginSignUp } from '../../styles/styleLoginSignUp'
 
-const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
+const SignUp: FC = () => {
   const classes = useStylesLoginSignUp()
+  const dispatch = useDispatch()
 
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schemaSU),
@@ -37,8 +38,13 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
     return () => unsubscribeFromAuth()
   }, [history])
 
-  const onSubmit = ({ email, password }) => {
-    signUpUserAC(email, password)
+  type SubmitT = {
+    email: string
+    password: string
+  }
+
+  const onSubmit = ({ email, password }: SubmitT) => {
+    dispatch(signUpUserAC(email, password))
   }
 
   return (
@@ -133,7 +139,7 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
                 size='large'
                 variant='contained'
                 // color='primary'
-                >
+              >
                 Sign Up
               </Button>
             </Grid>
@@ -141,10 +147,10 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
         </form>
 
         <Grid className={classes.form} container spacing={3}>
-          <GoogleButton callBackFn={logInWithGoogleAC} />
+          <GoogleButton />
         </Grid>
 
-        <Grid className={classes.form} align='center' item xs={12}>
+        <Grid className={classes.form} item xs={12}>
           <Link component={RLink} to='/login' variant='h6'>
             Already have an account? Log in
           </Link>
@@ -154,4 +160,4 @@ const SignUp = ({ signUpUserAC, logInWithGoogleAC }) => {
   )
 }
 
-export default connect(null, { signUpUserAC, logInWithGoogleAC })(SignUp)
+export default SignUp

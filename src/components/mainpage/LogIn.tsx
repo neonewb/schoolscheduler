@@ -13,16 +13,18 @@ import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Alert from '@material-ui/lab/Alert'
 
-import { connect } from 'react-redux'
-import { logInUserAC, logInWithGoogleAC } from '../../redux/auth/auth.actions'
+import { useDispatch } from 'react-redux'
+import { logInUserAC } from '../../redux/auth/auth.actions'
 import { schemaSI } from '../../utils/yupSchema'
-import GoogleButton from '../google/GoogleButton'
-import { useEffect } from 'react'
+import GoogleButton from '../../utils/google/GoogleButton'
+import { FC, useEffect } from 'react'
 import { auth } from '../../configs/firebase.config'
 import { useStylesLoginSignUp } from '../../styles/styleLoginSignUp'
 
-const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
+const LogIn: FC = () => {
   const classes = useStylesLoginSignUp()
+
+  const dispatch = useDispatch()
 
   const { register, handleSubmit, control, errors } = useForm({
     resolver: yupResolver(schemaSI),
@@ -39,8 +41,13 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
     return () => unsubscribeFromAuth()
   }, [history])
 
-  const onSubmit = ({ email, password }) => {
-    logInUserAC(email, password)
+  type SubmitT = {
+    email: string
+    password: string
+  }
+
+  const onSubmit = ({ email, password }: SubmitT) => {
+    dispatch(logInUserAC(email, password))
   }
 
   return (
@@ -66,7 +73,7 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                 }}
                 inputRef={register({ required: true })}
                 autoFocus
-                variant='outlined'
+                variant='filled'
                 required
                 fullWidth
                 label='Email Address'
@@ -88,7 +95,7 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                   },
                 }}
                 inputRef={register({ required: true })}
-                variant='outlined'
+                variant='filled'
                 required
                 fullWidth
                 label='Password'
@@ -130,16 +137,14 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
                 variant='contained'
                 // color='primary'
                 className={classes.button}>
-                <Typography variant='h5'>
-                Log In
-                </Typography>
+                <Typography variant='h5'>Log In</Typography>
               </Button>
             </Grid>
           </Grid>
         </form>
 
         <Grid className={classes.form} container spacing={3}>
-          <GoogleButton callBackFn={logInWithGoogleAC} />
+          <GoogleButton />
 
           <Grid item xs={12}>
             <Grid container>
@@ -162,4 +167,4 @@ const LogIn = ({ logInUserAC, logInWithGoogleAC }) => {
   )
 }
 
-export default connect(null, { logInUserAC, logInWithGoogleAC })(LogIn)
+export default LogIn
