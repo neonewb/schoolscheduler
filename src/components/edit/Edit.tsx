@@ -1,31 +1,33 @@
 import { Divider } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
-import { getDocFromDBAC } from '../../redux/database/firestore.actions'
+import { getDocFromDBAC, ScheduleT } from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
 import SettingsSchedule from './settingsSchedule/SettingsSchedule'
 import DnDSchedule from './dndSchedule/DnDSchedule'
+import { AppStateType } from '../../redux/redux.store'
+import { getUserS } from '../../redux/auth/auth.selectors'
+import { CurrentUserT } from '../../redux/auth/auth.actions'
+import { getIsLoadingS, getSchedulesS } from '../../redux/database/fsdb.selectors'
 
-const Edit = () => {
+const Edit: FC = () => {
   const classes = useStylesEdit()
 
-  const [isSetSchedOpen, setSchedOpen] = useState(false)
+  const [isSettingsOpen, setSettingsOpen] = useState<boolean>(false)
 
-  const user = useSelector((state) => state.auth.currentUser)
+  const user = useSelector<AppStateType, CurrentUserT>(getUserS)
+  const isLoading = useSelector<AppStateType, boolean>(getIsLoadingS)
+  const schedules = useSelector<AppStateType, Array<ScheduleT>>(getSchedulesS)
 
-  const isLoading = useSelector((state) => state.fsdb.isLoading)
-
-  const schedules = useSelector((state) => state.fsdb.schedules)
-
-  const { id } = useParams()
+  const { id } = useParams<{id: string}>()
 
   const history = useHistory()
   const dispatch = useDispatch()
-
+  
   let mySchedule = schedules.find((i) => i.id === id)
 
   useEffect(() => {
@@ -33,7 +35,7 @@ const Edit = () => {
       if (!userAuth) {
         history.push('/login')
       } else if (userAuth && schedules.length === 0) {
-        dispatch(getDocFromDBAC(userAuth.email, id))
+        dispatch(getDocFromDBAC(userAuth.email!, id))
       }
     })
     return () => unsubscribeFromAuth()
@@ -52,18 +54,16 @@ const Edit = () => {
       <Divider />
 
       <EditToolBar
-        setSchedOpen={setSchedOpen}
-        isOpen={isSetSchedOpen}
-        isLoading={isLoading}
+        setSettingsOpen={setSettingsOpen}
         mySchedule={mySchedule}
       />
 
       <Divider />
 
-      {isSetSchedOpen ? (
+      {isSettingsOpen ? (
         <SettingsSchedule
-          isOpen={isSetSchedOpen}
-          setSchedOpen={setSchedOpen}
+          isOpen={isSettingsOpen}
+          setSettingsOpen={setSettingsOpen}
           mySchedule={mySchedule}
         />
       ) : (

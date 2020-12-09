@@ -3,23 +3,19 @@ import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { deleteDocsFromCollectionAC } from '../../redux/database/firestore.actions'
 
-type DeleteConfirmT = {
+type DeleteConfirmPropsT = {
   isOpen: boolean
   handleClose: () => void
 }
 
-const DeleteConfirm: FC<DeleteConfirmT> = ({
-  isOpen,
-  handleClose,
-}) => {
-  
+const DeleteConfirm: FC<DeleteConfirmPropsT> = ({ isOpen, handleClose }) => {
   const dispatch = useDispatch()
 
   const deleteConfirm = () => {
     dispatch(deleteDocsFromCollectionAC())
     handleClose()
   }
-  
+
   return (
     <Dialog
       open={isOpen}

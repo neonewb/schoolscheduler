@@ -3,7 +3,7 @@ import DnDScheduleBody from './dndScheduleBody/DnDScheduleBody'
 import DnDScheduleFooter from './dndScheduleFooter/DnDScheduleFooter'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { makeStyles } from '@material-ui/core'
+import { makeStyles, Typography } from '@material-ui/core'
 
 const useStyles = makeStyles({
   DnDScheduleDiv: {

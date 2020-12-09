@@ -32,6 +32,8 @@ import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesDashboard } from '../../styles/stylesDashboard'
 import { AppStateType } from '../../redux/redux.store'
+import { getUserS } from '../../redux/auth/auth.selectors'
+import { getSchedulesS } from '../../redux/database/fsdb.selectors'
 
 const Dashboard: FC = () => {
   const classes = useStylesDashboard()
@@ -49,8 +51,8 @@ const Dashboard: FC = () => {
 
   const history = useHistory()
 
-  const schedules = useSelector<AppStateType, Array<ScheduleT>>((state) => state.fsdb.schedules)
-  const currentUser = useSelector<AppStateType, CurrentUserT>((state) => state.auth.currentUser)
+  const schedules = useSelector<AppStateType, Array<ScheduleT>>(getSchedulesS)
+  const currentUser = useSelector<AppStateType, CurrentUserT>(getUserS)
 
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged((user) => {

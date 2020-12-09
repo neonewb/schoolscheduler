@@ -1,15 +1,22 @@
 import { Button, Divider, Toolbar, Tooltip } from '@material-ui/core'
-import React from 'react'
+import React, { FC } from 'react'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 import PrintRoundedIcon from '@material-ui/icons/PrintRounded'
 import { useStylesEditToolBar } from '../../styles/stylesEditToolBar'
+import { ScheduleT } from '../../redux/database/firestore.actions'
 
-const EditToolBar = ({ setSchedOpen, isOpen, mySchedule }) => {
+type EditToolBarPropsT = {
+  setSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  mySchedule: ScheduleT | undefined
+}
+
+const EditToolBar: FC<EditToolBarPropsT> = ({ setSettingsOpen, mySchedule }) => {
   const classes = useStylesEditToolBar()
+  
   const handleSettingsClick = () => {
-    setSchedOpen(!isOpen)
+    setSettingsOpen(prevState => !prevState)
   }
 
   return (

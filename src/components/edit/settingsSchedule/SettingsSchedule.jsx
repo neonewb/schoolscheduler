@@ -57,7 +57,7 @@ const useStyles = makeStyles({
   },
 })
 
-const SettingsSchedule = ({ isOpen, mySchedule, setSchedOpen }) => {
+const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
@@ -100,7 +100,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSchedOpen }) => {
   ]
 
   const handleManuallyCreate = () => {
-    setSchedOpen(!isOpen)
+    setSettingsOpen(!isOpen)
     dispatch(manuallyCreateScheduleAC())
   }
 

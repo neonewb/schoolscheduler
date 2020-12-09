@@ -6,10 +6,10 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core'
-import React, { useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import DashboardRoundedIcon from '@material-ui/icons/DashboardRounded'
 import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded'
-import { logOutAC } from '../../redux/auth/auth.actions'
+import { CurrentUserT, logOutAC } from '../../redux/auth/auth.actions'
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useStylesEdit } from '../../styles/stylesForEdit'
@@ -17,25 +17,46 @@ import {
   getDocsFromDBAC,
   updateFieldAC,
   cancelСhoiceAC,
+  ScheduleT,
 } from '../../redux/database/firestore.actions'
 import { useForm } from 'react-hook-form'
 import { Skeleton } from '@material-ui/lab'
 
-const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
-  const { register, handleSubmit, watch } = useForm()
-  const scheduleTitleRef = useRef()
+type EditNavBarPropsT = {
+  user: CurrentUserT
+  schedLength: number
+  schedID: string
+  isLoading: boolean
+  mySchedule: ScheduleT | undefined
+}
+
+type InputT = {
+  title: string
+}
+
+const EditNavBar: FC<EditNavBarPropsT> = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
+  const { register, handleSubmit, watch } = useForm<InputT>()
+  const scheduleTitleRef = useRef<HTMLInputElement | null>(null)
 
   const classes = useStylesEdit()
 
   const history = useHistory()
   const dispatch = useDispatch()
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: InputT) => {
     dispatch(updateFieldAC(schedID, 'title', data.title))
-    scheduleTitleRef.current.blur()
+    if (null !== scheduleTitleRef.current) {
+      scheduleTitleRef.current.blur()
+    } 
   }
 
-  const watchTitle = watch('title')
+  const onFocus = () => {
+    if (null !== scheduleTitleRef.current) {
+    scheduleTitleRef.current.select()
+    }
+  }
+
+  const watchTitle: string = watch('title')
 
   useEffect(() => {
     if (mySchedule !== undefined) {
@@ -47,7 +68,7 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
 
   const handleDashboardClick = () => {
     history.push('/dashboard')
-    if (schedLength < 2) dispatch(getDocsFromDBAC(user.email, user.uid))
+    if (schedLength < 2) dispatch(getDocsFromDBAC(user.email!, user.uid!))
     dispatch(cancelСhoiceAC())
   }
 
@@ -69,11 +90,11 @@ const EditNavBar = ({ user, schedLength, schedID, isLoading, mySchedule }) => {
           id='title'
           size='small'
           variant='outlined'
-          onFocus={()=>{scheduleTitleRef.current.select()}}
           inputRef={(e) => {
             register(e)
             scheduleTitleRef.current = e
           }}
+          onFocus={onFocus}
           defaultValue={mySchedule.title}
         />
       </form>
