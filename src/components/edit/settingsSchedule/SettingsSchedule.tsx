@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ChangeEvent, FC } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,6 +11,7 @@ import {
   clearCheckClassAC,
   manuallyCreateScheduleAC,
   openCustomClassNamesAC,
+  ScheduleT,
   updateFieldAC,
 } from '../../../redux/database/firestore.actions'
 import Subjects from './Subjects'
@@ -20,7 +21,8 @@ import SchoolRoundedIcon from '@material-ui/icons/SchoolRounded'
 import SupervisorAccountRoundedIcon from '@material-ui/icons/SupervisorAccountRounded'
 import DateRangeRoundedIcon from '@material-ui/icons/DateRangeRounded'
 import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
-import HourglassFullRoundedIcon from '@material-ui/icons/HourglassFullRounded'
+import WatchLaterRoundedIcon from '@material-ui/icons/WatchLaterRounded'
+
 import Load from './load/Load'
 
 const useStyles = makeStyles({
@@ -57,15 +59,33 @@ const useStyles = makeStyles({
   },
 })
 
-const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
+type SettingsScheduleProps = {
+  isOpen: boolean
+  mySchedule: ScheduleT
+  setSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const SettingsSchedule: FC<SettingsScheduleProps> = ({
+  isOpen,
+  mySchedule,
+  setSettingsOpen,
+}) => {
   const classes = useStyles()
   const dispatch = useDispatch()
 
-  const handleChangeNumOfDays = (event, newValue) => {
+  const handleChangeNumOfDays = (
+    event: ChangeEvent<{}>,
+    newValue: number | number[]
+  ) => {
+    //@ts-ignore
     dispatch(updateFieldAC(mySchedule.id, 'numberOfDays', newValue))
   }
 
-  const handleChangeMaxLessons = (event, newValue) => {
+  const handleChangeMaxLessons = (
+    event: ChangeEvent<{}>,
+    newValue: number | number[]
+  ) => {
+    //@ts-ignore
     dispatch(updateFieldAC(mySchedule.id, 'maxLessonsPerDay', newValue))
   }
 
@@ -73,6 +93,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
     dispatch(clearCheckClassAC(mySchedule.id))
     dispatch(openCustomClassNamesAC())
   }
+
   const marksDays = [
     {
       value: 1,
@@ -108,11 +129,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
     return (
       <div className={classes.root}>
         <div className={classes.section}>
-          <DateRangeRoundedIcon
-            className={classes.icon}
-            fontSize='large'
-            color='primary'
-          />
+          <DateRangeRoundedIcon fontSize='large' color='primary' />
           <Typography variant='h6' id='days-slider' gutterBottom>
             Number of days
           </Typography>
@@ -133,11 +150,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
         <Divider className={classes.divider} />
 
         <div className={classes.section}>
-          <TodayRoundedIcon
-            className={classes.icon}
-            fontSize='large'
-            color='primary'
-          />
+          <TodayRoundedIcon fontSize='large' color='primary' />
           <Typography variant='h6' id='lessons-slider' gutterBottom>
             Maximum lessons per day
           </Typography>
@@ -158,11 +171,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
         {mySchedule.isOpenCustomClassNames ? (
           <>
             <div className={classes.section}>
-              <SupervisorAccountRoundedIcon
-                className={classes.icon}
-                fontSize='large'
-                color='primary'
-              />
+              <SupervisorAccountRoundedIcon fontSize='large' color='primary' />
               <Typography variant='h6' id='classes' gutterBottom>
                 Set custom classes or{' '}
                 <Button
@@ -177,11 +186,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
         ) : (
           <>
             <div className={classes.section}>
-              <SupervisorAccountRoundedIcon
-                className={classes.icon}
-                fontSize='large'
-                color='primary'
-              />
+              <SupervisorAccountRoundedIcon fontSize='large' color='primary' />
               <Typography variant='h6' id='classes' gutterBottom>
                 Choose classes or{' '}
                 <Button
@@ -197,11 +202,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
 
         <Divider className={classes.divider} />
         <div className={classes.section}>
-          <BookRoundedIcon
-            className={classes.icon}
-            fontSize='large'
-            color='primary'
-          />
+          <BookRoundedIcon fontSize='large' color='primary' />
           <Typography variant='h6' id='subjects' gutterBottom>
             Subjects
           </Typography>
@@ -211,11 +212,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
         <Divider className={classes.divider} />
 
         <div className={classes.section}>
-          <SchoolRoundedIcon
-            className={classes.icon}
-            fontSize='large'
-            color='primary'
-          />
+          <SchoolRoundedIcon fontSize='large' color='primary' />
           <Typography variant='h6' id='teachers' gutterBottom>
             Teachers
           </Typography>
@@ -225,11 +222,7 @@ const SettingsSchedule = ({ isOpen, mySchedule, setSettingsOpen }) => {
         <Divider className={classes.divider} />
 
         <div className={classes.section}>
-          <HourglassFullRoundedIcon
-            className={classes.icon}
-            fontSize='large'
-            color='primary'
-          />
+          <WatchLaterRoundedIcon fontSize='large' color='primary' />
           <Typography variant='h6' id='load' gutterBottom>
             Load
           </Typography>

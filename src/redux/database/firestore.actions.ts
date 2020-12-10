@@ -183,7 +183,7 @@ export type UpdateFieldT = ReturnType<typeof updateFieldAC>
 export const updateFieldAC = (
   schedID: string,
   field: string,
-  content: string
+  content: string | number
 ) =>
   ({
     type: 'UPDATE_FIELD',

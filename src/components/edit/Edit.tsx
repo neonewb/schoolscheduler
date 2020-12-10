@@ -4,7 +4,10 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
-import { getDocFromDBAC, ScheduleT } from '../../redux/database/firestore.actions'
+import {
+  getDocFromDBAC,
+  ScheduleT,
+} from '../../redux/database/firestore.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
 import SettingsSchedule from './settingsSchedule/SettingsSchedule'
@@ -12,7 +15,12 @@ import DnDSchedule from './dndSchedule/DnDSchedule'
 import { AppStateType } from '../../redux/redux.store'
 import { getUserS } from '../../redux/auth/auth.selectors'
 import { CurrentUserT } from '../../redux/auth/auth.actions'
-import { getIsLoadingS, getSchedulesS } from '../../redux/database/fsdb.selectors'
+import {
+  getIsLoadingS,
+  getSchedulesS,
+} from '../../redux/database/fsdb.selectors'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const Edit: FC = () => {
   const classes = useStylesEdit()
@@ -23,11 +31,11 @@ const Edit: FC = () => {
   const isLoading = useSelector<AppStateType, boolean>(getIsLoadingS)
   const schedules = useSelector<AppStateType, Array<ScheduleT>>(getSchedulesS)
 
-  const { id } = useParams<{id: string}>()
+  const { id } = useParams<{ id: string }>()
 
   const history = useHistory()
   const dispatch = useDispatch()
-  
+
   let mySchedule = schedules.find((i) => i.id === id)
 
   useEffect(() => {
@@ -42,34 +50,36 @@ const Edit: FC = () => {
   }, [history, schedules, dispatch, id])
 
   return (
-    <div className={classes.root}>
-      <EditNavBar
-        isLoading={isLoading}
-        mySchedule={mySchedule}
-        user={user}
-        schedLength={schedules.length}
-        schedID={id}
-      />
+    <DndProvider backend={HTML5Backend}>
+      <div className={classes.root}>
+        <EditNavBar
+          isLoading={isLoading}
+          mySchedule={mySchedule}
+          user={user}
+          schedLength={schedules.length}
+          schedID={id}
+        />
 
-      <Divider />
+        <Divider />
 
-      <EditToolBar
-        setSettingsOpen={setSettingsOpen}
-        mySchedule={mySchedule}
-      />
-
-      <Divider />
-
-      {isSettingsOpen ? (
-        <SettingsSchedule
-          isOpen={isSettingsOpen}
+        <EditToolBar
           setSettingsOpen={setSettingsOpen}
           mySchedule={mySchedule}
         />
-      ) : (
-        <DnDSchedule mySchedule={mySchedule} />
-      )}
-    </div>
+
+        <Divider />
+
+        {isSettingsOpen && mySchedule ? (
+          <SettingsSchedule
+            isOpen={isSettingsOpen}
+            mySchedule={mySchedule}
+            setSettingsOpen={setSettingsOpen}
+          />
+        ) : (
+          <DnDSchedule mySchedule={mySchedule} />
+        )}
+      </div>
+    </DndProvider>
   )
 }
 
