@@ -1,9 +1,11 @@
 import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
+import { FC } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import {
   deleteTeacherAC,
+  ScheduleT,
   setTeacherAC,
 } from '../../../redux/database/firestore.actions'
 
@@ -25,33 +27,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Teachers = ({ teachers }) => {
+type TeacherProps = {
+  teachers: ScheduleT['teachers']
+}
+
+const Teachers: FC<TeacherProps> = ({ teachers }) => {
   const classeStyle = useStyles()
 
   const dispatch = useDispatch()
   const { handleSubmit, control, reset } = useForm()
 
-  const onSubmit = ({ teacher }) => {
+  const onSubmit = ({ teacher }: {teacher: string}) => {
     dispatch(setTeacherAC(teacher))
-    reset({ teacher: '' })
+    reset()
   }
 
-  const handleDelete = (e) => {
-    dispatch(deleteTeacherAC(e))
+  const handleDelete = (teacher: string) => {
+    dispatch(deleteTeacherAC(teacher))
   }
 
   return (
     <>
       <div className={classeStyle.classDiv}>
-        {teachers.map((e) => {
+        {teachers.map((teacher) => {
           return (
             <Chip
-              key={e}
-              label={e}
+              key={teacher}
+              label={teacher}
               variant='outlined'
               color='primary'
               onDelete={() => {
-                handleDelete(e)
+                handleDelete(teacher)
               }}
             />
           )

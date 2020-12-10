@@ -1,9 +1,11 @@
 import { Chip, IconButton, makeStyles, TextField } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
+import { FC } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import {
   deleteCustomClassAC,
+  ScheduleT,
   setCustomClassAC,
 } from '../../../redux/database/firestore.actions'
 
@@ -25,33 +27,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CustomClassesNames = ({ classes }) => {
+type CustomClassesNamesProps = {
+  classes: ScheduleT['classes']
+}
+
+const CustomClassesNames: FC<CustomClassesNamesProps> = ({ classes }) => {
   const classeStyle = useStyles()
 
   const dispatch = useDispatch()
   const { handleSubmit, control, reset } = useForm()
 
-  const onSubmit = ({ customClassName }) => {
+  const onSubmit = ({ customClassName }: {customClassName: string}) => {
     dispatch(setCustomClassAC(customClassName))
-    reset({ customClassName: '' })
+    reset()
   }
 
-  const handleDelete = (e) => {
-    dispatch(deleteCustomClassAC(e))
+  const handleDelete = (className: string) => {
+    dispatch(deleteCustomClassAC(className))
   }
 
   return (
     <>
       <div className={classeStyle.classDiv}>
-        {classes.map((e) => {
+        {classes.map((className) => {
           return (
             <Chip
-              key={e}
-              label={e}
+              key={className}
+              label={className}
               variant='outlined'
               color='primary'
               onDelete={() => {
-                handleDelete(e)
+                handleDelete(className)
               }}
             />
           )

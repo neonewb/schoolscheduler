@@ -24,4 +24,4 @@ export const subjectsOptions = [
   'The world',
 ] as const
 
-export type SubjectT = string | typeof subjectsOptions 
+export type SubjectT = typeof subjectsOptions[number]

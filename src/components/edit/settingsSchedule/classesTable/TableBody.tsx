@@ -5,22 +5,34 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@material-ui/core'
-import React from 'react'
+import { nanoid } from 'nanoid'
+import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import {
+  ScheduleT,
   setCheckAC,
   setClassAC,
 } from '../../../../redux/database/firestore.actions'
 import { alphabet } from '../../../../utils/alphabet'
 
-const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
+type ClassesTableBodyProps = {
+  numberOfColumns: ScheduleT['numberOfColumns']
+  checked: ScheduleT['checked']
+  classes: ScheduleT['classes']
+}
+
+const ClassesTableBody: FC<ClassesTableBodyProps> = ({
+  numberOfColumns,
+  checked,
+  classes,
+}) => {
   const dispatch = useDispatch()
 
-  const handleCheck = (num) => {
+  const handleCheck = (num: string) => {
     dispatch(setCheckAC(num))
   }
 
-  const handleClassCheck = ({ num, char }) => {
+  const handleClassCheck = ({ num, char }: {num:string, char: string}) => {
     dispatch(setClassAC(num, char))
   }
 
@@ -28,10 +40,11 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
 
   for (let i = 0; i < 11; i++) {
     let row = []
+    const key = nanoid()
 
-    let parralelName = i + 1 + ''
+    const parralelName = i + 1 + ''
     row.push(
-      <TableCell key={i + 123 * 100 + parralelName}>
+      <TableCell key={key}>
         <FormControlLabel
           control={
             <Checkbox
@@ -49,7 +62,7 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
     for (let j = 0; j < numberOfColumns; j++) {
       let className = `${i + 1} ${alphabet[j]}`
       row.push(
-        <TableCell key={j + 123 * 100 + className}>
+        <TableCell key={key + className}>
           <FormControlLabel
             control={
               <Checkbox
@@ -71,9 +84,10 @@ const ClassesTableBody = ({ numberOfColumns, checked, classes }) => {
 
   return (
     <TableBody>
-      {rows.map((row, index) => (
-        <TableRow key={index + 123 * 123}>{row}</TableRow>
-      ))}
+      {rows.map((row) => {
+        const key = nanoid()
+        return <TableRow key={key}>{row}</TableRow>
+      })}
     </TableBody>
   )
 }

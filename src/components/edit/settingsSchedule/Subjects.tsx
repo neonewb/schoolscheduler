@@ -4,10 +4,11 @@ import { useDispatch } from 'react-redux'
 import {
   setSubjectAC,
   deleteSubjectAC,
+  ScheduleT,
 } from '../../../redux/database/firestore.actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-import { useState } from 'react'
-import { subjectsOptions } from '../../../utils/subjects'
+import { FC, useState } from 'react'
+import { subjectsOptions, SubjectT } from '../../../utils/subjects'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
@@ -27,44 +28,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Subjects = ({ subjects }) => {
+type SubjectProps = {
+  subjects: ScheduleT['subjects']
+}
+
+const Subjects: FC<SubjectProps> = ({ subjects }) => {
   const classes = useStyles()
 
   const dispatch = useDispatch()
 
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<SubjectT | string>('')
   const [inputValue, setInputValue] = useState('')
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     dispatch(setSubjectAC(inputValue))
   }
 
-  const handleChange = (newValue) => {
-    dispatch(setSubjectAC(newValue))
-    setValue(newValue)
+  const handleChange = (newValue: string | null) => {
+    if (newValue) {
+      setValue(newValue)
+      dispatch(setSubjectAC(newValue))
+    } else {
+      setValue('')
+    }
   }
 
-  const handleInputChange = (newValue) => {
+  const handleInputChange = (newValue: string | null) => {
+    if (newValue) {
     setInputValue(newValue)
+    } else {
+      setInputValue('')
+    }
   }
 
-  const handleDelete = (e) => {
-    dispatch(deleteSubjectAC(e))
+  const handleDelete = (subject: SubjectT | string) => {
+    dispatch(deleteSubjectAC(subject))
   }
 
   return (
     <>
       <div className={classes.subjectsDiv}>
-        {subjects.map((e) => {
+        {subjects.map((subject) => {
           return (
             <Chip
-              key={e}
-              label={e}
+              key={subject}
+              label={subject}
               variant='outlined'
               color='primary'
               onDelete={() => {
-                handleDelete(e)
+                handleDelete(subject)
               }}
             />
           )
@@ -85,6 +98,7 @@ const Subjects = ({ subjects }) => {
           freeSolo
           selectOnFocus
           handleHomeEndKeys
+          //@ts-ignore
           options={subjectsOptions}
           value={value}
           onChange={(event, newValue) => {

@@ -15,12 +15,12 @@ export type LoadT = {
   className: string
   id: string
   lessons: string
-  subject: SubjectT
+  subject: string
   teacher: string
 }
 
 type LessonT = {
-  subject: SubjectT
+  subject: string
   teacher: string
   daysOfTheWeek: DaysOfTheWeekT
   lessonNumber: number
@@ -52,7 +52,7 @@ export type ScheduleT = {
   isOpenCustomClassNames: boolean
   checked: Array<string>
   classes: Array<string>
-  subjects: Array<SubjectT>
+  subjects: Array<string>
   teachers: Array<string>
   load: Array<LoadT>
   timeTable?: TimeTableT
@@ -70,7 +70,7 @@ export const addDocToCollectionSuccessAC = (
   isOpenCustomClassNames: boolean,
   checked: Array<string>,
   classes: Array<string>,
-  subjects: Array<SubjectT>,
+  subjects: Array<string>,
   teachers: Array<string>,
   load: Array<LoadT>,
   timeTable: TimeTableT
@@ -259,7 +259,7 @@ export const openCustomClassNamesAC = () =>
     type: 'OPEN_CUSTOM_CLASS_NAMES',
   } as const)
 
-export const setSubjectAC = (subject: SubjectT) =>
+export const setSubjectAC = (subject: string) =>
   ({
     type: 'SET_SUBJECT',
     payload: {
@@ -267,7 +267,7 @@ export const setSubjectAC = (subject: SubjectT) =>
     },
   } as const)
 
-export const deleteSubjectAC = (subject: SubjectT) =>
+export const deleteSubjectAC = (subject: string) =>
   ({
     type: 'DELETE_SUBJECT',
     payload: {
@@ -294,7 +294,7 @@ export const deleteTeacherAC = (teacher: string) =>
 type NewLoadT = {
   classes: Array<string>
   lessons: string
-  subject: SubjectT
+  subject: SubjectT | string
   teacher: string
 }
 

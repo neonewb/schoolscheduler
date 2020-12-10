@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   Checkbox,
@@ -16,9 +16,11 @@ import {
   setCheckAC,
   addColumnAC,
   subtractColumnAC,
+  ScheduleT,
 } from '../../../../redux/database/firestore.actions'
 import { alphabet } from '../../../../utils/alphabet'
 import { deepPurple } from '@material-ui/core/colors'
+import { nanoid } from 'nanoid'
 
 const useStyles = makeStyles({
   rippleColor: {
@@ -33,7 +35,12 @@ const useStyles = makeStyles({
   },
 })
 
-const ClassesTableHead = ({ numberOfColumns, checked }) => {
+type ClassesTableHeadProps = {
+  numberOfColumns: ScheduleT['numberOfColumns']
+  checked: ScheduleT['checked']
+}
+
+const ClassesTableHead: FC<ClassesTableHeadProps> = ({ numberOfColumns, checked }) => {
   const styles = useStyles()
   let columns = []
 
@@ -43,14 +50,15 @@ const ClassesTableHead = ({ numberOfColumns, checked }) => {
     dispatch(allCheckAC())
   }
 
-  const handleCheck = (letter) => {
+  const handleCheck = (letter: string) => {
     dispatch(setCheckAC(letter))
   }
 
   for (let i = 0; i < numberOfColumns; i++) {
+    const key = nanoid()
     const name = alphabet[i]
     columns.push(
-      <TableCell className={styles.cellWidth} key={name + i + 123 * 100}>
+      <TableCell className={styles.cellWidth} key={key}>
         <FormControlLabel
           control={
             <Checkbox

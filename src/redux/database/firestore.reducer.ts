@@ -123,15 +123,13 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
       }
 
     case 'SET_SUBJECT':
-      if (!action.payload.subject) return state
-
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
           if (!schedule.isChoosen) return schedule
           return {
             ...schedule,
-            subjects: schedule.subjects.includes(action.payload.subject)
+            subjects: schedule.subjects.includes(action.payload.subject!)
               ? schedule.subjects
               : [...(schedule.subjects ?? []), action.payload.subject],
           }
