@@ -90,7 +90,7 @@ function* addDocToCollectionS(action: AddDocToCollectionT) {
       subjects: [],
       teachers: [],
       load: [],
-      timeTable: [],
+      timeTable: {},
     })
 
     yield put(

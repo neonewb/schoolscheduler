@@ -1,5 +1,4 @@
 import { DaysOfTheWeekT } from '../../utils/daysOfTheWeek'
-import { SubjectT } from '../../utils/subjects'
 
 export type AddDocToCollectionT = ReturnType<typeof addDocToCollectionAC>
 export const addDocToCollectionAC = (email: string, userID: string) =>
@@ -55,7 +54,7 @@ export type ScheduleT = {
   subjects: Array<string>
   teachers: Array<string>
   load: Array<LoadT>
-  timeTable?: TimeTableT
+  timeTable: TimeTableT
   isChoosen: boolean
 }
 

@@ -4,6 +4,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
+import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import Tooltip from '@material-ui/core/Tooltip'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
@@ -15,6 +16,15 @@ type MainListItemsPropsT = {
 export const MainListItems: FC<MainListItemsPropsT> = ({ handleClickDel }) => {
   return (
     <div>
+      <Tooltip title='Copy schedule' placement='right'>
+        <ListItem button>
+          <ListItemIcon>
+            <FileCopyRoundedIcon color='primary' fontSize='large' />
+          </ListItemIcon>
+          <ListItemText primary='Copy schedule' />
+        </ListItem>
+      </Tooltip>
+
       <Tooltip title='Delete schedule' placement='right'>
         <ListItem button onClick={handleClickDel}>
           <ListItemIcon>
@@ -51,6 +61,7 @@ export const secondaryListItems = (
     <ListSubheader inset>With</ListSubheader>
     <ListSubheader inset>React</ListSubheader>
     <ListSubheader inset>Redux</ListSubheader>
+    <ListSubheader inset>TypeScript</ListSubheader>
     <ListSubheader inset>Firebase</ListSubheader>
   </div>
 )

@@ -5,12 +5,10 @@ import React from 'react'
 const useStyles = makeStyles(() => ({
   CircularProgress: {
     margin: 20,
-  }
+  },
 }))
 
-const Loader: React.FC = () => {
+export const Loader: React.FC = () => {
   const classes = useStyles()
   return <CircularProgress className={classes.CircularProgress} />
 }
-
-export default Loader

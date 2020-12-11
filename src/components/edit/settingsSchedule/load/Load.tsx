@@ -51,7 +51,6 @@ const Load: FC<LoadProps> = ({ mySchedule }) => {
       [key]: value,
     }))
   }
-console.log(newLoad);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()

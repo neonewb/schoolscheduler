@@ -21,6 +21,7 @@ import {
 } from '../../redux/database/fsdb.selectors'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Loader } from '../../utils/Loader'
 
 const Edit: FC = () => {
   const classes = useStylesEdit()
@@ -75,8 +76,10 @@ const Edit: FC = () => {
             mySchedule={mySchedule}
             setSettingsOpen={setSettingsOpen}
           />
-        ) : (
+        ) : mySchedule ? (
           <DnDSchedule mySchedule={mySchedule} />
+        ) : (
+          <Loader />
         )}
       </div>
     </DndProvider>

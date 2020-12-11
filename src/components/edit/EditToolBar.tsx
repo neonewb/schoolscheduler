@@ -4,6 +4,7 @@ import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 import PrintRoundedIcon from '@material-ui/icons/PrintRounded'
+import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { useStylesEditToolBar } from '../../styles/stylesEditToolBar'
 import { ScheduleT } from '../../redux/database/firestore.actions'
 
@@ -37,6 +38,15 @@ const EditToolBar: FC<EditToolBarPropsT> = ({ setSettingsOpen, mySchedule }) => 
       <Tooltip title='Print Schedule'>
         <Button className={classes.button} aria-label='Print Schedule'>
           <PrintRoundedIcon color='primary' fontSize='default' />
+        </Button>
+      </Tooltip>
+
+      <Divider orientation='vertical' light flexItem />
+
+      <Divider orientation='vertical' light flexItem />
+      <Tooltip title='Copy Schedule'>
+        <Button className={classes.button} aria-label='Copy Schedule'>
+          <FileCopyRoundedIcon color='primary' fontSize='default' />
         </Button>
       </Tooltip>
 
