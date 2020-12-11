@@ -1,11 +1,21 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { Checkbox, TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
-const LoadMultipleAutocomplete = ({ options, label, handleNewLoad }) => {
-  const [value, setValue] = useState([])
+type LoadMultipleAutocompletePropsT = {
+  options: string[]
+  label: string
+  handleNewLoad: (key: string, value: string | string[]) => void
+}
 
-  const handleChange = (newValue) => {
+const LoadMultipleAutocomplete: FC<LoadMultipleAutocompletePropsT> = ({
+  options,
+  label,
+  handleNewLoad,
+}) => {
+  const [value, setValue] = useState<string[]>([])
+
+  const handleChange = (newValue: string[]) => {
     handleNewLoad(label.toLowerCase(), newValue)
     setValue(newValue)
   }

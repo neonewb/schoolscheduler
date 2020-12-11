@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { IconButton, makeStyles } from '@material-ui/core'
 import AddCircleRoundedIcon from '@material-ui/icons/AddCircleRounded'
 import { useDispatch } from 'react-redux'
 import LoadAutocomplete from './LoadAutocomplete'
 import {
   deleteLoadAC,
+  NewLoadT,
+  ScheduleT,
   setLoadAC,
 } from '../../../../redux/database/firestore.actions'
 import { getNumbersArray } from '../../../../utils/funcs'
@@ -26,22 +28,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Load = ({ mySchedule }) => {
+type LoadProps = {
+  mySchedule: ScheduleT
+}
+
+const Load: FC<LoadProps> = ({ mySchedule }) => {
   let { classes, subjects, teachers, load } = mySchedule
   const styles = useStyles()
 
   const dispatch = useDispatch()
 
-  const [newLoad, setNewLoad] = useState({})
+  const [newLoad, setNewLoad] = useState<NewLoadT>({
+    classes: [],
+    lessons: '',
+    subject: '',
+    teacher: '',
+  })
 
-  const handleNewLoad = (key, value) => {
-    setNewLoad(prevState => ({
+  const handleNewLoad = (key: string, value: string | string[]) => {
+    setNewLoad((prevState) => ({
       ...prevState,
       [key]: value,
     }))
   }
+console.log(newLoad);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     dispatch(setLoadAC(newLoad))
   }
@@ -93,9 +105,13 @@ const Load = ({ mySchedule }) => {
     }
   })
 
-  const handleDeleteLoad = (rowsDeleted) => {
+  type RowsDeletedT = {
+    lookup: { [dataIndex: number]: boolean };
+    data: Array<{ index: number; dataIndex: number }>;
+}
+
+  const handleDeleteLoad = (rowsDeleted: RowsDeletedT) => {
     const idsToDelete = rowsDeleted.data.map((d) => data[d.dataIndex].id)
-    console.log(idsToDelete)
     dispatch(deleteLoadAC(idsToDelete))
   }
 
@@ -106,7 +122,7 @@ const Load = ({ mySchedule }) => {
     jumpToPage: true,
     print: false,
     onRowsDelete: handleDeleteLoad,
-  }
+  } as const
 
   if (classes.length > 0 && subjects.length > 0 && teachers.length > 0) {
     return (
@@ -142,7 +158,12 @@ const Load = ({ mySchedule }) => {
           </IconButton>
         </form>
 
-        <MUIDataTable columns={columns} data={data} options={options} />
+        <MUIDataTable
+          columns={columns}
+          data={data}
+          options={options}
+          title={'Load table'}
+        />
       </>
     )
   } else {

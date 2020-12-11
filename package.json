@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.16",
+    "@types/mui-datatables": "^3.7.0",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/react-dnd": "^3.0.2",

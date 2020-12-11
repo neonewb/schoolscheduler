@@ -291,10 +291,10 @@ export const deleteTeacherAC = (teacher: string) =>
     },
   } as const)
 
-type NewLoadT = {
+export type NewLoadT = {
   classes: Array<string>
   lessons: string
-  subject: SubjectT | string
+  subject: string
   teacher: string
 }
 

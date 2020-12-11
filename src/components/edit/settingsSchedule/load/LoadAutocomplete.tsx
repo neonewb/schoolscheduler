@@ -1,13 +1,28 @@
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 import { TextField } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
-const LoadAutocomplete = ({ options, label, handleNewLoad }) => {
+type LoadAutocompletePropsT = {
+  options: string[]
+  label: string
+  handleNewLoad: (key: string, value: string) => void
+}
+
+const LoadAutocomplete: FC<LoadAutocompletePropsT> = ({
+  options,
+  label,
+  handleNewLoad,
+}) => {
   const [value, setValue] = useState('')
 
-  const handleChange = (newValue) => {
-    handleNewLoad(label.toLowerCase(), newValue)
-    setValue(newValue)
+  const handleChange = (newValue: string | null) => {
+    if (newValue) {
+      handleNewLoad(label.toLowerCase(), newValue)
+      setValue(newValue)
+    } else {
+      handleNewLoad(label.toLowerCase(), '')
+      setValue('')
+    }
   }
 
   return (
