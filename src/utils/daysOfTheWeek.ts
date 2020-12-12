@@ -8,4 +8,4 @@ export const daysOfTheWeek = [
   'Sunday',
 ] as const
 
-export type DaysOfTheWeekT = typeof daysOfTheWeek
+export type DaysOfTheWeekT = typeof daysOfTheWeek[number]

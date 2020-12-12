@@ -1,14 +1,14 @@
 import { alphabet } from '../../utils/alphabet'
 import {
-  getChoosenSchedule,
   isANumber,
   isLoadIncludesItem,
 } from '../../utils/funcs'
 import { nanoid } from 'nanoid'
 import { InferActionsTypes } from './../redux.store'
 import * as FirestoreActions from './firestore.actions'
-import { ScheduleT, LoadT, TimeTableT } from './firestore.actions'
+import { ScheduleT, LoadT } from './firestore.actions'
 import { Reducer } from 'redux'
+import { getChoosenScheduleS } from './fsdb.selectors'
 
 type FsdbActionsTypes = InferActionsTypes<typeof FirestoreActions>
 
@@ -184,7 +184,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
       const { teacher, subject, classes, lessons } = action.payload.newLoad
       if (!(teacher && subject && classes && lessons)) return state
 
-      const schedule = getChoosenSchedule(state)
+      const schedule = getChoosenScheduleS(state)
 
       let loadArray = classes.map((className) => {
         return {
@@ -214,7 +214,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
     }
 
     case 'DELETE_LOAD':
-      let newLoad: Array<LoadT> = getChoosenSchedule(state).load
+      let newLoad: Array<LoadT> = getChoosenScheduleS(state).load
 
       action.payload.ids.forEach((element) => {
         newLoad = newLoad.filter((e) => e.id !== element)
@@ -299,7 +299,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
       }
 
     case 'ALL_CHECK': {
-      const schedule = getChoosenSchedule(state)
+      const schedule = getChoosenScheduleS(state)
 
       let checked: Array<string> = []
       let classes: Array<string> = []
@@ -336,7 +336,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
     }
 
     case 'SET_CHECK': {
-      let { checked, classes, numberOfColumns } = getChoosenSchedule(state)
+      let { checked, classes, numberOfColumns } = getChoosenScheduleS(state)
 
       checked = checked.filter((e: string) => e !== 'All')
 
@@ -392,7 +392,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
     }
 
     case 'ADD_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenScheduleS(
         state
       )
 
@@ -425,7 +425,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
     }
 
     case 'SUBTRACT_COLUMN': {
-      let { checked, classes, numberOfColumns: numOfCol } = getChoosenSchedule(
+      let { checked, classes, numberOfColumns: numOfCol } = getChoosenScheduleS(
         state
       )
 
@@ -462,40 +462,6 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
           }
         }),
       }
-
-    case 'MANUALLY_CREATE_SCHEDULE': {
-      let { classes, teachers } = getChoosenSchedule(state)
-
-      const classesTT = classes.map((e: string) => {
-        return {
-          name: e,
-          lessons: [],
-        }
-      })
-
-      const teachersTT = teachers.map((e: string) => {
-        return {
-          name: e,
-          lessons: [],
-        }
-      })
-
-      const newTimeTable: TimeTableT = {
-        classesTT: [...classesTT],
-        teachersTT: [...teachersTT],
-      }
-
-      return {
-        ...state,
-        schedules: state.schedules.map((schedule) => {
-          if (!schedule.isChoosen) return schedule
-          return {
-            ...schedule,
-            timeTable: newTimeTable,
-          }
-        }),
-      }
-    }
 
     default:
       return state

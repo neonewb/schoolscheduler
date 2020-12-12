@@ -13,6 +13,7 @@ import {
 } from '../../redux/database/firestore.actions'
 import { Skeleton } from '@material-ui/lab'
 import { ScheduleTitle } from './ScheduleTitle'
+import { clearTimeTableAC } from '../../redux/timetable/tt.actions'
 
 type EditNavBarPropsT = {
   user: CurrentUserT
@@ -38,6 +39,7 @@ const EditNavBar: FC<EditNavBarPropsT> = ({
     history.push('/dashboard')
     if (schedLength < 2) dispatch(getDocsFromDBAC(user.email!, user.uid!))
     dispatch(cancelСhoiceAC())
+    dispatch(clearTimeTableAC())
   }
 
   const handleLogOut = () => {

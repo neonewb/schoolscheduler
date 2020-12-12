@@ -24,6 +24,7 @@
     "@types/yup": "^0.29.10",
     "firebase": "^7.24.0",
     "firebase-tools": "^8.14.1",
+    "immer": "^8.0.0",
     "mui-datatables": "^3.7.1",
     "nanoid": "^3.1.16",
     "react": "^17.0.1",

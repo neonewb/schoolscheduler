@@ -1,6 +1,4 @@
 import { LoadT, ScheduleT } from "../redux/database/firestore.actions"
-import { FsdbInitialStateT } from "../redux/database/firestore.reducer"
-
 
 export const isANumber = (str: number | string): boolean => {
   return !!Number(str)
@@ -8,10 +6,6 @@ export const isANumber = (str: number | string): boolean => {
 
 export const getNumbersArray = (num: number): Array<string> => {
   return [...Array(num + 1).keys()].map(String).slice(1)
-}
-
-export function getChoosenSchedule(state: FsdbInitialStateT): ScheduleT {
-  return state.schedules.find((e) => e.isChoosen)!
 }
 
 export const isLoadIncludesItem = (item: LoadT, schedule: ScheduleT) => {

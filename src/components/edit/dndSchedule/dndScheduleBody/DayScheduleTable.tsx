@@ -18,22 +18,32 @@ const useStyles = makeStyles({
     height: '60vh',
     maxHeight: '60vh',
   },
+  rowDivs: {
+    display: 'flex',
+    '&:hover $classesNames': {
+      backgroundColor: teal[50],
+      border: '1px solid ' + teal[100],
+      borderRadius: 2,
+    },
+  },
   classesNames: {
-    margin: '0px 1px',
+    margin: '1px 1px',
     width: 50,
     height: 50,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  rowDivs: {
-    display: 'flex',
+    '&:hover': {
+      backgroundColor: teal[50],
+      border: '1px solid ' + teal[100],
+      borderRadius: 2,
+    },
   },
   tableHeader: {
     position: 'sticky',
     top: 0,
     zIndex: 2,
-    paddingTop: 8
+    paddingTop: 8,
   },
   tableHeadCell: {
     height: 50,
@@ -44,6 +54,11 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    '&:hover': {
+      backgroundColor: teal[50],
+      border: '1px solid ' + teal[100],
+      borderRadius: 2,
+    },
   },
   droppableDiv: {
     width: 50,
@@ -54,6 +69,7 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: teal[50],
       border: '1px solid ' + teal[100],
+      borderRadius: 2,
     },
   },
 })
@@ -67,12 +83,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   dayNum,
   mySchedule,
 }) => {
-  let {
-    maxLessonsPerDay,
-    classes,
-    // timeTable
-  } = mySchedule
-  // let { classes: classesLessons, teacher } = timeTable
+  let { maxLessonsPerDay, classes } = mySchedule
 
   const styles = useStyles()
 
@@ -86,17 +97,23 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
     let row = []
 
     // Add class names
+    let className = classes[i]
+    if (className.length > 3) {
+      className = className.substring(0, 4)
+    }
     const key = nanoid()
     row.push(
       <div className={styles.classesNames} key={key}>
-        <Typography>{classes[i]}</Typography>
+        <Typography>{className}</Typography>
       </div>
     )
 
     // Add lessons drop components
     for (let j = 0; j < maxLessonsPerDay; j++) {
       const id = nanoid()
-      row.push(<DroppableComponent style={styles.droppableDiv} key={id} id={id} />)
+      row.push(
+        <DroppableComponent style={styles.droppableDiv} key={id} id={id} />
+      )
     }
     rows.push(row)
   }
@@ -104,11 +121,11 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   return (
     <div className={styles.table}>
       <Paper elevation={2} className={styles.tableHeader}>
-          <Typography>{daysOfTheWeek[dayNum]}</Typography>
+        <Typography>{daysOfTheWeek[dayNum]}</Typography>
         <div className={styles.rowDivs}>
           {headSchedule.map((number) => {
             return (
-              <Box className={styles.tableHeadCell} key={number + 'head'}>
+              <Box className={styles.tableHeadCell} key={number + ' head cell'}>
                 <Typography>{number}</Typography>
               </Box>
             )

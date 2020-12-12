@@ -9,7 +9,6 @@ import { deepPurple, teal } from '@material-ui/core/colors'
 import { useDispatch } from 'react-redux'
 import {
   clearCheckClassAC,
-  manuallyCreateScheduleAC,
   openCustomClassNamesAC,
   ScheduleT,
   updateFieldAC,
@@ -24,6 +23,7 @@ import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
 import WatchLaterRoundedIcon from '@material-ui/icons/WatchLaterRounded'
 
 import Load from './load/Load'
+import { manuallyCreateScheduleAC } from '../../../redux/timetable/tt.actions'
 
 const useStyles = makeStyles({
   root: {
@@ -122,7 +122,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
 
   const handleManuallyCreate = () => {
     setSettingsOpen(!isOpen)
-    dispatch(manuallyCreateScheduleAC())
+    dispatch(manuallyCreateScheduleAC(mySchedule))
   }
 
   if (isOpen) {

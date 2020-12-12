@@ -1,11 +1,11 @@
 import { Paper, Typography } from '@material-ui/core'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
-import { LoadT } from '../../../../redux/database/firestore.actions'
+import { LessonT } from '../../../../redux/timetable/timetable'
 import { DragItemTypes } from '../../../../utils/DragItemsTypes'
 
 type DraggableLessonPropsT = {
-  lesson: LoadT
+  lesson: LessonT
   style: string
 }
 
@@ -29,7 +29,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ style, lesson }) => {
       style={{ 'opacity': opacity }}
       className={style}
     >
-      <Typography align={'center'}>{lesson.subject[0] + lesson.subject[1]}</Typography>
+      <Typography align={'center'}>{lesson.subject.substring(0, 4)}</Typography>
     </Paper>
   )
 }

@@ -3,6 +3,10 @@ import DnDScheduleBody from './dndScheduleBody/DnDScheduleBody'
 import DnDScheduleFooter from './dndScheduleFooter/DnDScheduleFooter'
 import { makeStyles, Typography } from '@material-ui/core'
 import { ScheduleT } from '../../../redux/database/firestore.actions'
+import { useSelector } from 'react-redux'
+import { AppStateType } from '../../../redux/redux.store'
+import { getLessonsS } from '../../../redux/timetable/tt.selectors'
+import { LessonT } from '../../../redux/timetable/timetable'
 
 const useStyles = makeStyles({
   DnDScheduleDiv: {
@@ -20,12 +24,13 @@ type DnDScheduleProps = {
 
 const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
   const styles = useStyles()
+  const lessons = useSelector<AppStateType, LessonT[]>(getLessonsS)
 
-  if (Object.keys(mySchedule.timeTable).length > 0) {
+  if (lessons.length > 0){
     return (
       <div className={styles.DnDScheduleDiv}>
         <DnDScheduleBody mySchedule={mySchedule} />
-        <DnDScheduleFooter mySchedule={mySchedule} />
+        <DnDScheduleFooter lessons={lessons} />
       </div>
     )
   } else {

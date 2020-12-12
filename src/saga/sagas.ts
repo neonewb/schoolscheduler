@@ -1,3 +1,5 @@
+import { getTimetableS } from './../redux/timetable/tt.selectors'
+import { TTInitialStateT } from './../redux/timetable/tt.reducer'
 import { AppStateType } from './../redux/redux.store'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 import { auth, db, googleProvider } from '../configs/firebase.config'
@@ -27,6 +29,7 @@ import {
   UpdateFieldT,
   ScheduleT,
 } from '../redux/database/firestore.actions'
+import { getChoosenScheduleID } from '../redux/database/fsdb.selectors'
 
 function* signUpS(action: SignUpUserT) {
   try {
@@ -90,7 +93,6 @@ function* addDocToCollectionS(action: AddDocToCollectionT) {
       subjects: [],
       teachers: [],
       load: [],
-      timeTable: {},
     })
 
     yield put(
@@ -107,8 +109,7 @@ function* addDocToCollectionS(action: AddDocToCollectionT) {
         [],
         [],
         [],
-        [],
-        {}
+        []
       )
     )
   } catch (error) {
@@ -279,18 +280,16 @@ function* setLoadS() {
 }
 
 function* setTimeTableS() {
-  const schedule: ScheduleT = yield select((state: AppStateType) =>
-    state.fsdb.schedules.find((e) => e.isChoosen)
-  )
-
-  const docRef = schedulesColl.doc(schedule.id)
+  const timetable: TTInitialStateT = yield select(getTimetableS)
+  const id: string = yield select(getChoosenScheduleID)
+  const docRef = schedulesColl.doc(id)
 
   try {
     //@ts-ignore
     yield call([docRef, docRef.update], {
-      timeTable: schedule.timeTable,
+      timeTable: timetable,
     })
-    console.log(`Schedule timeTable successfully updated!`)
+    console.log(`Schedule timetable successfully updated!`)
   } catch (error) {
     yield put(updateFailedAC(error))
   }

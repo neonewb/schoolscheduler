@@ -2,7 +2,7 @@ import { Paper } from '@material-ui/core'
 import { makeStyles, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
-import { ScheduleT } from '../../../../redux/database/firestore.actions'
+import { LessonT } from '../../../../redux/timetable/timetable'
 import DraggableLesson from './DraggableLesson'
 
 const useStyles = makeStyles({
@@ -41,11 +41,10 @@ const useStyles = makeStyles({
 })
 
 type DnDScheduleFooterPtopsT = {
-  mySchedule: ScheduleT
+  lessons: LessonT[]
 }
 
-const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ mySchedule }) => {
-  let { load } = mySchedule
+const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ lessons }) => {
   const styles = useStyles()
 
   return (
@@ -53,8 +52,8 @@ const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ mySchedule }) => {
       <Typography className={styles.margin}>Lessons:</Typography>
 
       <div className={styles.lessons}>
-        {load.map((e) => (
-          <DraggableLesson key={e.id} style={styles.lessonPaper} lesson={e} />
+        {lessons.map((lesson) => (
+          <DraggableLesson key={lesson.id} style={styles.lessonPaper} lesson={lesson} />
         ))}
       </div>
     </Paper>

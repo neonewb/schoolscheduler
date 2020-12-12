@@ -1,5 +1,3 @@
-import { DaysOfTheWeekT } from '../../utils/daysOfTheWeek'
-
 export type AddDocToCollectionT = ReturnType<typeof addDocToCollectionAC>
 export const addDocToCollectionAC = (email: string, userID: string) =>
   ({
@@ -18,28 +16,6 @@ export type LoadT = {
   teacher: string
 }
 
-type LessonT = {
-  subject: string
-  teacher: string
-  daysOfTheWeek: DaysOfTheWeekT
-  lessonNumber: number
-}
-
-type ClassT = {
-  lessons: Array<LessonT>
-  name: string
-}
-
-type TeacherT = {
-  lessons: Array<LessonT>
-  name: string
-}
-
-export type TimeTableT = {
-  classesTT?: Array<ClassT>
-  teachersTT?: Array<TeacherT>
-}
-
 export type ScheduleT = {
   id: string
   email: string
@@ -54,7 +30,6 @@ export type ScheduleT = {
   subjects: Array<string>
   teachers: Array<string>
   load: Array<LoadT>
-  timeTable: TimeTableT
   isChoosen: boolean
 }
 
@@ -72,7 +47,6 @@ export const addDocToCollectionSuccessAC = (
   subjects: Array<string>,
   teachers: Array<string>,
   load: Array<LoadT>,
-  timeTable: TimeTableT
 ) =>
   ({
     type: 'ADD_DOC_TO_COLLECTION_SUCCESS',
@@ -90,7 +64,6 @@ export const addDocToCollectionSuccessAC = (
       subjects,
       teachers,
       load,
-      timeTable,
     } as ScheduleT,
   } as const)
 
@@ -311,9 +284,4 @@ export const deleteLoadAC = (ids: Array<string>) =>
     payload: {
       ids,
     },
-  } as const)
-
-export const manuallyCreateScheduleAC = () =>
-  ({
-    type: 'MANUALLY_CREATE_SCHEDULE',
   } as const)

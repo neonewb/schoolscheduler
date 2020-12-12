@@ -5,12 +5,14 @@ import authReducer from './auth/auth.reducer'
 import createSagaMiddleware from 'redux-saga'
 import { mySaga } from '../saga/sagas'
 import firestoreReducer from './database/firestore.reducer'
+import TTReducer from './timetable/tt.reducer'
 
 const saga = createSagaMiddleware()
 
 const middlewares = [logger, saga]
 
 const rootReducer = combineReducers({
+  timetable: TTReducer,
   fsdb: firestoreReducer,
   auth: authReducer,
 })
