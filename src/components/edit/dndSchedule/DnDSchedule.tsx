@@ -10,8 +10,8 @@ const useStyles = makeStyles({
     maxHeight: '40vh',
   },
   text: {
-    margin: 8
-  }
+    margin: 8,
+  },
 })
 
 type DnDScheduleProps = {
@@ -30,7 +30,10 @@ const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
     )
   } else {
     return (
-      <Typography className={styles.text}>There is no timetable yet. Go to settings for create schedule automatically or manually</Typography>
+      <Typography className={styles.text}>
+        There is no timetable yet. Go to settings for create schedule
+        automatically or manually
+      </Typography>
     )
   }
 }

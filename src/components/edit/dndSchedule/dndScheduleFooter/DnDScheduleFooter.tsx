@@ -1,14 +1,14 @@
 import { Paper } from '@material-ui/core'
 import { makeStyles, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
-import React from 'react'
+import React, { FC } from 'react'
+import { ScheduleT } from '../../../../redux/database/firestore.actions'
 import DraggableLesson from './DraggableLesson'
 
 const useStyles = makeStyles({
   footer: {
     width: '100%',
     minWidth: 600,
-    // height: '100%',
     display: 'flex',
     alignItems: 'center',
     padding: 10,
@@ -40,7 +40,11 @@ const useStyles = makeStyles({
   },
 })
 
-const DnDScheduleFooter = ({ mySchedule }) => {
+type DnDScheduleFooterPtopsT = {
+  mySchedule: ScheduleT
+}
+
+const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ mySchedule }) => {
   let { load } = mySchedule
   const styles = useStyles()
 

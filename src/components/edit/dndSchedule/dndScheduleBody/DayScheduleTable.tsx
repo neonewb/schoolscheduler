@@ -1,25 +1,11 @@
-import {
-  makeStyles,
-  Paper,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  withStyles,
-} from '@material-ui/core'
-import MuiTableCell from '@material-ui/core/TableCell'
-import React from 'react'
+import { Box, makeStyles, Paper, Typography } from '@material-ui/core'
+import React, { FC } from 'react'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
-
-const TableCell = withStyles({
-  root: {
-    borderBottom: 'none',
-  },
-})(MuiTableCell)
+import { ScheduleT } from '../../../../redux/database/firestore.actions'
+import { grey, teal } from '@material-ui/core/colors'
 
 const useStyles = makeStyles({
   table: {
@@ -33,6 +19,7 @@ const useStyles = makeStyles({
     maxHeight: '60vh',
   },
   classesNames: {
+    margin: '0px 1px',
     width: 50,
     height: 50,
     display: 'flex',
@@ -41,36 +28,49 @@ const useStyles = makeStyles({
   },
   rowDivs: {
     display: 'flex',
+  },
+  tableHeader: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 2,
+    paddingTop: 8
+  },
+  tableHeadCell: {
+    height: 50,
+    width: 50,
+    maxWidth: 50,
+    minWidth: 50,
+    margin: '0px 1px',
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   droppableDiv: {
     width: 50,
     height: 50,
     margin: 1,
-  },
-  tableHeader: {
-    padding: 4,
-    position: 'sticky',
-    top: 0,
-    background: 'white',
-    zIndex: 2,
-    borderBottom: 'none',
-  },
-  tableHeadCell: {
-    width: 50,
-    maxWidth: 50,
-    minWidth: 50,
-    '&:first-child': {
-      paddingLeft: 0
+    border: '1px solid ' + grey[300],
+    borderRadius: 2,
+    '&:hover': {
+      backgroundColor: teal[50],
+      border: '1px solid ' + teal[100],
     },
   },
 })
 
-const DayScheduleTable = ({ dayNum, mySchedule }) => {
-  let { 
-    maxLessonsPerDay, 
-    classes, 
-    // timeTable 
+type DayScheduleTablePropsT = {
+  dayNum: number
+  mySchedule: ScheduleT
+}
+
+const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
+  dayNum,
+  mySchedule,
+}) => {
+  let {
+    maxLessonsPerDay,
+    classes,
+    // timeTable
   } = mySchedule
   // let { classes: classesLessons, teacher } = timeTable
 
@@ -81,20 +81,22 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
 
   let rows = []
 
+  // Create row
   for (let i = 0; i < classes.length; i++) {
     let row = []
 
-    // Class names
+    // Add class names
+    const key = nanoid()
     row.push(
-      <div className={styles.classesNames} key={classes[i] + i}>
-        <Typography align='center'>{classes[i]}</Typography>
+      <div className={styles.classesNames} key={key}>
+        <Typography>{classes[i]}</Typography>
       </div>
     )
 
-    // Lessons
+    // Add lessons drop components
     for (let j = 0; j < maxLessonsPerDay; j++) {
       const id = nanoid()
-      row.push(<DroppableComponent key={id} id={id} />)
+      row.push(<DroppableComponent style={styles.droppableDiv} key={id} id={id} />)
     }
     rows.push(row)
   }
@@ -102,26 +104,16 @@ const DayScheduleTable = ({ dayNum, mySchedule }) => {
   return (
     <div className={styles.table}>
       <Paper elevation={2} className={styles.tableHeader}>
-        <Typography>{daysOfTheWeek[dayNum]}</Typography>
-
-        <TableContainer>
-          <Table stickyHeader size='small' aria-label='Day table'>
-            <TableHead>
-              <TableRow>
-                {headSchedule.map((number) => {
-                  return (
-                    <TableCell
-                      align='center'
-                      className={styles.tableHeadCell}
-                      key={number + 'head'}>
-                      <Typography>{number}</Typography>
-                    </TableCell>
-                  )
-                })}
-              </TableRow>
-            </TableHead>
-          </Table>
-        </TableContainer>
+          <Typography>{daysOfTheWeek[dayNum]}</Typography>
+        <div className={styles.rowDivs}>
+          {headSchedule.map((number) => {
+            return (
+              <Box className={styles.tableHeadCell} key={number + 'head'}>
+                <Typography>{number}</Typography>
+              </Box>
+            )
+          })}
+        </div>
       </Paper>
 
       <div className={styles.contain}>

@@ -1,9 +1,15 @@
 import { Paper, Typography } from '@material-ui/core'
-import React from 'react'
+import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
+import { LoadT } from '../../../../redux/database/firestore.actions'
 import { DragItemTypes } from '../../../../utils/DragItemsTypes'
 
-const DraggableLesson = ({ style, lesson }) => {
+type DraggableLessonPropsT = {
+  lesson: LoadT
+  style: string
+}
+
+const DraggableLesson: FC<DraggableLessonPropsT> = ({ style, lesson }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { name: lesson.id, type: DragItemTypes.LESSON },
     end: (item, monitor) => {

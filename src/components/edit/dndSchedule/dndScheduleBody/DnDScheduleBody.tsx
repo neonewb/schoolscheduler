@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core'
-import React from 'react'
+import { nanoid } from 'nanoid'
+import React, { FC } from 'react'
+import { ScheduleT } from '../../../../redux/database/firestore.actions'
 import DayScheduleTable from './DayScheduleTable'
 
 const useStyles = makeStyles({
@@ -11,15 +13,19 @@ const useStyles = makeStyles({
   },
 })
 
-const DnDScheduleBody = ({ mySchedule }) => {
+type DnDScheduleBodyPropsT = {
+  mySchedule: ScheduleT
+}
+const DnDScheduleBody: FC<DnDScheduleBodyPropsT> = ({ mySchedule }) => {
   let { numberOfDays } = mySchedule
   const styles = useStyles()
 
   let daysArr = []
 
   for (let i = 0; i < numberOfDays; i++) {
+    const key = nanoid()
     daysArr.push(
-      <DayScheduleTable key={i + 'day'} dayNum={i} mySchedule={mySchedule} />
+      <DayScheduleTable key={key} dayNum={i} mySchedule={mySchedule} />
     )
   }
 
