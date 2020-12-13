@@ -5,8 +5,7 @@ import { makeStyles, Typography } from '@material-ui/core'
 import { ScheduleT } from '../../../redux/schedules/sched.actions'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../../../redux/rootReducer'
-import { getLessonsS } from '../../../redux/timetable/tt.selectors'
-import { LessonT } from '../../../redux/timetable/timetable'
+import { hasTimetableSel } from '../../../redux/schedules/sched.selectors'
 
 const useStyles = makeStyles({
   DnDScheduleDiv: {
@@ -24,13 +23,13 @@ type DnDScheduleProps = {
 
 const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
   const styles = useStyles()
-  const lessons = useSelector<AppStateType, LessonT[]>(getLessonsS)
+  const hasTimeTable = useSelector<AppStateType, boolean>(hasTimetableSel)
 
-  if (lessons.length > 0){
+  if (hasTimeTable){
     return (
       <div className={styles.DnDScheduleDiv}>
         <DnDScheduleBody mySchedule={mySchedule} />
-        <DnDScheduleFooter lessons={lessons} />
+        <DnDScheduleFooter />
       </div>
     )
   } else {

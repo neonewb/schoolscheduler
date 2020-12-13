@@ -26,6 +26,12 @@ export function hasTimetableS(state: AppStateType, id: string): boolean {
   return false
 }
 
+export function hasTimetableSel(state: AppStateType): boolean {
+  const choosenSchedule = state.sched.schedules.find((e) => e.isChoosen)
+  if (choosenSchedule?.hasTimeTable) return true
+  return false
+}
+
 export function getChoosenSchedID(state: SchedInitialStateT): string {
   const choosenSchedule = state.schedules.find((e) => e.isChoosen)
   if (choosenSchedule) return choosenSchedule.id

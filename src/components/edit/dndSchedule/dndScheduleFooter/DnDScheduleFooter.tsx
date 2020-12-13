@@ -2,7 +2,10 @@ import { Paper } from '@material-ui/core'
 import { makeStyles, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
+import { AppStateType } from '../../../../redux/rootReducer'
 import { LessonT } from '../../../../redux/timetable/timetable'
+import { getLessonsS } from '../../../../redux/timetable/tt.selectors'
 import DraggableLesson from './DraggableLesson'
 
 const useStyles = makeStyles({
@@ -32,20 +35,17 @@ const useStyles = makeStyles({
     margin: 8,
     '&:hover': {
       background: teal[50],
-      cursor: 'grab'
-    }
+      cursor: 'grab',
+    },
   },
   margin: {
     marginRight: 8,
   },
 })
 
-type DnDScheduleFooterPtopsT = {
-  lessons: LessonT[]
-}
-
-const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ lessons }) => {
+const DnDScheduleFooter: FC = () => {
   const styles = useStyles()
+  const lessons = useSelector<AppStateType, LessonT[]>(getLessonsS)
 
   return (
     <Paper className={styles.footer}>
@@ -53,7 +53,11 @@ const DnDScheduleFooter: FC<DnDScheduleFooterPtopsT> = ({ lessons }) => {
 
       <div className={styles.lessons}>
         {lessons.map((lesson) => (
-          <DraggableLesson key={lesson.id} style={styles.lessonPaper} lesson={lesson} />
+          <DraggableLesson
+            key={lesson.id}
+            style={styles.lessonPaper}
+            lesson={lesson}
+          />
         ))}
       </div>
     </Paper>
