@@ -5,7 +5,7 @@ export type CurrentUserT = {
   photoURL: null | string
 }
 
-export const setCurrentUserAC = (currentUser: CurrentUserT) =>
+export const setCurrentUserAC = (currentUser: firebase.User) =>
   ({
     type: 'SET_CURRENT_USER',
     payload: {
@@ -34,7 +34,7 @@ export const signUpUserFailedAC = (error: string) =>
     error,
   } as const)
 
-export const signUpUserSuccessAC = (currentUser: CurrentUserT) =>
+export const signUpUserSuccessAC = (currentUser: firebase.User) =>
   ({
     type: 'SIGN_UP_USER_SUCCESS',
     payload: {
@@ -69,7 +69,7 @@ export const logInUserFailedAC = (error: string) =>
     error,
   } as const)
 
-export const logInUserSuccessAC = (currentUser: CurrentUserT) =>
+export const logInUserSuccessAC = (currentUser: firebase.User) =>
   ({
     type: 'LOG_IN_USER_SUCCESS',
     payload: {

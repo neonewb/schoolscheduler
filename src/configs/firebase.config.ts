@@ -19,9 +19,3 @@ export const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 export const auth = firebase.auth()
 export const db = firebase.firestore()
-
-// let docRef = db.collection('imperror555@gmail.com').doc('Qvwio3ZiuHfbSbNtgEFB')
-
-// let updateTimestamp = docRef.update({
-//   timestamp: firebase.firestore.FieldValue.serverTimestamp()
-// })

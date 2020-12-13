@@ -1,23 +1,12 @@
 import { getTimetableS } from './../redux/timetable/tt.selectors'
 import { TTInitialStateT } from './../redux/timetable/tt.reducer'
-import { AppStateType } from './../redux/redux.store'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
-import { auth, db, googleProvider } from '../configs/firebase.config'
-import {
-  logOutUserFailedAC,
-  signUpUserFailedAC,
-  signUpUserSuccessAC,
-  logInUserSuccessAC,
-  logInUserFailedAC,
-  SignUpUserT,
-  LogInUserT,
-} from '../redux/auth/auth.actions'
+import { db } from '../configs/firebase.config'
 import {
   addDocToCollectionFailedAC,
   addDocToCollectionSuccessAC,
   delDocFromCollFailedAC,
   delDocsFromRxStateAC,
-  clearRxStateAC,
   setDocToRxStateAC,
   setIsLoadingTrue,
   setIsLoadingFalse,
@@ -29,51 +18,11 @@ import {
   UpdateFieldT,
   ScheduleT,
 } from '../redux/database/firestore.actions'
-import { getChoosenScheduleID } from '../redux/database/fsdb.selectors'
-
-function* signUpS(action: SignUpUserT) {
-  try {
-    const response = yield call(
-      [auth, auth.createUserWithEmailAndPassword],
-      action.payload.email,
-      action.payload.password
-    )
-    yield put(signUpUserSuccessAC(response.user))
-  } catch (error) {
-    yield put(signUpUserFailedAC(error.message))
-  }
-}
-
-function* logInS(action: LogInUserT) {
-  try {
-    const response = yield call(
-      [auth, auth.signInWithEmailAndPassword],
-      action.payload.email,
-      action.payload.password
-    )
-    yield put(logInUserSuccessAC(response.user))
-  } catch (error) {
-    yield put(logInUserFailedAC(error.message))
-  }
-}
-
-function* logOutS() {
-  try {
-    yield call([auth, auth.signOut])
-    yield put(clearRxStateAC())
-  } catch (error) {
-    yield put(logOutUserFailedAC(error.message))
-  }
-}
-
-function* logInWithGoogleS() {
-  try {
-    const response = yield call([auth, auth.signInWithPopup], googleProvider)
-    yield put(logInUserSuccessAC(response.user))
-  } catch (error) {
-    yield put(logInUserFailedAC(error.message))
-  }
-}
+import {
+  getChoosenScheduleID,
+  getChoosenSchedule,
+  getChoosenSchedules,
+} from '../redux/database/fsdb.selectors'
 
 const schedulesColl = db.collection('schedules')
 
@@ -168,14 +117,12 @@ function* getDocsFromDBS(action: GetDocsFromDBT) {
       yield put(setDocToRxStateAC(element))
     }
   } catch (error) {
-    console.error('Error get docs:', error)
+    console.error('Error get docs: ', error)
   }
 }
 
 function* deleteDocsFromCollectionS() {
-  const choosenSchedules: Array<ScheduleT> = yield select(
-    (state: AppStateType) => state.fsdb.schedules.filter((i) => i.isChoosen)
-  )
+  const choosenSchedules: Array<ScheduleT> = yield select(getChoosenSchedules)
 
   yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
   yield put(delDocsFromRxStateAC())
@@ -206,9 +153,7 @@ function* updateFieldS(action: UpdateFieldT) {
 }
 
 function* setCheckedClassesS() {
-  const schedule: ScheduleT = yield select((state: AppStateType) =>
-    state.fsdb.schedules.find((e) => e.isChoosen)
-  )
+  const schedule: ScheduleT = yield select(getChoosenSchedule)
 
   const docRef = schedulesColl.doc(schedule.id)
 
@@ -226,9 +171,7 @@ function* setCheckedClassesS() {
 }
 
 function* setSubjectS() {
-  const schedule: ScheduleT = yield select((state: AppStateType) =>
-    state.fsdb.schedules.find((e) => e.isChoosen)
-  )
+  const schedule: ScheduleT = yield select(getChoosenSchedule)
 
   const docRef = schedulesColl.doc(schedule.id)
 
@@ -244,9 +187,7 @@ function* setSubjectS() {
 }
 
 function* setTeacherS() {
-  const schedule: ScheduleT = yield select((state: AppStateType) =>
-    state.fsdb.schedules.find((e) => e.isChoosen)
-  )
+  const schedule: ScheduleT = yield select(getChoosenSchedule)
 
   const docRef = schedulesColl.doc(schedule.id)
 
@@ -262,9 +203,7 @@ function* setTeacherS() {
 }
 
 function* setLoadS() {
-  const schedule: ScheduleT = yield select((state: AppStateType) =>
-    state.fsdb.schedules.find((e) => e.isChoosen)
-  )
+  const schedule: ScheduleT = yield select(getChoosenSchedule)
 
   const docRef = schedulesColl.doc(schedule.id)
 
@@ -279,7 +218,7 @@ function* setLoadS() {
   }
 }
 
-function* setTimeTableS() {
+function* setTimeTable() {
   const timetable: TTInitialStateT = yield select(getTimetableS)
   const id: string = yield select(getChoosenScheduleID)
   const docRef = schedulesColl.doc(id)
@@ -287,7 +226,7 @@ function* setTimeTableS() {
   try {
     //@ts-ignore
     yield call([docRef, docRef.update], {
-      timeTable: timetable,
+      timetable: timetable,
     })
     console.log(`Schedule timetable successfully updated!`)
   } catch (error) {
@@ -296,10 +235,6 @@ function* setTimeTableS() {
 }
 
 export function* mySaga() {
-  yield takeEvery('SIGN_UP_USER', signUpS)
-  yield takeEvery('LOG_IN_USER', logInS)
-  yield takeEvery('LOG_OUT_USER', logOutS)
-  yield takeEvery('LOG_IN_WITH_GOOGLE', logInWithGoogleS)
   yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionS)
   yield takeEvery('GET_DOC_FROM_DB', getDocFromDBS)
   yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBS)
@@ -320,5 +255,5 @@ export function* mySaga() {
   yield takeEvery('DELETE_TEACHER', setTeacherS)
   yield takeEvery('SET_LOAD', setLoadS)
   yield takeEvery('DELETE_LOAD', setLoadS)
-  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTableS)
+  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTable)
 }
