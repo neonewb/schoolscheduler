@@ -52,7 +52,7 @@ const EditNavBar: FC<EditNavBarPropsT> = ({
     myScheduleTitle = <Skeleton variant='rect' width={223} height={40} />
   } else {
     myScheduleTitle = (
-      <ScheduleTitle propTitle={mySchedule.title} schedID={schedID} />
+      <ScheduleTitle propTitle={mySchedule.title} />
     )
   }
 

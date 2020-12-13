@@ -20,7 +20,7 @@ function* signUp(action: SignUpUserT) {
     )
     yield put(signUpUserSuccessAC(user))
   } catch (error) {
-    yield put(signUpUserFailedAC(error.message))
+    yield put(signUpUserFailedAC(error))
   }
 }
 
@@ -33,7 +33,7 @@ function* logIn(action: LogInUserT) {
     )
     yield put(logInUserSuccessAC(user))
   } catch (error) {
-    yield put(logInUserFailedAC(error.message))
+    yield put(logInUserFailedAC(error))
   }
 }
 
@@ -42,7 +42,7 @@ function* logOut() {
     yield call(AuthAPI.signOut)
     yield put(clearRxStateAC())
   } catch (error) {
-    yield put(logOutUserFailedAC(error.message))
+    yield put(logOutUserFailedAC(error))
   }
 }
 
@@ -51,7 +51,7 @@ function* logInWithGoogle() {
     const user: firebase.User = yield call(AuthAPI.googleSignIn)
     yield put(logInUserSuccessAC(user))
   } catch (error) {
-    yield put(logInUserFailedAC(error.message))
+    yield put(logInUserFailedAC(error))
   }
 }
 

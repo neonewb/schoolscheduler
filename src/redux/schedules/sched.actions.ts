@@ -1,3 +1,5 @@
+import { FirebaseError } from 'firebase'
+
 export type AddDocToCollectionT = ReturnType<typeof addDocToCollectionAC>
 export const addDocToCollectionAC = (email: string, userID: string) =>
   ({
@@ -46,7 +48,7 @@ export const addDocToCollectionSuccessAC = (
   classes: Array<string>,
   subjects: Array<string>,
   teachers: Array<string>,
-  load: Array<LoadT>,
+  load: Array<LoadT>
 ) =>
   ({
     type: 'ADD_DOC_TO_COLLECTION_SUCCESS',
@@ -67,7 +69,7 @@ export const addDocToCollectionSuccessAC = (
     } as ScheduleT,
   } as const)
 
-export const addDocToCollectionFailedAC = (error: string) =>
+export const addDocToCollectionFailedAC = (error: FirebaseError) =>
   ({
     type: 'ADD_DOC_TO_COLLECTION_FAILED',
     error,
@@ -104,7 +106,7 @@ export const deleteDocsFromCollectionAC = () =>
     type: 'DEL_DOCS_FROM_COLLECTION',
   } as const)
 
-export const delDocFromCollFailedAC = (error: string) =>
+export const delDocFromCollFailedAC = (error: FirebaseError) =>
   ({
     type: 'DEL_DOC_FROM_COLLECTION_FAILED',
     error,
@@ -152,21 +154,16 @@ export const setIsLoadingFalse = () =>
   } as const)
 
 export type UpdateFieldT = ReturnType<typeof updateFieldAC>
-export const updateFieldAC = (
-  schedID: string,
-  field: string,
-  content: string | number
-) =>
+export const updateFieldAC = (field: string, content: string | number) =>
   ({
     type: 'UPDATE_FIELD',
     payload: {
-      schedID,
       field,
       content,
     },
   } as const)
 
-export const updateFailedAC = (error: string) =>
+export const updateFailedAC = (error: FirebaseError) =>
   ({
     type: 'UPDATE_SCHEDULE_FAILED',
     error,

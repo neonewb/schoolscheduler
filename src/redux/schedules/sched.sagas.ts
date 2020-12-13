@@ -1,5 +1,6 @@
+import { firestore } from 'firebase'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
-import { schedulesColl } from '../../configs/firebase.config'
+import { dbApi } from '../../api/dbApi'
 import {
   addDocToCollectionFailedAC,
   addDocToCollectionSuccessAC,
@@ -18,26 +19,30 @@ import {
 } from './sched.actions'
 import {
   getChoosenSchedule,
+  getChoosenScheduleID,
   getChoosenSchedules,
 } from './sched.selectors'
 
-function* addDocToCollectionS(action: AddDocToCollectionT) {
+function* addDocToCollection(action: AddDocToCollectionT) {
   const payload = action.payload
   try {
-    const response = yield call([schedulesColl, schedulesColl.add], {
-      email: payload.email,
-      userid: payload.userID,
-      title: 'New schedule',
-      numberOfDays: 6,
-      maxLessonsPerDay: 10,
-      numberOfColumns: 2,
-      isOpenCustomClassNames: false,
-      checked: [],
-      classes: [],
-      subjects: [],
-      teachers: [],
-      load: [],
-    })
+    const response: firestore.DocumentReference<firestore.DocumentData> = yield call(
+      dbApi.addDoc,
+      {
+        email: payload.email,
+        userid: payload.userID,
+        title: 'New schedule',
+        numberOfDays: 6,
+        maxLessonsPerDay: 10,
+        numberOfColumns: 2,
+        isOpenCustomClassNames: false,
+        checked: [],
+        classes: [],
+        subjects: [],
+        teachers: [],
+        load: [],
+      }
+    )
 
     yield put(
       addDocToCollectionSuccessAC(
@@ -62,15 +67,18 @@ function* addDocToCollectionS(action: AddDocToCollectionT) {
 }
 
 // Fetch single doc
-function* getDocFromDBS(action: GetDocFromDBT) {
+function* getDocFromDB(action: GetDocFromDBT) {
   const payload = action.payload
   try {
     yield put(setIsLoadingTrue())
-    const docRef = schedulesColl.doc(payload.docID)
 
-    const mySchedule = yield call([docRef, docRef.get])
+    const mySchedule: firestore.DocumentSnapshot<firestore.DocumentData> = yield call(
+      dbApi.getDoc,
+      payload.docID
+    )
 
     if (mySchedule.exists) {
+      //@ts-ignore
       const schedule: ScheduleT = mySchedule.data()
       schedule.id = mySchedule.id
       if (schedule.email === payload.email) {
@@ -84,20 +92,20 @@ function* getDocFromDBS(action: GetDocFromDBT) {
       yield put(setIsLoadingFalse())
     }
   } catch (error) {
-    console.error('Error get doc:', error)
+    console.error('Error get doc: ', error)
     yield put(setIsLoadingFalse())
   }
 }
 
 // Fetch multiple doc
-function* getDocsFromDBS(action: GetDocsFromDBT) {
+function* getDocsFromDB(action: GetDocsFromDBT) {
   const payload = action.payload
   try {
-    const mySchedules = schedulesColl
-      .where('email', '==', payload.email)
-      .where('userid', '==', payload.userID)
-
-    const querySnapshot = yield call([mySchedules, mySchedules.get])
+    const querySnapshot: firestore.QuerySnapshot<firestore.DocumentData> = yield call(
+      dbApi.getDocs,
+      payload.email,
+      payload.userID
+    )
 
     let arrDoc: Array<ScheduleT> = []
 
@@ -116,7 +124,7 @@ function* getDocsFromDBS(action: GetDocsFromDBT) {
   }
 }
 
-function* deleteDocsFromCollectionS() {
+function* deleteDocsFromCollection() {
   const choosenSchedules: Array<ScheduleT> = yield select(getChoosenSchedules)
 
   yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
@@ -124,21 +132,18 @@ function* deleteDocsFromCollectionS() {
 }
 
 function* deleteDocFromCollectionS(id: string) {
-  console.log(id)
-  const docRef = schedulesColl.doc(id)
-
   try {
-    yield call([docRef, docRef.delete])
+    yield call(dbApi.delDoc, id)
   } catch (error) {
     yield put(delDocFromCollFailedAC(error))
   }
 }
-function* updateFieldS(action: UpdateFieldT) {
-  const docRef = schedulesColl.doc(action.payload.schedID)
+
+function* updateField(action: UpdateFieldT) {
+  const id: string = yield select(getChoosenScheduleID)
 
   try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
+    yield call(dbApi.updateDoc, id, {
       [action.payload.field]: action.payload.content,
     })
     console.log(`Schedule ${action.payload.field} successfully updated!`)
@@ -150,11 +155,8 @@ function* updateFieldS(action: UpdateFieldT) {
 function* setCheckedClassesS() {
   const schedule: ScheduleT = yield select(getChoosenSchedule)
 
-  const docRef = schedulesColl.doc(schedule.id)
-
   try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
+    yield call(dbApi.updateDoc, schedule.id, {
       classes: schedule.classes,
       checked: schedule.checked,
       isOpenCustomClassNames: schedule.isOpenCustomClassNames,
@@ -168,11 +170,8 @@ function* setCheckedClassesS() {
 function* setSubjectS() {
   const schedule: ScheduleT = yield select(getChoosenSchedule)
 
-  const docRef = schedulesColl.doc(schedule.id)
-
   try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
+    yield call(dbApi.updateDoc, schedule.id, {
       subjects: schedule.subjects,
     })
     console.log(`Schedule subjects successfully updated!`)
@@ -184,11 +183,8 @@ function* setSubjectS() {
 function* setTeacherS() {
   const schedule: ScheduleT = yield select(getChoosenSchedule)
 
-  const docRef = schedulesColl.doc(schedule.id)
-
   try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
+    yield call(dbApi.updateDoc, schedule.id, {
       teachers: schedule.teachers,
     })
     console.log(`Schedule teachers successfully updated!`)
@@ -200,11 +196,8 @@ function* setTeacherS() {
 function* setLoadS() {
   const schedule: ScheduleT = yield select(getChoosenSchedule)
 
-  const docRef = schedulesColl.doc(schedule.id)
-
   try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
+    yield call(dbApi.updateDoc, schedule.id, {
       load: schedule.load,
     })
     console.log(`Schedule load successfully updated!`)
@@ -214,11 +207,11 @@ function* setLoadS() {
 }
 
 export function* schedulesSaga() {
-  yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionS)
-  yield takeEvery('GET_DOC_FROM_DB', getDocFromDBS)
-  yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBS)
-  yield takeEvery('DEL_DOCS_FROM_COLLECTION', deleteDocsFromCollectionS)
-  yield takeEvery('UPDATE_FIELD', updateFieldS)
+  yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollection)
+  yield takeEvery('GET_DOC_FROM_DB', getDocFromDB)
+  yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDB)
+  yield takeEvery('DEL_DOCS_FROM_COLLECTION', deleteDocsFromCollection)
+  yield takeEvery('UPDATE_FIELD', updateField)
   yield takeEvery('ALL_CHECK', setCheckedClassesS)
   yield takeEvery('CLEAR_CHECKED_AND_CLASSES', setCheckedClassesS)
   yield takeEvery('OPEN_CUSTOM_CLASS_NAMES', setCheckedClassesS)

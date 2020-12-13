@@ -1,3 +1,5 @@
+import { FirebaseError } from "firebase"
+
 export type CurrentUserT = {
   email: null | string
   uid: null | string
@@ -28,7 +30,7 @@ export const signUpUserAC = (email: string, password: string) =>
     },
   } as const)
 
-export const signUpUserFailedAC = (error: string) =>
+export const signUpUserFailedAC = (error: FirebaseError) =>
   ({
     type: 'SIGN_UP_USER_FAILED',
     error,
@@ -47,7 +49,7 @@ export const logOutAC = () =>
     type: 'LOG_OUT_USER',
   } as const)
 
-export const logOutUserFailedAC = (error: string) =>
+export const logOutUserFailedAC = (error: FirebaseError) =>
   ({
     type: 'LOG_OUT_USER_FAILED',
     error,
@@ -63,7 +65,7 @@ export const logInUserAC = (email: string, password: string) =>
     },
   } as const)
 
-export const logInUserFailedAC = (error: string) =>
+export const logInUserFailedAC = (error: FirebaseError) =>
   ({
     type: 'LOG_IN_USER_FAILED',
     error,

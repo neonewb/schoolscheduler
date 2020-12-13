@@ -7,7 +7,6 @@ import { useStylesEdit } from '../../styles/stylesForEdit'
 
 type ScheduleTitleProps = {
   propTitle: string
-  schedID: string
 }
 
 type InputT = {
@@ -15,7 +14,6 @@ type InputT = {
 }
 export const ScheduleTitle: FC<ScheduleTitleProps> = ({
   propTitle,
-  schedID,
 }) => {
   const classes = useStylesEdit()
 
@@ -31,7 +29,7 @@ export const ScheduleTitle: FC<ScheduleTitleProps> = ({
 
   const onSubmit = ({ title }: InputT) => {
     if (title !== propTitle) {
-      dispatch(updateFieldAC(schedID, 'title', title))
+      dispatch(updateFieldAC('title', title))
     }
     if (scheduleTitleRef.current) {
       scheduleTitleRef.current.blur()
@@ -48,7 +46,7 @@ export const ScheduleTitle: FC<ScheduleTitleProps> = ({
 
   const onBlur = () => {
     if (watchTitle !== propTitle) {
-      dispatch(updateFieldAC(schedID, 'title', watchTitle))
+      dispatch(updateFieldAC('title', watchTitle))
     }
   }
 

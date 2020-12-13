@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid'
 import * as FirestoreActions from './sched.actions'
 import { ScheduleT, LoadT } from './sched.actions'
 import { Reducer } from 'redux'
-import { getChoosenScheduleS } from './sched.selectors'
+import { getChoosenSchedID, getChoosenScheduleS } from './sched.selectors'
 import { InferActionsTypes } from '../rootReducer'
 
 type SchedActionsTypes = InferActionsTypes<typeof FirestoreActions>
@@ -52,7 +52,9 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
     case 'ADD_DOC_TO_COLLECTION_FAILED':
     case 'DEL_DOC_FROM_COLLECTION_FAILED':
     case 'UPDATE_SCHEDULE_FAILED':
-      console.error(action.error)
+      console.error(action.error.name)
+      console.error(action.error.code)
+      console.error(action.error.message)
       return state
 
     case 'CHOOSE_SCHEDULE':
@@ -104,10 +106,11 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
       return { ...state, isLoading: false }
 
     case 'UPDATE_FIELD':
+      const id = getChoosenSchedID(state)
       return {
         ...state,
         schedules: state.schedules.map((schedule) => {
-          if (schedule.id !== action.payload.schedID) {
+          if (schedule.id !== id) {
             return schedule
           }
           return {

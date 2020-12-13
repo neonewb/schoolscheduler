@@ -15,9 +15,7 @@ firebase.initializeApp({
 
 firebase.firestore()
 
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
+export const googleProvider = new firebase.auth.GoogleAuthProvider()
 
 export const auth = firebase.auth()
 export const db = firebase.firestore()
-
-export const schedulesColl = db.collection('schedules')

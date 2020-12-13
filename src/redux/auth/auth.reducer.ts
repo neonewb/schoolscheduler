@@ -50,7 +50,9 @@ const authReducer: Reducer<AuthInitialStateT, AuthActionsTypes> = (
     case 'LOG_IN_USER_FAILED':
     case 'LOG_OUT_USER_FAILED':
     case 'SIGN_UP_USER_FAILED':
-      console.error(action.error)
+      console.error(action.error.name)
+      console.error(action.error.code)
+      console.error(action.error.message)
       return state
 
     default:

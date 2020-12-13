@@ -78,7 +78,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
     newValue: number | number[]
   ) => {
     //@ts-ignore
-    dispatch(updateFieldAC(mySchedule.id, 'numberOfDays', newValue))
+    dispatch(updateFieldAC('numberOfDays', newValue))
   }
 
   const handleChangeMaxLessons = (
@@ -86,7 +86,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
     newValue: number | number[]
   ) => {
     //@ts-ignore
-    dispatch(updateFieldAC(mySchedule.id, 'maxLessonsPerDay', newValue))
+    dispatch(updateFieldAC('maxLessonsPerDay', newValue))
   }
 
   const handleOpenCustomClassNames = () => {
