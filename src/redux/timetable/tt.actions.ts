@@ -1,4 +1,4 @@
-import { ScheduleT } from '../database/firestore.actions'
+import { ScheduleT } from '../schedules/sched.actions'
 import { TtAcTypes } from './timetable.d'
 
 export const manuallyCreateScheduleAC = (schedule: ScheduleT) =>

@@ -10,7 +10,7 @@ import {
   getDocsFromDBAC,
   cancelСhoiceAC,
   ScheduleT,
-} from '../../redux/database/firestore.actions'
+} from '../../redux/schedules/sched.actions'
 import { Skeleton } from '@material-ui/lab'
 import { ScheduleTitle } from './ScheduleTitle'
 import { clearTimeTableAC } from '../../redux/timetable/tt.actions'

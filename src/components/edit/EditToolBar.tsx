@@ -6,7 +6,7 @@ import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 import PrintRoundedIcon from '@material-ui/icons/PrintRounded'
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
 import { useStylesEditToolBar } from '../../styles/stylesEditToolBar'
-import { ScheduleT } from '../../redux/database/firestore.actions'
+import { ScheduleT } from '../../redux/schedules/sched.actions'
 
 type EditToolBarPropsT = {
   setSettingsOpen: React.Dispatch<React.SetStateAction<boolean>>

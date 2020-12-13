@@ -25,15 +25,15 @@ import {
   addDocToCollectionAC,
   getDocsFromDBAC,
   ScheduleT,
-} from '../../redux/database/firestore.actions'
+} from '../../redux/schedules/sched.actions'
 import ScheduleItems from './ScheduleItems'
 import DeleteConfirm from './DeleteConfirm'
 import { useHistory } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesDashboard } from '../../styles/stylesDashboard'
-import { AppStateType } from '../../redux/redux.store'
+import { AppStateType } from '../../redux/rootReducer'
 import { getUserS } from '../../redux/auth/auth.selectors'
-import { getSchedulesS } from '../../redux/database/fsdb.selectors'
+import { getSchedulesS } from '../../redux/schedules/sched.selectors'
 
 const Dashboard: FC = () => {
   const classes = useStylesDashboard()

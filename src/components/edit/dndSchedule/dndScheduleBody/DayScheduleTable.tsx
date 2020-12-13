@@ -4,7 +4,7 @@ import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { getNumbersArray } from '../../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
-import { ScheduleT } from '../../../../redux/database/firestore.actions'
+import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import { grey, teal } from '@material-ui/core/colors'
 
 const useStyles = makeStyles({

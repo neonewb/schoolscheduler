@@ -1,7 +1,7 @@
 import produce, { Draft } from 'immer'
 import { nanoid } from 'nanoid'
 import { Reducer } from 'redux'
-import { InferActionsTypes } from '../redux.store'
+import { InferActionsTypes } from '../rootReducer'
 import { ClassT, TeacherT, LessonT } from './timetable'
 import { TtAcTypes } from './timetable.d'
 import * as TTActions from './tt.actions'
@@ -19,7 +19,6 @@ type TTActionsTypes = InferActionsTypes<typeof TTActions>
 const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
   (draft: Draft<TTInitialStateT>, action: TTActionsTypes) => {
     switch (action.type) {
-      
       case TtAcTypes.MANUALLY_CREATE_SCHEDULE: {
         const { classes, teachers, load: loads } = action.payload.schedule
 

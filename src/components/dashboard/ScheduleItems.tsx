@@ -8,7 +8,7 @@ import {
   chooseScheduleAC,
   chooseSingleAC,
   ScheduleT,
-} from '../../redux/database/firestore.actions'
+} from '../../redux/schedules/sched.actions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {

@@ -12,7 +12,7 @@ import {
   openCustomClassNamesAC,
   ScheduleT,
   updateFieldAC,
-} from '../../../redux/database/firestore.actions'
+} from '../../../redux/schedules/sched.actions'
 import Subjects from './Subjects'
 import Teachers from './Teachers'
 import BookRoundedIcon from '@material-ui/icons/BookRounded'

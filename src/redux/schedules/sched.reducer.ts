@@ -1,16 +1,13 @@
 import { alphabet } from '../../utils/alphabet'
-import {
-  isANumber,
-  isLoadIncludesItem,
-} from '../../utils/funcs'
+import { isANumber, isLoadIncludesItem } from '../../utils/funcs'
 import { nanoid } from 'nanoid'
-import { InferActionsTypes } from './../redux.store'
-import * as FirestoreActions from './firestore.actions'
-import { ScheduleT, LoadT } from './firestore.actions'
+import * as FirestoreActions from './sched.actions'
+import { ScheduleT, LoadT } from './sched.actions'
 import { Reducer } from 'redux'
-import { getChoosenScheduleS } from './fsdb.selectors'
+import { getChoosenScheduleS } from './sched.selectors'
+import { InferActionsTypes } from '../rootReducer'
 
-type FsdbActionsTypes = InferActionsTypes<typeof FirestoreActions>
+type SchedActionsTypes = InferActionsTypes<typeof FirestoreActions>
 
 const initialState = {
   schedules: [] as Array<ScheduleT>,
@@ -18,9 +15,9 @@ const initialState = {
   error: null as null | string,
 } as const
 
-export type FsdbInitialStateT = typeof initialState
+export type SchedInitialStateT = typeof initialState
 
-const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
+const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
   state = initialState,
   action
 ) => {
@@ -49,9 +46,7 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
     case 'DEL_DOCS_FROM_RX_STATE':
       return {
         ...state,
-        schedules: [
-          ...state.schedules.filter((i) => !i.isChoosen),
-        ],
+        schedules: [...state.schedules.filter((i) => !i.isChoosen)],
       }
 
     case 'ADD_DOC_TO_COLLECTION_FAILED':
@@ -468,4 +463,4 @@ const firestoreReducer: Reducer<FsdbInitialStateT, FsdbActionsTypes> = (
   }
 }
 
-export default firestoreReducer
+export default schedReducer

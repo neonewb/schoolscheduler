@@ -7,21 +7,21 @@ import { useStylesEdit } from '../../styles/stylesForEdit'
 import {
   getDocFromDBAC,
   ScheduleT,
-} from '../../redux/database/firestore.actions'
+} from '../../redux/schedules/sched.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
 import SettingsSchedule from './settingsSchedule/SettingsSchedule'
 import DnDSchedule from './dndSchedule/DnDSchedule'
-import { AppStateType } from '../../redux/redux.store'
 import { getUserS } from '../../redux/auth/auth.selectors'
 import { CurrentUserT } from '../../redux/auth/auth.actions'
 import {
   getIsLoadingS,
   getSchedulesS,
-} from '../../redux/database/fsdb.selectors'
+} from '../../redux/schedules/sched.selectors'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Loader } from '../../utils/Loader'
+import { AppStateType } from '../../redux/rootReducer'
 
 const Edit: FC = () => {
   const classes = useStylesEdit()

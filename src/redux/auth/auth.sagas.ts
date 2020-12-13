@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { AuthAPI } from '../../api/authApi'
-import { clearRxStateAC } from '../database/firestore.actions'
+import { clearRxStateAC } from '../schedules/sched.actions'
 import {
   logOutUserFailedAC,
   signUpUserFailedAC,

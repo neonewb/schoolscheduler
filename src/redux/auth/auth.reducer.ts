@@ -1,5 +1,5 @@
 import { Reducer } from 'redux'
-import { InferActionsTypes } from './../redux.store'
+import { InferActionsTypes } from '../rootReducer'
 import * as AuthActions from './auth.actions'
 
 type AuthActionsTypes = InferActionsTypes<typeof AuthActions>

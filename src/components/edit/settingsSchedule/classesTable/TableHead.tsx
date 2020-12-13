@@ -17,7 +17,7 @@ import {
   addColumnAC,
   subtractColumnAC,
   ScheduleT,
-} from '../../../../redux/database/firestore.actions'
+} from '../../../../redux/schedules/sched.actions'
 import { alphabet } from '../../../../utils/alphabet'
 import { deepPurple } from '@material-ui/core/colors'
 import { nanoid } from 'nanoid'

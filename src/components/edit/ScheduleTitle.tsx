@@ -2,7 +2,7 @@ import { TextField } from '@material-ui/core'
 import React, { FC, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { updateFieldAC } from '../../redux/database/firestore.actions'
+import { updateFieldAC } from '../../redux/schedules/sched.actions'
 import { useStylesEdit } from '../../styles/stylesForEdit'
 
 type ScheduleTitleProps = {

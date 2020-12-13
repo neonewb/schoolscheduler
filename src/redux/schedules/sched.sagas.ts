@@ -1,7 +1,5 @@
-import { getTimetableS } from './../redux/timetable/tt.selectors'
-import { TTInitialStateT } from './../redux/timetable/tt.reducer'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
-import { db } from '../configs/firebase.config'
+import { schedulesColl } from '../../configs/firebase.config'
 import {
   addDocToCollectionFailedAC,
   addDocToCollectionSuccessAC,
@@ -17,14 +15,11 @@ import {
   GetDocsFromDBT,
   UpdateFieldT,
   ScheduleT,
-} from '../redux/database/firestore.actions'
+} from './sched.actions'
 import {
-  getChoosenScheduleID,
   getChoosenSchedule,
   getChoosenSchedules,
-} from '../redux/database/fsdb.selectors'
-
-const schedulesColl = db.collection('schedules')
+} from './sched.selectors'
 
 function* addDocToCollectionS(action: AddDocToCollectionT) {
   const payload = action.payload
@@ -218,23 +213,7 @@ function* setLoadS() {
   }
 }
 
-function* setTimeTable() {
-  const timetable: TTInitialStateT = yield select(getTimetableS)
-  const id: string = yield select(getChoosenScheduleID)
-  const docRef = schedulesColl.doc(id)
-
-  try {
-    //@ts-ignore
-    yield call([docRef, docRef.update], {
-      timetable: timetable,
-    })
-    console.log(`Schedule timetable successfully updated!`)
-  } catch (error) {
-    yield put(updateFailedAC(error))
-  }
-}
-
-export function* mySaga() {
+export function* schedulesSaga() {
   yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollectionS)
   yield takeEvery('GET_DOC_FROM_DB', getDocFromDBS)
   yield takeEvery('GET_DOCS_FROM_DB', getDocsFromDBS)
@@ -255,5 +234,4 @@ export function* mySaga() {
   yield takeEvery('DELETE_TEACHER', setTeacherS)
   yield takeEvery('SET_LOAD', setLoadS)
   yield takeEvery('DELETE_LOAD', setLoadS)
-  yield takeEvery('MANUALLY_CREATE_SCHEDULE', setTimeTable)
 }

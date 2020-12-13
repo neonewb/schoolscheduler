@@ -7,7 +7,7 @@ import {
   deleteCustomClassAC,
   ScheduleT,
   setCustomClassAC,
-} from '../../../redux/database/firestore.actions'
+} from '../../../redux/schedules/sched.actions'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {

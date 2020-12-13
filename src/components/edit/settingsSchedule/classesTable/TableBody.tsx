@@ -12,7 +12,7 @@ import {
   ScheduleT,
   setCheckAC,
   setClassAC,
-} from '../../../../redux/database/firestore.actions'
+} from '../../../../redux/schedules/sched.actions'
 import { alphabet } from '../../../../utils/alphabet'
 
 type ClassesTableBodyProps = {

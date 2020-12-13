@@ -8,7 +8,7 @@ import {
   NewLoadT,
   ScheduleT,
   setLoadAC,
-} from '../../../../redux/database/firestore.actions'
+} from '../../../../redux/schedules/sched.actions'
 import { getNumbersArray } from '../../../../utils/funcs'
 import LoadMultipleAutocomplete from './LoadMultipleAutocomplete'
 import MUIDataTable from 'mui-datatables'

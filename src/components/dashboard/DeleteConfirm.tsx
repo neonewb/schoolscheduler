@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteDocsFromCollectionAC } from '../../redux/database/firestore.actions'
+import { deleteDocsFromCollectionAC } from '../../redux/schedules/sched.actions'
 
 type DeleteConfirmPropsT = {
   isOpen: boolean

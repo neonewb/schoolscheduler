@@ -1,4 +1,4 @@
-import { LoadT, ScheduleT } from "../redux/database/firestore.actions"
+import { LoadT, ScheduleT } from "../redux/schedules/sched.actions"
 
 export const isANumber = (str: number | string): boolean => {
   return !!Number(str)

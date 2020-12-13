@@ -1,4 +1,4 @@
-import { AppStateType } from '../redux.store'
+import { AppStateType } from '../rootReducer'
 
 export const getTimetableS = (state: AppStateType) => state.timetable
 

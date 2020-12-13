@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core'
 import { nanoid } from 'nanoid'
 import React, { FC } from 'react'
-import { ScheduleT } from '../../../../redux/database/firestore.actions'
+import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import DayScheduleTable from './DayScheduleTable'
 
 const useStyles = makeStyles({

@@ -5,7 +5,7 @@ import {
   setSubjectAC,
   deleteSubjectAC,
   ScheduleT,
-} from '../../../redux/database/firestore.actions'
+} from '../../../redux/schedules/sched.actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import { FC, useState } from 'react'
 import { subjectsOptions, SubjectT } from '../../../utils/subjects'
