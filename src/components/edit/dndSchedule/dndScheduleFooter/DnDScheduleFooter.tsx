@@ -53,6 +53,7 @@ const DnDScheduleFooter: FC = () => {
 
       <div className={styles.lessons}>
         {lessons.map((lesson) => (
+          
           <DraggableLesson
             key={lesson.id}
             style={styles.lessonPaper}

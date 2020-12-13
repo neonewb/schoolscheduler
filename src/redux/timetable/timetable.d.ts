@@ -11,9 +11,10 @@ export type LessonT = {
   id: string
   subject: string
   teacher: string
-  className?: string
+  className: string
+  numOfLessons: string
   dayOfTheWeek?: DaysOfTheWeekT
-  lessonNumber?: number
+  period?: string
 }
 
 export type ClassT = {

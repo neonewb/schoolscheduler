@@ -33,21 +33,13 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         }))
 
         loads.forEach((load) => {
-          if (load.lessons === '1') {
-            draft.lessonsTT.push({
-              id: nanoid(),
-              subject: load.subject,
-              teacher: load.teacher,
-            })
-          } else {
-            for (let i = 0; i < Number(load.lessons); i++) {
-              draft.lessonsTT.push({
-                id: nanoid(),
-                subject: load.subject,
-                teacher: load.teacher,
-              })
-            }
-          }
+          draft.lessonsTT.push({
+            id: nanoid(),
+            subject: load.subject,
+            teacher: load.teacher,
+            className: load.className,
+            numOfLessons: load.lessons,
+          })
         })
         break
       }
