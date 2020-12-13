@@ -27,6 +27,7 @@ export type ScheduleT = {
   maxLessonsPerDay: number
   numberOfColumns: number
   isOpenCustomClassNames: boolean
+  hasTimeTable: boolean
   checked: Array<string>
   classes: Array<string>
   subjects: Array<string>
@@ -44,6 +45,7 @@ export const addDocToCollectionSuccessAC = (
   maxLessonsPerDay: number,
   numberOfColumns: number,
   isOpenCustomClassNames: boolean,
+  hasTimeTable: boolean,
   checked: Array<string>,
   classes: Array<string>,
   subjects: Array<string>,
@@ -61,6 +63,7 @@ export const addDocToCollectionSuccessAC = (
       maxLessonsPerDay,
       numberOfColumns,
       isOpenCustomClassNames,
+      hasTimeTable,
       checked,
       classes,
       subjects,
@@ -95,9 +98,9 @@ export const getDocsFromDBAC = (email: string, userID: string) =>
     },
   } as const)
 
-export const setDocToRxStateAC = (schedule: ScheduleT) =>
+export const setDocToSchedStateAC = (schedule: ScheduleT) =>
   ({
-    type: 'SET_DOC_TO_RX_STATE',
+    type: 'SET_DOC_TO_SCHED_STATE',
     payload: { schedule },
   } as const)
 
@@ -280,5 +283,13 @@ export const deleteLoadAC = (ids: Array<string>) =>
     type: 'DELETE_LOAD',
     payload: {
       ids,
+    },
+  } as const)
+
+export const setHasTimeTableAC = (id: string) =>
+  ({
+    type: 'SET_HAS_TIMETABLE',
+    payload: {
+      id,
     },
   } as const)

@@ -1,5 +1,6 @@
 import { ScheduleT } from '../schedules/sched.actions'
 import { TtAcTypes } from './timetable.d'
+import { TTInitialStateT } from './tt.reducer'
 
 export const manuallyCreateScheduleAC = (schedule: ScheduleT) =>
   ({
@@ -12,4 +13,21 @@ export const manuallyCreateScheduleAC = (schedule: ScheduleT) =>
 export const clearTimeTableAC = () =>
   ({
     type: TtAcTypes.CLEAR_TIMETABLE,
+  } as const)
+
+export type getTimeTableACT = ReturnType<typeof getTimeTableAC>
+export const getTimeTableAC = (id: string) =>
+  ({
+    type: TtAcTypes.GET_TIMETABLE,
+    payload: {
+      id,
+    },
+  } as const)
+
+export const setTimeTableAC = (timetable: TTInitialStateT) =>
+  ({
+    type: TtAcTypes.SET_TIMETABLE,
+    payload: {
+      timetable,
+    },
   } as const)

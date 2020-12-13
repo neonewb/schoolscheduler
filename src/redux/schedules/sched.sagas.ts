@@ -1,3 +1,4 @@
+import { setTimeTableAC } from './../timetable/tt.actions'
 import { firestore } from 'firebase'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 import { dbApi } from '../../api/dbApi'
@@ -6,7 +7,7 @@ import {
   addDocToCollectionSuccessAC,
   delDocFromCollFailedAC,
   delDocsFromRxStateAC,
-  setDocToRxStateAC,
+  setDocToSchedStateAC,
   setIsLoadingTrue,
   setIsLoadingFalse,
   updateFailedAC,
@@ -36,6 +37,7 @@ function* addDocToCollection(action: AddDocToCollectionT) {
         maxLessonsPerDay: 10,
         numberOfColumns: 2,
         isOpenCustomClassNames: false,
+        hasTimeTable: false,
         checked: [],
         classes: [],
         subjects: [],
@@ -53,6 +55,7 @@ function* addDocToCollection(action: AddDocToCollectionT) {
         6,
         10,
         2,
+        false,
         false,
         [],
         [],
@@ -82,7 +85,13 @@ function* getDocFromDB(action: GetDocFromDBT) {
       const schedule: ScheduleT = mySchedule.data()
       schedule.id = mySchedule.id
       if (schedule.email === payload.email) {
-        yield put(setDocToRxStateAC(schedule))
+        if (schedule.hasTimeTable) {
+          //@ts-ignore
+          yield put(setTimeTableAC(schedule.timetable))
+        }
+        //@ts-ignore
+        delete schedule.timetable
+        yield put(setDocToSchedStateAC(schedule))
         yield put(chooseSingleAC(mySchedule.id))
         yield put(setIsLoadingFalse())
       }
@@ -113,11 +122,12 @@ function* getDocsFromDB(action: GetDocsFromDBT) {
       arrDoc.push({
         id: doc.id,
         ...doc.data(),
+        timetable: undefined,
       })
     })
 
     for (const element of arrDoc) {
-      yield put(setDocToRxStateAC(element))
+      yield put(setDocToSchedStateAC(element))
     }
   } catch (error) {
     console.error('Error get docs: ', error)

@@ -50,4 +50,15 @@ export const dbApi = {
     const response = await docRef.update(data)
     return response
   },
+
+  async getTimeTable(
+    id: string
+  ): Promise<firestore.DocumentSnapshot<firestore.DocumentData>> {
+    const docRef = schedsColl.doc(id)
+
+    const response = await docRef.get()
+    //@ts-ignore
+    return response.data().timetable
+  },
+
 }

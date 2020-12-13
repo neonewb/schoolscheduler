@@ -58,6 +58,12 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         draft.lessonsTT = []
         break
 
+      case TtAcTypes.SET_TIMETABLE:
+        draft.classesTT = action.payload.timetable.classesTT
+        draft.teachersTT = action.payload.timetable.teachersTT
+        draft.lessonsTT = action.payload.timetable.lessonsTT
+        break
+
       default:
         break
     }

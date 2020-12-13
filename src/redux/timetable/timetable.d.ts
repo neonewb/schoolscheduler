@@ -1,8 +1,10 @@
-import { DaysOfTheWeekT } from "../../utils/daysOfTheWeek"
+import { DaysOfTheWeekT } from '../../utils/daysOfTheWeek'
 
 export enum TtAcTypes {
   MANUALLY_CREATE_SCHEDULE = 'MANUALLY_CREATE_SCHEDULE',
   CLEAR_TIMETABLE = 'CLEAR_TIMETABLE',
+  SET_TIMETABLE = 'SET_TIMETABLE',
+  GET_TIMETABLE = 'GET_TIMETABLE',
 }
 
 export type LessonT = {

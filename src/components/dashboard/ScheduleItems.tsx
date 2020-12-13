@@ -9,6 +9,7 @@ import {
   chooseSingleAC,
   ScheduleT,
 } from '../../redux/schedules/sched.actions'
+import { getTimeTableAC } from '../../redux/timetable/tt.actions'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,6 +50,7 @@ const ScheduleItems: FC<ScheduleItemsProps> = ({ schedules }) => {
   const handleDubbleClick = (id: string) => {
     history.push(`/edit/${id}`)
     dispatch(chooseSingleAC(id))
+    dispatch(getTimeTableAC(id))
   }
 
   const handleClick = (id: string) => {

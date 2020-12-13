@@ -1,13 +1,13 @@
 import { alphabet } from '../../utils/alphabet'
 import { isANumber, isLoadIncludesItem } from '../../utils/funcs'
 import { nanoid } from 'nanoid'
-import * as FirestoreActions from './sched.actions'
+import * as SchedActions from './sched.actions'
 import { ScheduleT, LoadT } from './sched.actions'
 import { Reducer } from 'redux'
 import { getChoosenSchedID, getChoosenScheduleS } from './sched.selectors'
 import { InferActionsTypes } from '../rootReducer'
 
-type SchedActionsTypes = InferActionsTypes<typeof FirestoreActions>
+type SchedActionsTypes = InferActionsTypes<typeof SchedActions>
 
 const initialState = {
   schedules: [] as Array<ScheduleT>,
@@ -28,7 +28,7 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
         schedules: [...state.schedules, { ...action.payload }],
       }
 
-    case 'SET_DOC_TO_RX_STATE':
+    case 'SET_DOC_TO_SCHED_STATE':
       if (state.schedules.some((e) => e.id === action.payload.schedule.id)) {
         return state
       }
@@ -461,6 +461,19 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
         }),
       }
 
+    case 'SET_HAS_TIMETABLE':
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (schedule.id !== action.payload.id) {
+            return schedule
+          }
+          return {
+            ...schedule,
+            hasTimeTable: true,
+          }
+        }),
+      }
     default:
       return state
   }
