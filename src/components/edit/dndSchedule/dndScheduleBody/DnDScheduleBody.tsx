@@ -8,8 +8,10 @@ const useStyles = makeStyles({
   days: {
     width: '100%',
     minWidth: 600,
+    position: 'relative',
     display: 'flex',
     overflow: 'auto',
+    height: '75vh',
   },
 })
 

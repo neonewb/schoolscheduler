@@ -20,8 +20,8 @@ import {
 } from '../../redux/schedules/sched.selectors'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Loader } from '../../utils/Loader'
 import { AppStateType } from '../../redux/rootReducer'
+import { Skeleton } from '@material-ui/lab'
 
 const Edit: FC = () => {
   const classes = useStylesEdit()
@@ -79,7 +79,7 @@ const Edit: FC = () => {
         ) : mySchedule ? (
           <DnDSchedule mySchedule={mySchedule} />
         ) : (
-          <Loader />
+          <Skeleton variant='rect' style={{ width: '100%', height: '100%', }}/>
         )}
       </div>
     </DndProvider>

@@ -1,43 +1,34 @@
 import React, { FC } from 'react'
 import DnDScheduleBody from './dndScheduleBody/DnDScheduleBody'
 import DnDScheduleFooter from './dndScheduleFooter/DnDScheduleFooter'
-import { makeStyles, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { ScheduleT } from '../../../redux/schedules/sched.actions'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../../../redux/rootReducer'
 import { hasTimetableSel } from '../../../redux/schedules/sched.selectors'
-
-const useStyles = makeStyles({
-  DnDScheduleDiv: {
-    height: '400px',
-    maxHeight: '40vh',
-  },
-  text: {
-    margin: 8,
-  },
-})
 
 type DnDScheduleProps = {
   mySchedule: ScheduleT
 }
 
 const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
-  const styles = useStyles()
   const hasTimeTable = useSelector<AppStateType, boolean>(hasTimetableSel)
 
-  if (hasTimeTable){
+  if (hasTimeTable) {
     return (
-      <div className={styles.DnDScheduleDiv}>
+      <div>
         <DnDScheduleBody mySchedule={mySchedule} />
         <DnDScheduleFooter />
       </div>
     )
   } else {
     return (
-      <Typography className={styles.text}>
-        There is no timetable yet. Go to settings for create schedule
-        automatically or manually
-      </Typography>
+      <Box m={2}>
+        <Typography>
+          There is no timetable yet. Go to settings for create schedule
+          automatically or manually.
+        </Typography>
+      </Box>
     )
   }
 }

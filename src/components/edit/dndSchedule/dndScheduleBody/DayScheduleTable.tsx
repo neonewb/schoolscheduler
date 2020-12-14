@@ -8,15 +8,10 @@ import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import { grey, teal } from '@material-ui/core/colors'
 
 const useStyles = makeStyles({
-  table: {
-    width: '100%',
-    padding: 8,
-    textAlign: 'center',
-  },
   contain: {
     marginTop: 8,
-    height: '60vh',
-    maxHeight: '60vh',
+    // height: '60vh',
+    // maxHeight: '60vh',
   },
   rowDivs: {
     display: 'flex',
@@ -39,10 +34,17 @@ const useStyles = makeStyles({
       borderRadius: 2,
     },
   },
+  tableWrapper: {
+    padding: 8,
+    position: 'relative',
+    height: '100%',
+  },
   tableHeader: {
     position: 'sticky',
     top: 0,
+    bottom: 0,
     zIndex: 2,
+    height: 82,
     paddingTop: 8,
   },
   tableHeadCell: {
@@ -119,9 +121,9 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   }
 
   return (
-    <div className={styles.table}>
+    <div className={styles.tableWrapper} >
       <Paper elevation={2} className={styles.tableHeader}>
-        <Typography>{daysOfTheWeek[dayNum]}</Typography>
+        <Typography align='center'>{daysOfTheWeek[dayNum]}</Typography>
         <div className={styles.rowDivs}>
           {headSchedule.map((number) => {
             return (
