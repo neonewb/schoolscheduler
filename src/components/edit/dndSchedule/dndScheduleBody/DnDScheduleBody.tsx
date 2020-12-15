@@ -3,15 +3,19 @@ import { nanoid } from 'nanoid'
 import React, { FC } from 'react'
 import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import DayScheduleTable from './DayScheduleTable'
+import DnDScheduleHead from './DnDScheduleHead'
 
 const useStyles = makeStyles({
-  days: {
-    width: '100%',
-    minWidth: 600,
+  wrapper: {
     position: 'relative',
-    display: 'flex',
+    width: '100%',
+    maxWidth: '100%',
+    minWidth: 600,
     overflow: 'auto',
     height: '75vh',
+  },
+  days: {
+    display: 'flex',
   },
 })
 
@@ -31,7 +35,15 @@ const DnDScheduleBody: FC<DnDScheduleBodyPropsT> = ({ mySchedule }) => {
     )
   }
 
-  return <div className={styles.days}>{daysArr}</div>
+  return (
+    <div className={styles.wrapper}>
+      <DnDScheduleHead
+        numberOfDays={mySchedule.numberOfDays}
+        maxLessonsPerDay={mySchedule.maxLessonsPerDay}
+      />
+      <div className={styles.days}>{daysArr}</div>
+    </div>
+  )
 }
 
 export default DnDScheduleBody

@@ -1,18 +1,11 @@
-import { Box, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Box, makeStyles, Typography } from '@material-ui/core'
 import React, { FC } from 'react'
-import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
-import { getNumbersArray } from '../../../../utils/funcs'
 import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
 import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import { grey, teal } from '@material-ui/core/colors'
 
 const useStyles = makeStyles({
-  contain: {
-    marginTop: 8,
-    // height: '60vh',
-    // maxHeight: '60vh',
-  },
   rowDivs: {
     display: 'flex',
     '&:hover $classesNames': {
@@ -25,34 +18,6 @@ const useStyles = makeStyles({
     margin: '1px 1px',
     width: 50,
     height: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '&:hover': {
-      backgroundColor: teal[50],
-      border: '1px solid ' + teal[100],
-      borderRadius: 2,
-    },
-  },
-  tableWrapper: {
-    padding: 8,
-    position: 'relative',
-    height: '100%',
-  },
-  tableHeader: {
-    position: 'sticky',
-    top: 0,
-    bottom: 0,
-    zIndex: 2,
-    height: 82,
-    paddingTop: 8,
-  },
-  tableHeadCell: {
-    height: 50,
-    width: 50,
-    maxWidth: 50,
-    minWidth: 50,
-    margin: '0px 1px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -89,9 +54,6 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
 
   const styles = useStyles()
 
-  let headSchedule = getNumbersArray(maxLessonsPerDay)
-  headSchedule.unshift('Class')
-
   let rows = []
 
   // Create row
@@ -121,31 +83,16 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   }
 
   return (
-    <div className={styles.tableWrapper} >
-      <Paper elevation={2} className={styles.tableHeader}>
-        <Typography align='center'>{daysOfTheWeek[dayNum]}</Typography>
-        <div className={styles.rowDivs}>
-          {headSchedule.map((number) => {
-            return (
-              <Box className={styles.tableHeadCell} key={number + ' head cell'}>
-                <Typography>{number}</Typography>
-              </Box>
-            )
-          })}
-        </div>
-      </Paper>
-
-      <div className={styles.contain}>
-        {rows.map((row) => {
-          const cellId = nanoid()
-          return (
-            <div className={styles.rowDivs} key={cellId}>
-              {row}
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    <Box>
+      {rows.map((row) => {
+        const cellId = nanoid()
+        return (
+          <div className={styles.rowDivs} key={cellId}>
+            {row}
+          </div>
+        )
+      })}
+    </Box>
   )
 }
 
