@@ -14,11 +14,12 @@ import { getTimeTableAC } from '../../redux/timetable/tt.actions'
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-    overflow: 'auto',
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    textOverflow: 'ellipsis',
     '&:hover': {
       background: teal[50],
     },
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
       background: teal[100],
     },
   },
+  schedTitle: {
+    maxWidth: '100%',
+  }
 }))
 
 type ScheduleItemsProps = {
@@ -82,8 +86,8 @@ const ScheduleItems: FC<ScheduleItemsProps> = ({ schedules }) => {
               handleDubbleClick(item.id)
             }}>
             <Paper className={itemClass}>
-              <Typography align='center' component='p' variant='h4'>
-                {item.title || 'New schedule'}
+              <Typography className={classes.schedTitle} align='center' component='p' variant='h4'>
+                {item.title.substring(0, 40) || 'New schedule'}
               </Typography>
             </Paper>
           </Button>

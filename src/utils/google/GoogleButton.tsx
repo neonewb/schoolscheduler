@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
   googleButton: {
-    backgroundColor: teal[100],
+    backgroundColor: 'white',
     '&:hover': {
       backgroundColor: teal[200],
     },

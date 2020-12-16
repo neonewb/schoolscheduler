@@ -29,11 +29,13 @@ type DraggableLessonPropsT = {
 
 const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson }) => {
   const styles = useStyles()
-const dispatch = useDispatch()
+  const dispatch = useDispatch()
+
   const [{ isDragging }, drag] = useDrag({
     item: {
       sbuject: lesson.subject,
       teacher: lesson.teacher,
+      classTitle: lesson.classTitle,
       type: DragItemTypes.LESSON,
       id: lesson.id,
     },
@@ -50,6 +52,7 @@ const dispatch = useDispatch()
       isDragging: monitor.isDragging(),
     }),
   })
+
   const opacity = isDragging ? 0.4 : 1
 
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)

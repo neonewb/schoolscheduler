@@ -81,8 +81,6 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
     // Add drop components and lessons if they are
     for (let period = 0; period < maxLessonsPerDay; period++) {
       const renderLesson = () => {
-        console.log('renderLesson')
-
         if (!myClass || myClass?.lessons.length === 0) return null
         
         const lesson = myClass.lessons.find(
@@ -101,6 +99,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
           dayNum={dayNum}
           period={period}
           key={id}
+          myClass={myClass}
           id={id}>
             {renderLesson()}
           </DroppableComponent>

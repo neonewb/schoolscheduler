@@ -6,7 +6,7 @@ export const useStylesLoginSignUp = makeStyles((theme) => ({
     height: 66.69,
     fontSize: 25,
     fontFamily: 'Comfortaa',
-    backgroundColor: teal[100],
+    backgroundColor: 'white',
     '&:hover': {
       backgroundColor: teal[200],
     },

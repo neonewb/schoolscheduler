@@ -70,7 +70,6 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
                 ...clas.lessons,
                 {
                   ...lesson,
-                  classTitle: dropResult.classTitle,
                   dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
                   period: dropResult.period,
                 },
