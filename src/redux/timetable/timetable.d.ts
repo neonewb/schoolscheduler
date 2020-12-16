@@ -5,16 +5,17 @@ export enum TtAcTypes {
   CLEAR_TIMETABLE = 'CLEAR_TIMETABLE',
   SET_TIMETABLE = 'SET_TIMETABLE',
   GET_TIMETABLE = 'GET_TIMETABLE',
+  DROP_LESSON = 'DROP_LESSON',
 }
 
 export type LessonT = {
   id: string
   subject: string
   teacher: string
-  className: string
+  classTitle: string
   numOfLessons: string
   dayOfTheWeek?: DaysOfTheWeekT
-  period?: string
+  period?: number
 }
 
 export type ClassT = {

@@ -6,13 +6,24 @@ import { teal } from '@material-ui/core/colors'
 
 type DroppableComponentPropsT = {
   style: string
+  classTitle: string
+  dayNum: number
+  period: number
   id: string
+  children: any
 }
 
-const DroppableComponent: FC<DroppableComponentPropsT> = ({ style, id }) => {
+const DroppableComponent: FC<DroppableComponentPropsT> = ({
+  style,
+  id,
+  classTitle,
+  dayNum,
+  period,
+  children
+}) => {
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: DragItemTypes.LESSON,
-    drop: () => ({ name: id }),
+    drop: () => ({ classTitle, dayNum, period, id }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -34,7 +45,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({ style, id }) => {
       key={id}
       ref={drop}
       className={style}
-      style={{ ...stylesOnActive }}></div>
+      style={{ ...stylesOnActive }}>{children}</div>
   )
 }
 

@@ -4,6 +4,10 @@ import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
 import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import { grey, teal } from '@material-ui/core/colors'
+import { useSelector } from 'react-redux'
+import { getClasses } from '../../../../redux/timetable/tt.selectors'
+import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
+import DraggableLesson from '../dndScheduleFooter/DraggableLesson'
 
 const useStyles = makeStyles({
   rowDivs: {
@@ -32,11 +36,11 @@ const useStyles = makeStyles({
     height: 50,
     margin: 1,
     border: '1px solid ' + grey[300],
-    borderRadius: 2,
+    borderRadius: 4,
     '&:hover': {
       backgroundColor: teal[50],
       border: '1px solid ' + teal[100],
-      borderRadius: 2,
+      borderRadius: 4,
     },
   },
 })
@@ -51,39 +55,62 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   mySchedule,
 }) => {
   let { maxLessonsPerDay, classes } = mySchedule
-
+  const clsses = useSelector(getClasses)
   const styles = useStyles()
 
   let rows = []
 
   // Create row
-  for (let i = 0; i < classes.length; i++) {
+  for (let classNum = 0; classNum < classes.length; classNum++) {
     let row = []
 
     // Add class names
-    let className = classes[i]
-    if (className.length > 3) {
-      className = className.substring(0, 4)
+    let classTitle = classes[classNum]
+    if (classTitle.length > 3) {
+      classTitle = classTitle.substring(0, 4)
     }
     const key = nanoid()
     row.push(
       <div className={styles.classesNames} key={key}>
-        <Typography>{className}</Typography>
+        <Typography>{classTitle}</Typography>
       </div>
     )
+    
+    const myClass = clsses.find((e) => e.name === classTitle)
 
-    // Add lessons drop components
-    for (let j = 0; j < maxLessonsPerDay; j++) {
+    // Add drop components and lessons if they are
+    for (let period = 0; period < maxLessonsPerDay; period++) {
+      const renderLesson = () => {
+        console.log('renderLesson')
+
+        if (!myClass || myClass?.lessons.length === 0) return null
+        
+        const lesson = myClass.lessons.find(
+          (i) =>
+            i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
+        )
+        
+        return lesson ? <DraggableLesson lesson={lesson} /> : null
+      }
+
       const id = nanoid()
       row.push(
-        <DroppableComponent style={styles.droppableDiv} key={id} id={id} />
+        <DroppableComponent
+          style={styles.droppableDiv}
+          classTitle={classTitle}
+          dayNum={dayNum}
+          period={period}
+          key={id}
+          id={id}>
+            {renderLesson()}
+          </DroppableComponent>
       )
     }
     rows.push(row)
   }
 
   return (
-    <Box>
+    <Box p={1}>
       {rows.map((row) => {
         const cellId = nanoid()
         return (

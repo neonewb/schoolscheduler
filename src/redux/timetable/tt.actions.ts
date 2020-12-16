@@ -1,5 +1,5 @@
 import { ScheduleT } from '../schedules/sched.actions'
-import { TtAcTypes } from './timetable.d'
+import { LessonT, TtAcTypes } from './timetable.d'
 import { TTInitialStateT } from './tt.reducer'
 
 export const manuallyCreateScheduleAC = (schedule: ScheduleT) =>
@@ -29,5 +29,14 @@ export const setTimeTableAC = (timetable: TTInitialStateT) =>
     type: TtAcTypes.SET_TIMETABLE,
     payload: {
       timetable,
+    },
+  } as const)
+
+export const dropLesson = (lesson: LessonT, dropResult: any) =>
+  ({
+    type: TtAcTypes.DROP_LESSON,
+    payload: {
+      lesson,
+      dropResult,
     },
   } as const)

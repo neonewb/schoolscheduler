@@ -8,15 +8,11 @@ import { getNumbersArray } from '../../../../utils/funcs'
 const useStyles = makeStyles({
   rowDivs: {
     display: 'flex',
-    '&:hover $classesNames': {
-      backgroundColor: teal[50],
-      border: '1px solid ' + teal[100],
-      borderRadius: 2,
-    },
   },
   tableHeader: {
     height: 82,
     paddingTop: 8,
+    marginRight: 16
   },
   tableHeadCell: {
     height: 50,
@@ -38,9 +34,9 @@ const useStyles = makeStyles({
     position: 'sticky',
     zIndex: 1,
     display: 'flex',
-    // padding: 8,
     width: '100%',
     maxWidth: '100%',
+    margin: 8
   },
 })
 

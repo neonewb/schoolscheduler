@@ -1,6 +1,5 @@
 import { Paper } from '@material-ui/core'
 import { makeStyles, Typography } from '@material-ui/core'
-import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../../../../redux/rootReducer'
@@ -23,20 +22,9 @@ const useStyles = makeStyles({
     maxWidth: '100%',
     height: 90,
     overflow: 'auto',
-  },
-  lessonPaper: {
-    width: 50,
-    minWidth: 50,
-    maxWidth: 50,
-    height: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 8,
-    '&:hover': {
-      background: teal[50],
-      cursor: 'grab',
-    },
+    '& div': {
+      margin: 8
+    }
   },
   margin: {
     marginRight: 8,
@@ -53,12 +41,7 @@ const DnDScheduleFooter: FC = () => {
 
       <div className={styles.lessons}>
         {lessons.map((lesson) => (
-          
-          <DraggableLesson
-            key={lesson.id}
-            style={styles.lessonPaper}
-            lesson={lesson}
-          />
+          <DraggableLesson key={lesson.id} lesson={lesson} />
         ))}
       </div>
     </Paper>

@@ -1,21 +1,49 @@
-import { Box, Paper, Popover, Typography } from '@material-ui/core'
+import { Box, makeStyles, Paper, Popover, Typography } from '@material-ui/core'
+import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
+import { useDispatch } from 'react-redux'
 import { LessonT } from '../../../../redux/timetable/timetable'
+import { dropLesson } from '../../../../redux/timetable/tt.actions'
 import { DragItemTypes } from '../../../../utils/DragItemsTypes'
+
+const useStyles = makeStyles({
+  lessonPaper: {
+    width: 48,
+    minWidth: 48,
+    maxWidth: 48,
+    height: 48,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '&:hover': {
+      background: teal[50],
+      cursor: 'grab',
+    },
+  },
+})
 
 type DraggableLessonPropsT = {
   lesson: LessonT
-  style: string
 }
 
-const DraggableLesson: FC<DraggableLessonPropsT> = ({ style, lesson }) => {
+const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson }) => {
+  const styles = useStyles()
+const dispatch = useDispatch()
   const [{ isDragging }, drag] = useDrag({
-    item: { name: lesson.id, type: DragItemTypes.LESSON },
+    item: {
+      sbuject: lesson.subject,
+      teacher: lesson.teacher,
+      type: DragItemTypes.LESSON,
+      id: lesson.id,
+    },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult()
       if (item && dropResult) {
-        console.log(`You dropped ${item.name} into ${dropResult.name}!`)
+        console.log(
+          `You dropped ${item.sbuject} ${item.teacher} into ${dropResult.classTitle} ${dropResult.dayNum} ${dropResult.period}!`
+        )
+        dispatch(dropLesson(lesson, dropResult))
       }
     },
     collect: (monitor) => ({
@@ -46,7 +74,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ style, lesson }) => {
       onMouseLeave={handlePopoverClose}
       ref={drag}
       style={{ opacity: opacity }}
-      className={style}>
+      className={styles.lessonPaper}>
       <Typography align={'center'}>{lesson.subject.substring(0, 4)}</Typography>
 
       <Popover
@@ -67,7 +95,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ style, lesson }) => {
         <Box p={1}>
           <Typography>{lesson.subject}</Typography>
           <Typography>{lesson.teacher}</Typography>
-          <Typography>{lesson.className} ({lesson.numOfLessons})</Typography>
+          <Typography>{lesson.classTitle}</Typography>
         </Box>
       </Popover>
     </Paper>
