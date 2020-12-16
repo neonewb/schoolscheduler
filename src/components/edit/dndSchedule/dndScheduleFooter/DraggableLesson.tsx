@@ -5,7 +5,7 @@ import { useDrag } from 'react-dnd'
 import { useDispatch } from 'react-redux'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
-import { DragItemTypes } from '../../../../utils/DragItemsTypes'
+import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
 
 const useStyles = makeStyles({
   lessonPaper: {
@@ -40,11 +40,8 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson }) => {
       id: lesson.id,
     },
     end: (item, monitor) => {
-      const dropResult = monitor.getDropResult()
+      const dropResult: DropResultT = monitor.getDropResult()
       if (item && dropResult) {
-        console.log(
-          `You dropped ${item.sbuject} ${item.teacher} into ${dropResult.classTitle} ${dropResult.dayNum} ${dropResult.period}!`
-        )
         dispatch(dropLesson(lesson, dropResult))
       }
     },

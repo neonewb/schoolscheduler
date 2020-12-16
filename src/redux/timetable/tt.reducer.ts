@@ -39,7 +39,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             subject: load.subject,
             teacher: load.teacher,
             classTitle: load.className,
-            numOfLessons: load.lessons,
+            numOfLessons: Number(load.lessons),
           })
         })
         break
@@ -64,16 +64,36 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
           if (clas.name !== dropResult.classTitle) {
             return clas
           } else {
+            
+            clas.lessons = clas.lessons.filter((el) => el.id !== lesson.id)
+
             return {
               ...clas,
               lessons: [
                 ...clas.lessons,
                 {
                   ...lesson,
+                  id: dropResult.id,
                   dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
                   period: dropResult.period,
                 },
               ],
+            }
+          }
+        })
+
+        draft.lessonsTT = draft.lessonsTT.map((el) => {
+          if (el.id !== lesson.id) {
+            return el
+          } else if (el.numOfLessons <= 1) {
+            return {
+              ...el,
+              numOfLessons: 0,
+            }
+          } else {
+            return {
+              ...el,
+              numOfLessons: el.numOfLessons - 1,
             }
           }
         })

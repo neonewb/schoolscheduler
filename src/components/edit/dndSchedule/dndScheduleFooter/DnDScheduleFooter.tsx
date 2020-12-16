@@ -23,8 +23,8 @@ const useStyles = makeStyles({
     height: 90,
     overflow: 'auto',
     '& div': {
-      margin: 8
-    }
+      margin: 8,
+    },
   },
   margin: {
     marginRight: 8,
@@ -40,9 +40,12 @@ const DnDScheduleFooter: FC = () => {
       <Typography className={styles.margin}>Lessons:</Typography>
 
       <div className={styles.lessons}>
-        {lessons.map((lesson) => (
-          <DraggableLesson key={lesson.id} lesson={lesson} />
-        ))}
+        {lessons.map((lesson) => {
+          if (lesson.numOfLessons !== 0) {
+            return <DraggableLesson key={lesson.id} lesson={lesson} />
+          }
+          return null
+        })}
       </div>
     </Paper>
   )

@@ -13,7 +13,7 @@ export type LessonT = {
   subject: string
   teacher: string
   classTitle: string
-  numOfLessons: string
+  numOfLessons: number
   dayOfTheWeek?: DaysOfTheWeekT
   period?: number
 }
@@ -27,3 +27,4 @@ export type TeacherT = {
   name: string
   lessons: Array<LessonT>
 }
+

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useDrop } from 'react-dnd'
-import { DragItemTypes } from '../../../../utils/DragItemsTypes'
+import { DragItemTypes } from '../../../../utils/DragDropTypes'
 import theme from '../../../../styles/theme'
 import { teal } from '@material-ui/core/colors'
 import { ClassT } from '../../../../redux/timetable/timetable'
@@ -33,6 +33,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
     if (myClass?.lessons.length === 0) return true
     return true
   }
+
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: DragItemTypes.LESSON,
     canDrop: (item) => canLessonDrop(item, classTitle, myClass),

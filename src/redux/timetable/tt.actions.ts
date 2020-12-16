@@ -1,3 +1,4 @@
+import { DropResultT } from '../../utils/DragDropTypes'
 import { ScheduleT } from '../schedules/sched.actions'
 import { LessonT, TtAcTypes } from './timetable.d'
 import { TTInitialStateT } from './tt.reducer'
@@ -32,7 +33,7 @@ export const setTimeTableAC = (timetable: TTInitialStateT) =>
     },
   } as const)
 
-export const dropLesson = (lesson: LessonT, dropResult: any) =>
+export const dropLesson = (lesson: LessonT, dropResult: DropResultT) =>
   ({
     type: TtAcTypes.DROP_LESSON,
     payload: {
