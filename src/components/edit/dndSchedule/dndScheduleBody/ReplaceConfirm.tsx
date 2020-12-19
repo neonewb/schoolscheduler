@@ -1,27 +1,46 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
+import {
+  closeReplaceConfirm,
+  isOpenReplace,
+} from '../../../../effector/replaceStore'
+import { useStore } from 'effector-react'
 import React, { FC } from 'react'
-import { useDispatch } from 'react-redux'
+import ReactDOM from 'react-dom'
 
-type ReplaceConfirmPropsT = {
-  isOpen: boolean
-  handleClose: () => void
+export const getConfirmReplace = () => {
+  return new Promise<boolean>((resolve, reject) => {
+    ReactDOM.render(
+      <ReplaceConfirm resolve={resolve} />,
+      document.getElementById('modal')
+    )
+  })
 }
 
-export const ReplaceConfirm: FC<ReplaceConfirmPropsT> = ({ isOpen, handleClose }) => {
-  const dispatch = useDispatch()
+type ReplaceConfirmProps = {
+  resolve: (value: boolean | PromiseLike<boolean>) => void
+}
 
-  const delConfirm = () => {
-    // dispatch(deleteDocsFromCollectionAC())
-    handleClose()
+export const ReplaceConfirm: FC<ReplaceConfirmProps> = ({ resolve }) => {
+  const isOpen = useStore(isOpenReplace)
+
+  const replaceConfirm = () => {
+    resolve(true)
+    closeReplaceConfirm()
+  }
+
+  const handleClose = () => {
+    resolve(false)
+    closeReplaceConfirm()
   }
 
   return (
     <Dialog
+      transitionDuration={100}
       open={isOpen}
       onClose={handleClose}
       aria-labelledby='alert-dialog-title'>
       <DialogTitle id='alert-dialog-title'>
-        {'Are you sure you want to replace lesson?'}
+        Are you sure you want to replace lesson?
       </DialogTitle>
       <DialogActions>
         <Button variant='contained' onClick={handleClose} color='primary'>
@@ -30,7 +49,7 @@ export const ReplaceConfirm: FC<ReplaceConfirmPropsT> = ({ isOpen, handleClose }
         <Button
           variant='contained'
           onClick={() => {
-            delConfirm()
+            replaceConfirm()
           }}
           color='secondary'>
           Yes

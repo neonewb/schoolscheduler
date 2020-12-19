@@ -75,20 +75,21 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
         <Typography>{classTitle}</Typography>
       </div>
     )
-    
+
     const myClass = clsses.find((e) => e.name === classTitle)
 
     // Add drop components and lessons if they are
     for (let period = 0; period < maxLessonsPerDay; period++) {
       const renderLesson = () => {
         if (!myClass || myClass?.lessons.length === 0) return null
-        
+
         const lesson = myClass.lessons.find(
-          (i) =>
-            i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
+          (i) => i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
         )
-        
-        return lesson ? <DraggableLesson lesson={lesson} source={'timetable'}/> : null
+
+        return lesson ? (
+          <DraggableLesson lesson={lesson} source={'timetable'} />
+        ) : null
       }
 
       const id = nanoid()
@@ -101,8 +102,8 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
           key={id}
           myClass={myClass}
           id={id}>
-            {renderLesson()}
-          </DroppableComponent>
+          {renderLesson()}
+        </DroppableComponent>
       )
     }
     rows.push(row)

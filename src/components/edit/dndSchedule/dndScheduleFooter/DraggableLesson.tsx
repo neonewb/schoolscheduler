@@ -3,11 +3,13 @@ import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
+import { openReplaceConfirm } from '../../../../effector/replaceStore'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
 import { getClassLessons } from '../../../../redux/timetable/tt.selectors'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
+import { getConfirmReplace } from '../dndScheduleBody/ReplaceConfirm'
 
 const useStyles = makeStyles({
   lessonPaper: {
@@ -44,7 +46,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
       type: DragItemTypes.LESSON,
       id: lesson.id,
     },
-    end: (item, monitor) => {
+    end: async (item, monitor) => {
       const dropResult: DropResultT = monitor.getDropResult()
       if (item && dropResult) {
         if (
@@ -65,8 +67,9 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
                 les.period === dropResult.period
             )
             if (isMatch) {
-              console.log(isMatch)
-              
+              openReplaceConfirm()
+              const confirm = await getConfirmReplace()
+              console.log(confirm)
             } else {
               dispatch(dropLesson(lesson, dropResult, item.source))
             }

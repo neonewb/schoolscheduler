@@ -42,7 +42,13 @@ const DnDScheduleFooter: FC = () => {
       <div className={styles.lessons}>
         {lessons.map((lesson) => {
           if (lesson.numOfLessons !== 0) {
-            return <DraggableLesson key={lesson.id} lesson={lesson} source={'footer'}/>
+            return (
+              <DraggableLesson
+                key={lesson.id}
+                lesson={lesson}
+                source={'footer'}
+              />
+            )
           }
           return null
         })}

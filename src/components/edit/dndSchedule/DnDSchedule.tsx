@@ -6,6 +6,7 @@ import { ScheduleT } from '../../../redux/schedules/sched.actions'
 import { useSelector } from 'react-redux'
 import { AppStateType } from '../../../redux/rootReducer'
 import { hasTimetableSel } from '../../../redux/schedules/sched.selectors'
+import { ReplaceConfirm } from './dndScheduleBody/ReplaceConfirm'
 
 type DnDScheduleProps = {
   mySchedule: ScheduleT
@@ -19,6 +20,7 @@ const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
       <div>
         <DnDScheduleBody mySchedule={mySchedule} />
         <DnDScheduleFooter />
+        {/* <ReplaceConfirm /> */}
       </div>
     )
   } else {
