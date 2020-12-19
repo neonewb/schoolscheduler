@@ -58,30 +58,55 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         break
 
       case TtAcTypes.DROP_LESSON: {
-        const { lesson, dropResult } = action.payload
+        const { lesson, dropResult, source } = action.payload
 
         draft.classesTT = draft.classesTT.map((clas) => {
           if (clas.name !== dropResult.classTitle) {
             return clas
           } else {
-            
-            clas.lessons = clas.lessons.filter((el) => el.id !== lesson.id)
-
-            return {
-              ...clas,
-              lessons: [
-                ...clas.lessons,
-                {
-                  ...lesson,
-                  id: dropResult.id,
-                  dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
-                  period: dropResult.period,
-                },
-              ],
+            if (source === 'footer') {
+              return {
+                ...clas,
+                lessons: [
+                  ...clas.lessons,
+                  // Create new lesson
+                  {
+                    subject: lesson.subject,
+                    teacher: lesson.teacher,
+                    classTitle: lesson.classTitle,
+                    numOfLessons: lesson.numOfLessons,
+                    id: dropResult.id,
+                    dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
+                    period: dropResult.period,
+                  },
+                ],
+              }
+            } else {
+              return {
+                ...clas,
+                lessons: clas.lessons.map((lessn) => {
+                  if (
+                    lessn.dayOfTheWeek === lesson.dayOfTheWeek &&
+                    lessn.period === lesson.period
+                  ) {
+                    return {
+                      // Edit exist lesson
+                      ...lessn,
+                      id: dropResult.id,
+                      numOfLessons: lesson.numOfLessons,
+                      dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
+                      period: dropResult.period,
+                    }
+                  } else {
+                    return lessn
+                  }
+                }),
+              }
             }
           }
         })
 
+        // Edit number of lessons
         draft.lessonsTT = draft.lessonsTT.map((el) => {
           if (el.id !== lesson.id) {
             return el
@@ -97,6 +122,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             }
           }
         })
+
         break
       }
 

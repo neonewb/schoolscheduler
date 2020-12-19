@@ -1,18 +1,17 @@
 import { Button, Dialog, DialogActions, DialogTitle } from '@material-ui/core'
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteDocsFromCollectionAC } from '../../redux/schedules/sched.actions'
 
-type DeleteConfirmPropsT = {
+type ReplaceConfirmPropsT = {
   isOpen: boolean
   handleClose: () => void
 }
 
-const DeleteConfirm: FC<DeleteConfirmPropsT> = ({ isOpen, handleClose }) => {
+export const ReplaceConfirm: FC<ReplaceConfirmPropsT> = ({ isOpen, handleClose }) => {
   const dispatch = useDispatch()
 
   const delConfirm = () => {
-    dispatch(deleteDocsFromCollectionAC())
+    // dispatch(deleteDocsFromCollectionAC())
     handleClose()
   }
 
@@ -22,7 +21,7 @@ const DeleteConfirm: FC<DeleteConfirmPropsT> = ({ isOpen, handleClose }) => {
       onClose={handleClose}
       aria-labelledby='alert-dialog-title'>
       <DialogTitle id='alert-dialog-title'>
-        {'Are you sure you want to delete choosen schedules?'}
+        {'Are you sure you want to replace lesson?'}
       </DialogTitle>
       <DialogActions>
         <Button variant='contained' onClick={handleClose} color='primary'>
@@ -40,5 +39,3 @@ const DeleteConfirm: FC<DeleteConfirmPropsT> = ({ isOpen, handleClose }) => {
     </Dialog>
   )
 }
-
-export default DeleteConfirm

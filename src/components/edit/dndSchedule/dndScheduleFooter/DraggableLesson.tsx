@@ -2,9 +2,11 @@ import { Box, makeStyles, Paper, Popover, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
+import { getClassLessons } from '../../../../redux/timetable/tt.selectors'
+import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
 
 const useStyles = makeStyles({
@@ -25,14 +27,17 @@ const useStyles = makeStyles({
 
 type DraggableLessonPropsT = {
   lesson: LessonT
+  source: 'footer' | 'timetable'
 }
 
-const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson }) => {
+const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
   const styles = useStyles()
   const dispatch = useDispatch()
+  const lessons = useSelector(getClassLessons(lesson.classTitle))
 
   const [{ isDragging }, drag] = useDrag({
     item: {
+      source,
       sbuject: lesson.subject,
       teacher: lesson.teacher,
       classTitle: lesson.classTitle,
@@ -42,7 +47,33 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson }) => {
     end: (item, monitor) => {
       const dropResult: DropResultT = monitor.getDropResult()
       if (item && dropResult) {
-        dispatch(dropLesson(lesson, dropResult))
+        if (
+          !(
+            // Check lesson didn't drop on itself
+            (
+              lesson.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+              lesson.period === dropResult.period
+            )
+          )
+        ) {
+          if (!lessons) {
+            dispatch(dropLesson(lesson, dropResult, item.source))
+          } else if (lessons.length > 0) {
+            const isMatch = lessons.some(
+              (les) =>
+                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+                les.period === dropResult.period
+            )
+            if (isMatch) {
+              console.log(isMatch)
+              
+            } else {
+              dispatch(dropLesson(lesson, dropResult, item.source))
+            }
+          } else {
+            dispatch(dropLesson(lesson, dropResult, item.source))
+          }
+        }
       }
     },
     collect: (monitor) => ({

@@ -88,7 +88,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
             i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
         )
         
-        return lesson ? <DraggableLesson lesson={lesson} /> : null
+        return lesson ? <DraggableLesson lesson={lesson} source={'timetable'}/> : null
       }
 
       const id = nanoid()
