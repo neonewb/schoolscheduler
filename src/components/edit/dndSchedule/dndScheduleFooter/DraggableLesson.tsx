@@ -9,7 +9,7 @@ import { dropLesson } from '../../../../redux/timetable/tt.actions'
 import { getClassLessons } from '../../../../redux/timetable/tt.selectors'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
-import { getConfirmReplace } from '../dndScheduleBody/ReplaceConfirm'
+
 
 const useStyles = makeStyles({
   lessonPaper: {
@@ -68,8 +68,8 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
             )
             if (isMatch) {
               openReplaceConfirm()
-              const confirm = await getConfirmReplace()
-              console.log(confirm)
+              // const confirm = await getConfirmReplace()
+              // console.log(confirm)
             } else {
               dispatch(dropLesson(lesson, dropResult, item.source))
             }

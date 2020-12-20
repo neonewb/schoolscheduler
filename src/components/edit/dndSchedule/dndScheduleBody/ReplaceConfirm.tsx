@@ -5,31 +5,17 @@ import {
 } from '../../../../effector/replaceStore'
 import { useStore } from 'effector-react'
 import React, { FC } from 'react'
-import ReactDOM from 'react-dom'
 
-export const getConfirmReplace = () => {
-  return new Promise<boolean>((resolve, reject) => {
-    ReactDOM.render(
-      <ReplaceConfirm resolve={resolve} />,
-      document.getElementById('modal')
-    )
-  })
-}
-
-type ReplaceConfirmProps = {
-  resolve: (value: boolean | PromiseLike<boolean>) => void
-}
-
-export const ReplaceConfirm: FC<ReplaceConfirmProps> = ({ resolve }) => {
+export const ReplaceConfirm: FC = () => {
   const isOpen = useStore(isOpenReplace)
 
   const replaceConfirm = () => {
-    resolve(true)
+
     closeReplaceConfirm()
   }
 
   const handleClose = () => {
-    resolve(false)
+
     closeReplaceConfirm()
   }
 
