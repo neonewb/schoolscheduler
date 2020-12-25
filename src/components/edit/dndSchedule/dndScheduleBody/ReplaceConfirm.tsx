@@ -10,12 +10,12 @@ export const ReplaceConfirm: FC = () => {
   const isOpen = useStore(isOpenReplace)
 
   const replaceConfirm = () => {
-
+    // to do confirm
     closeReplaceConfirm()
   }
 
   const handleClose = () => {
-
+    // to do cancel
     closeReplaceConfirm()
   }
 

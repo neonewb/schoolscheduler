@@ -23,6 +23,7 @@ import {
   getChoosenScheduleID,
   getChoosenSchedules,
 } from './sched.selectors'
+import { showSnack } from '../../components/Notifier'
 
 function* addDocToCollection(action: AddDocToCollectionT) {
   const payload = action.payload
@@ -98,10 +99,12 @@ function* getDocFromDB(action: GetDocFromDBT) {
     } else {
       // doc.data() will be undefined in this case
       console.error('No such document!')
+     showSnack('No such document!', 'error')
       yield put(setIsLoadingFalse())
     }
   } catch (error) {
     console.error('Error get doc: ', error)
+    showSnack(`Error: ${error.message}`, 'error')
     yield put(setIsLoadingFalse())
   }
 }
@@ -131,22 +134,23 @@ function* getDocsFromDB(action: GetDocsFromDBT) {
     }
   } catch (error) {
     console.error('Error get docs: ', error)
+    showSnack(`Error: ${error.message}`, 'error')
   }
 }
 
 function* deleteDocsFromCollection() {
   const choosenSchedules: Array<ScheduleT> = yield select(getChoosenSchedules)
-
-  yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
-  yield put(delDocsFromRxStateAC())
-}
-
-function* deleteDocFromCollectionS(id: string) {
   try {
-    yield call(dbApi.delDoc, id)
+    yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
+    yield put(delDocsFromRxStateAC())
+    showSnack(`${choosenSchedules.length} document(s) removed`, 'default')
   } catch (error) {
     yield put(delDocFromCollFailedAC(error))
   }
+}
+
+function* deleteDocFromCollectionS(id: string) {
+  yield call(dbApi.delDoc, id)
 }
 
 function* updateField(action: UpdateFieldT) {
@@ -156,7 +160,7 @@ function* updateField(action: UpdateFieldT) {
     yield call(dbApi.updateDoc, id, {
       [action.payload.field]: action.payload.content,
     })
-    console.log(`Schedule ${action.payload.field} successfully updated!`)
+    showSnack(`Schedule ${action.payload.field} updated`, 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -171,7 +175,7 @@ function* setCheckedClassesS() {
       checked: schedule.checked,
       isOpenCustomClassNames: schedule.isOpenCustomClassNames,
     })
-    console.log(`Schedule checked and classes successfully updated!`)
+    showSnack('Checked and classes updated', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -184,7 +188,7 @@ function* setSubjectS() {
     yield call(dbApi.updateDoc, schedule.id, {
       subjects: schedule.subjects,
     })
-    console.log(`Schedule subjects successfully updated!`)
+    showSnack('Subjects updated', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -197,7 +201,7 @@ function* setTeacherS() {
     yield call(dbApi.updateDoc, schedule.id, {
       teachers: schedule.teachers,
     })
-    console.log(`Schedule teachers successfully updated!`)
+    showSnack('Teachers updated', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
   }
@@ -210,7 +214,7 @@ function* setLoadS() {
     yield call(dbApi.updateDoc, schedule.id, {
       load: schedule.load,
     })
-    console.log(`Schedule load successfully updated!`)
+    showSnack('Load updated', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
   }

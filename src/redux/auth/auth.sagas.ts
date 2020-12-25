@@ -1,5 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
 import { AuthAPI } from '../../api/authApi'
+import { showSnack } from '../../components/Notifier'
 import { clearRxStateAC } from '../schedules/sched.actions'
 import {
   logOutUserFailedAC,
@@ -19,6 +20,7 @@ function* signUp(action: SignUpUserT) {
       action.payload.password
     )
     yield put(signUpUserSuccessAC(user))
+    showSnack(`Hello, ${user.displayName || user.email}!`, 'info')
   } catch (error) {
     yield put(signUpUserFailedAC(error))
   }
@@ -32,6 +34,7 @@ function* logIn(action: LogInUserT) {
       action.payload.password
     )
     yield put(logInUserSuccessAC(user))
+    showSnack(`Hello, ${user.displayName || user.email}!`, 'info')
   } catch (error) {
     yield put(logInUserFailedAC(error))
   }
@@ -50,6 +53,7 @@ function* logInWithGoogle() {
   try {
     const user: firebase.User = yield call(AuthAPI.googleSignIn)
     yield put(logInUserSuccessAC(user))
+    showSnack(`Hello, ${user.displayName || user.email}!`, 'info')
   } catch (error) {
     yield put(logInUserFailedAC(error))
   }

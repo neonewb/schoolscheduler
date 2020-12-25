@@ -13,6 +13,7 @@ import {
 } from '../redux/auth/auth.actions'
 import { makeStyles } from '@material-ui/core'
 import Edit from './edit/Edit'
+import { Notifier } from './Notifier'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +62,8 @@ const App: FC = () => {
       <Route path='/edit/:id'>
         <Edit />
       </Route>
+      
+      <Notifier />
     </Grid>
   )
 }

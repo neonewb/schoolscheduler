@@ -2,6 +2,7 @@ import { TextField } from '@material-ui/core'
 import React, { FC, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 import { updateFieldAC } from '../../redux/schedules/sched.actions'
 import { useStylesEdit } from '../../styles/stylesForEdit'
 
@@ -15,6 +16,7 @@ type InputT = {
 export const ScheduleTitle: FC<ScheduleTitleProps> = ({
   propTitle,
 }) => {
+  useDocumentTitle(propTitle)
   const classes = useStylesEdit()
 
   const { register, handleSubmit, watch } = useForm<InputT>({

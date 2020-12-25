@@ -1,5 +1,6 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React, { FC } from 'react'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 
 const useStyles = makeStyles((theme) => ({
   mainPage: {
@@ -8,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const MainPageLeft: FC = () => {
+  useDocumentTitle('Neo Time Table')
   const classes = useStyles()
 
   return (

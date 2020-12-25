@@ -6,6 +6,7 @@ import { ScheduleT, LoadT } from './sched.actions'
 import { Reducer } from 'redux'
 import { getChoosenSchedID, getChoosenScheduleS } from './sched.selectors'
 import { InferActionsTypes } from '../rootReducer'
+import { showSnack } from '../../components/Notifier'
 
 type SchedActionsTypes = InferActionsTypes<typeof SchedActions>
 
@@ -23,6 +24,7 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
 ) => {
   switch (action.type) {
     case 'ADD_DOC_TO_COLLECTION_SUCCESS':
+      showSnack('New schedule created', 'success')
       return {
         ...state,
         schedules: [...state.schedules, { ...action.payload }],
@@ -55,6 +57,7 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
       console.error(action.error.name)
       console.error(action.error.code)
       console.error(action.error.message)
+      showSnack(`Error: ${action.error.message}`, 'error')
       return state
 
     case 'CHOOSE_SCHEDULE':

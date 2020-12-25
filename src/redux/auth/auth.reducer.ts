@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import { showSnack } from '../../components/Notifier'
 import { InferActionsTypes } from '../rootReducer'
 import * as AuthActions from './auth.actions'
 
@@ -53,6 +54,7 @@ const authReducer: Reducer<AuthInitialStateT, AuthActionsTypes> = (
       console.error(action.error.name)
       console.error(action.error.code)
       console.error(action.error.message)
+      showSnack(`Error: ${action.error.message}`, 'error')
       return state
 
     default:

@@ -15,7 +15,6 @@ import MUIDataTable from 'mui-datatables'
 
 const useStyles = makeStyles((theme) => ({
   textInput: {
-    minWidth: 1000,
     display: 'flex',
     alignItems: 'center',
     margin: 8,
@@ -120,6 +119,7 @@ const Load: FC<LoadProps> = ({ mySchedule }) => {
     filterType: 'checkbox',
     jumpToPage: true,
     print: false,
+    elevation: 0,
     onRowsDelete: handleDeleteLoad,
   } as const
 

@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC } from 'react'
 import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Divider } from '@material-ui/core'
+import { Button, Divider, Paper } from '@material-ui/core'
 import ClassesTable from './classesTable/ClassesTable'
 import CustomClassesNames from './CustomClassesNames'
 import { deepPurple, teal } from '@material-ui/core/colors'
@@ -25,7 +25,7 @@ import WatchLaterRoundedIcon from '@material-ui/icons/WatchLaterRounded'
 import Load from './load/Load'
 import { manuallyCreateScheduleAC } from '../../../redux/timetable/tt.actions'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100wv',
     margin: 16,
@@ -57,7 +57,11 @@ const useStyles = makeStyles({
       backgroundColor: deepPurple[400],
     },
   },
-})
+  paper: {
+    marginTop: theme.spacing(1),
+    padding: theme.spacing(1),
+  },
+}))
 
 type SettingsScheduleProps = {
   isOpen: boolean
@@ -128,63 +132,69 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
   if (isOpen) {
     return (
       <div className={classes.root}>
-        <div className={classes.section}>
-          <DateRangeRoundedIcon fontSize='large' color='primary' />
-          <Typography variant='h6' id='days-slider' gutterBottom>
-            Number of days
-          </Typography>
-        </div>
+        <Paper className={classes.paper} elevation={2}>
+          <div className={classes.section}>
+            <DateRangeRoundedIcon fontSize='large' color='primary' />
+            <Typography variant='h6' id='days-slider' gutterBottom>
+              Number of days
+            </Typography>
+          </div>
 
-        <Slider
-          className={classes.slider}
-          defaultValue={6}
-          onChangeCommitted={handleChangeNumOfDays}
-          aria-labelledby='days-slider'
-          valueLabelDisplay='auto'
-          step={1}
-          marks={marksDays}
-          min={1}
-          max={7}
-        />
+          <Slider
+            className={classes.slider}
+            defaultValue={6}
+            onChangeCommitted={handleChangeNumOfDays}
+            aria-labelledby='days-slider'
+            valueLabelDisplay='auto'
+            step={1}
+            marks={marksDays}
+            min={1}
+            max={7}
+          />
+        </Paper>
 
-        <Divider className={classes.divider} />
+        <Paper className={classes.paper} elevation={2}>
+          <div className={classes.section}>
+            <TodayRoundedIcon fontSize='large' color='primary' />
+            <Typography variant='h6' id='lessons-slider' gutterBottom>
+              Maximum lessons per day
+            </Typography>
+          </div>
+          <Slider
+            className={classes.slider}
+            defaultValue={10}
+            onChangeCommitted={handleChangeMaxLessons}
+            aria-labelledby='lessons-slider'
+            valueLabelDisplay='auto'
+            step={1}
+            marks={marksLessons}
+            min={1}
+            max={20}
+          />
+        </Paper>
 
-        <div className={classes.section}>
-          <TodayRoundedIcon fontSize='large' color='primary' />
-          <Typography variant='h6' id='lessons-slider' gutterBottom>
-            Maximum lessons per day
-          </Typography>
-        </div>
-        <Slider
-          className={classes.slider}
-          defaultValue={10}
-          onChangeCommitted={handleChangeMaxLessons}
-          aria-labelledby='lessons-slider'
-          valueLabelDisplay='auto'
-          step={1}
-          marks={marksLessons}
-          min={1}
-          max={20}
-        />
-
-        <Divider className={classes.divider} />
         {mySchedule.isOpenCustomClassNames ? (
           <>
-            <div className={classes.section}>
-              <SupervisorAccountRoundedIcon fontSize='large' color='primary' />
-              <Typography variant='h6' id='classes' gutterBottom>
-                Set custom classes or{' '}
-                <Button
-                  className={classes.button}
-                  onClick={handleOpenCustomClassNames}>
-                  choose classes
-                </Button>
-              </Typography>
-            </div>
-            <CustomClassesNames classes={mySchedule.classes} />
+            <Paper className={classes.paper} elevation={2}>
+              <div className={classes.section}>
+                <SupervisorAccountRoundedIcon
+                  fontSize='large'
+                  color='primary'
+                />
+                <Typography variant='h6' id='classes' gutterBottom>
+                  Set custom classes or{' '}
+                  <Button
+                    className={classes.button}
+                    onClick={handleOpenCustomClassNames}>
+                    choose classes
+                  </Button>
+                </Typography>
+              </div>
+              <CustomClassesNames classes={mySchedule.classes} />
+            </Paper>
           </>
         ) : (
-          <>
+          <Paper className={classes.paper} elevation={2}>
             <div className={classes.section}>
               <SupervisorAccountRoundedIcon fontSize='large' color='primary' />
               <Typography variant='h6' id='classes' gutterBottom>
@@ -197,38 +207,39 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
               </Typography>
             </div>
             <ClassesTable mySchedule={mySchedule} />
-          </>
+          </Paper>
         )}
 
-        <Divider className={classes.divider} />
-        <div className={classes.section}>
-          <BookRoundedIcon fontSize='large' color='primary' />
-          <Typography variant='h6' id='subjects' gutterBottom>
-            Subjects
-          </Typography>
-        </div>
-        <Subjects subjects={mySchedule.subjects} />
+        <Paper className={classes.paper} elevation={2}>
+          <div className={classes.section}>
+            <BookRoundedIcon fontSize='large' color='primary' />
+            <Typography variant='h6' id='subjects' gutterBottom>
+              Subjects
+            </Typography>
+          </div>
+          <Subjects subjects={mySchedule.subjects} />
+        </Paper>
 
-        <Divider className={classes.divider} />
+        <Paper className={classes.paper} elevation={2}>
+          <div className={classes.section}>
+            <SchoolRoundedIcon fontSize='large' color='primary' />
+            <Typography variant='h6' id='teachers' gutterBottom>
+              Teachers
+            </Typography>
+          </div>
+          <Teachers teachers={mySchedule.teachers} />
+        </Paper>
 
-        <div className={classes.section}>
-          <SchoolRoundedIcon fontSize='large' color='primary' />
-          <Typography variant='h6' id='teachers' gutterBottom>
-            Teachers
-          </Typography>
-        </div>
-        <Teachers teachers={mySchedule.teachers} />
+        <Paper className={classes.paper} elevation={2}>
+          <div className={classes.section}>
+            <WatchLaterRoundedIcon fontSize='large' color='primary' />
+            <Typography variant='h6' id='load' gutterBottom>
+              Load
+            </Typography>
+          </div>
 
-        <Divider className={classes.divider} />
-
-        <div className={classes.section}>
-          <WatchLaterRoundedIcon fontSize='large' color='primary' />
-          <Typography variant='h6' id='load' gutterBottom>
-            Load
-          </Typography>
-        </div>
-
-        <Load mySchedule={mySchedule} />
+          <Load mySchedule={mySchedule} />
+        </Paper>
 
         <Button
           className={classes.finalButton}

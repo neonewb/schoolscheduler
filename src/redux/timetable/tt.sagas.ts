@@ -9,6 +9,7 @@ import { setHasTimeTableAC, updateFailedAC } from '../schedules/sched.actions'
 import { dbApi } from '../../api/dbApi'
 import { TtAcTypes } from './timetable.d'
 import { getTimeTableACT, setTimeTableAC } from './tt.actions'
+import { showSnack } from '../../components/Notifier'
 
 function* manuallyCreateTimeTable() {
   const timetable: TTInitialStateT = yield select(getTimetableS)
@@ -19,7 +20,8 @@ function* manuallyCreateTimeTable() {
       timetable: timetable,
       hasTimeTable: true
     })
-    console.log(`Schedule timetable successfully created!`)
+    console.log(`Timetable successfully created!`)
+    showSnack('Timetable successfully created!', 'success')
     yield put(setHasTimeTableAC(id))
   } catch (error) {
     yield put(updateFailedAC(error))

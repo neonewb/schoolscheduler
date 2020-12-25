@@ -3,7 +3,7 @@ import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
 import { useDispatch, useSelector } from 'react-redux'
-import { openReplaceConfirm } from '../../../../effector/replaceStore'
+import { openReplaceConfirm, setReplaceStore } from '../../../../effector/replaceStore'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
 import { getClassLessons } from '../../../../redux/timetable/tt.selectors'
@@ -68,8 +68,8 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
             )
             if (isMatch) {
               openReplaceConfirm()
-              // const confirm = await getConfirmReplace()
-              // console.log(confirm)
+              //@ts-ignore
+              setReplaceStore(lesson, dropResult, item.source)
             } else {
               dispatch(dropLesson(lesson, dropResult, item.source))
             }

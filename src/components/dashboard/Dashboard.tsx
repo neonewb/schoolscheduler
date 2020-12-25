@@ -34,8 +34,11 @@ import { useStylesDashboard } from '../../styles/stylesDashboard'
 import { AppStateType } from '../../redux/rootReducer'
 import { getUserS } from '../../redux/auth/auth.selectors'
 import { getSchedulesS } from '../../redux/schedules/sched.selectors'
+import { useDocumentTitle } from '../../hooks/useDocumentTitle'
 
 const Dashboard: FC = () => {
+  useDocumentTitle('Dashboard')
+
   const classes = useStylesDashboard()
   const fixedHeightWidthPaper = clsx(classes.paper, classes.fixedHeightWidth)
 
