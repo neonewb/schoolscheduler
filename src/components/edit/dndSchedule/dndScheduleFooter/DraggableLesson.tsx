@@ -2,14 +2,11 @@ import { Box, makeStyles, Paper, Popover, Typography } from '@material-ui/core'
 import { teal } from '@material-ui/core/colors'
 import React, { FC } from 'react'
 import { useDrag } from 'react-dnd'
-import { useDispatch, useSelector } from 'react-redux'
-import { openReplaceConfirm, setReplaceStore } from '../../../../effector/replaceStore'
+import { useDispatch } from 'react-redux'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
-import { getClassLessons } from '../../../../redux/timetable/tt.selectors'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
-
 
 const useStyles = makeStyles({
   lessonPaper: {
@@ -35,7 +32,6 @@ type DraggableLessonPropsT = {
 const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
   const styles = useStyles()
   const dispatch = useDispatch()
-  const lessons = useSelector(getClassLessons(lesson.classTitle))
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -50,32 +46,13 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
       const dropResult: DropResultT = monitor.getDropResult()
       if (item && dropResult) {
         if (
+          // Check lesson didn't drop on itself
           !(
-            // Check lesson didn't drop on itself
-            (
-              lesson.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-              lesson.period === dropResult.period
-            )
+            lesson.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+            lesson.period === dropResult.period
           )
         ) {
-          if (!lessons) {
-            dispatch(dropLesson(lesson, dropResult, item.source))
-          } else if (lessons.length > 0) {
-            const isMatch = lessons.some(
-              (les) =>
-                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-                les.period === dropResult.period
-            )
-            if (isMatch) {
-              openReplaceConfirm()
-              //@ts-ignore
-              setReplaceStore(lesson, dropResult, item.source)
-            } else {
-              dispatch(dropLesson(lesson, dropResult, item.source))
-            }
-          } else {
-            dispatch(dropLesson(lesson, dropResult, item.source))
-          }
+          dispatch(dropLesson(lesson, dropResult, source))
         }
       }
     },

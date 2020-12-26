@@ -2,6 +2,7 @@ import produce, { Draft } from 'immer'
 import { nanoid } from 'nanoid'
 import { Reducer } from 'redux'
 import { daysOfTheWeek } from '../../utils/daysOfTheWeek'
+import { DropResultT } from '../../utils/DragDropTypes'
 import { InferActionsTypes } from '../rootReducer'
 import { ClassT, TeacherT, LessonT } from './timetable'
 import { TtAcTypes } from './timetable.d'
@@ -11,6 +12,13 @@ const TTinitialState = {
   classesTT: [] as ClassT[],
   teachersTT: [] as TeacherT[],
   lessonsTT: [] as LessonT[],
+  conflict: {
+    isOpenModal: false as boolean,
+    lesson: null as LessonT | null,
+    dropResult: null as DropResultT | null,
+    conflictClassLesson: null as LessonT | null,
+    conflictTeacherLesson: null as LessonT | null,
+  },
 } as const
 
 export type TTInitialStateT = typeof TTinitialState
@@ -24,7 +32,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         const { classes, teachers, load: loads } = action.payload.schedule
 
         draft.classesTT = classes.map((className) => ({
-          name: className,
+          title: className,
           lessons: [],
         }))
 
@@ -39,7 +47,8 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             subject: load.subject,
             teacher: load.teacher,
             classTitle: load.className,
-            numOfLessons: Number(load.lessons),
+            currentLessons: Number(load.lessons),
+            maxLessons: Number(load.lessons),
           })
         })
         break
@@ -60,11 +69,66 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
       case TtAcTypes.DROP_LESSON: {
         const { lesson, dropResult, source } = action.payload
 
+        // Check drop conflict
+        const classLessons = draft.classesTT.find(
+          (c) => c.title === lesson.classTitle
+        )?.lessons
+        const teacherLessons = draft.teachersTT.find(
+          (t) => t.name === lesson.teacher
+        )?.lessons
+
+        let isConflict = false
+
+        if (!(classLessons?.length === 0 && teacherLessons?.length === 0)) {
+          const conflictClassLesson = classLessons?.find(
+            (les) =>
+              les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+              les.period === dropResult.period
+          )
+          const conflictTeacherLesson = teacherLessons?.find(
+            (les) =>
+              les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+              les.period === dropResult.period
+          )
+          if (conflictClassLesson || conflictTeacherLesson) {
+            isConflict = true
+            draft.conflict = {
+              isOpenModal: true,
+              lesson: lesson,
+              dropResult: dropResult,
+              conflictClassLesson: conflictClassLesson || null,
+              conflictTeacherLesson: conflictTeacherLesson || null,
+            }
+          }
+        }
+
+        if (isConflict) {
+          break
+        }
+
         draft.classesTT = draft.classesTT.map((clas) => {
-          if (clas.name !== dropResult.classTitle) {
+          if (clas.title !== dropResult.classTitle) {
             return clas
           } else {
-            if (source === 'footer') {
+            if (dropResult.target === 'timetable' && source === 'timetable') {
+              return {
+                ...clas,
+                lessons: clas.lessons.map((lessn) => {
+                  if (lessn.id === lesson.id) {
+                    return {
+                      // Edit exist lesson
+                      ...lessn,
+                      id: dropResult.id,
+                      maxLessons: lesson.maxLessons,
+                      dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
+                      period: dropResult.period,
+                    }
+                  } else {
+                    return lessn
+                  }
+                }),
+              }
+            } else {
               return {
                 ...clas,
                 lessons: [
@@ -74,26 +138,31 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
                     subject: lesson.subject,
                     teacher: lesson.teacher,
                     classTitle: lesson.classTitle,
-                    numOfLessons: lesson.numOfLessons,
+                    maxLessons: lesson.maxLessons,
                     id: dropResult.id,
                     dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
                     period: dropResult.period,
                   },
                 ],
               }
-            } else {
+            }
+          }
+        })
+
+        draft.teachersTT = draft.teachersTT.map((teacher) => {
+          if (teacher.name !== lesson.teacher) {
+            return teacher
+          } else {
+            if (dropResult.target === 'timetable' && source === 'timetable') {
               return {
-                ...clas,
-                lessons: clas.lessons.map((lessn) => {
-                  if (
-                    lessn.dayOfTheWeek === lesson.dayOfTheWeek &&
-                    lessn.period === lesson.period
-                  ) {
+                ...teacher,
+                lessons: teacher.lessons.map((lessn) => {
+                  if (lessn.id === lesson.id) {
                     return {
                       // Edit exist lesson
                       ...lessn,
                       id: dropResult.id,
-                      numOfLessons: lesson.numOfLessons,
+                      maxLessons: lesson.maxLessons,
                       dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
                       period: dropResult.period,
                     }
@@ -102,29 +171,69 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
                   }
                 }),
               }
+            } else {
+              return {
+                ...teacher,
+                lessons: [
+                  ...teacher.lessons,
+                  // Create new lesson
+                  {
+                    subject: lesson.subject,
+                    teacher: lesson.teacher,
+                    classTitle: lesson.classTitle,
+                    maxLessons: lesson.maxLessons,
+                    id: dropResult.id,
+                    dayOfTheWeek: daysOfTheWeek[dropResult.dayNum],
+                    period: dropResult.period,
+                  },
+                ],
+              }
             }
           }
         })
 
         // Edit number of lessons
-        draft.lessonsTT = draft.lessonsTT.map((el) => {
-          if (el.id !== lesson.id) {
-            return el
-          } else if (el.numOfLessons <= 1) {
+        draft.lessonsTT = draft.lessonsTT.map((lessn) => {
+          if (lessn.id !== lesson.id) {
+            return lessn
+          } else if (lessn.currentLessons! <= 1) {
             return {
-              ...el,
-              numOfLessons: 0,
+              ...lessn,
+              currentLessons: 0,
             }
           } else {
             return {
-              ...el,
-              numOfLessons: el.numOfLessons - 1,
+              ...lessn,
+              currentLessons: lessn.currentLessons! - 1,
             }
           }
         })
 
         break
       }
+
+      case TtAcTypes.RESOLVE_CONFLICT:
+        const { answer } = action.payload
+        console.log(answer)
+
+        if (answer) {
+          draft.conflict = {
+            isOpenModal: false,
+            lesson: null,
+            dropResult: null,
+            conflictClassLesson: null,
+            conflictTeacherLesson: null,
+          }
+        } else {
+          draft.conflict = {
+            isOpenModal: false,
+            lesson: null,
+            dropResult: null,
+            conflictClassLesson: null,
+            conflictTeacherLesson: null,
+          }
+        }
+        break
 
       default:
         break

@@ -17,3 +17,4 @@ https://devschooltimetable.web.app
   * React hook form
   * Yup
   * Notistack
+  * NanoID

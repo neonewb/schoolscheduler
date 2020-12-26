@@ -37,7 +37,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: DragItemTypes.LESSON,
     canDrop: (item) => canLessonDrop(item, classTitle, myClass),
-    drop: () => ({ classTitle, dayNum, period, id }),
+    drop: () => ({ classTitle, dayNum, period, id, target: 'timetable' }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),

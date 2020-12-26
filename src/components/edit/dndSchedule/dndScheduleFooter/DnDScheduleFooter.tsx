@@ -41,7 +41,7 @@ const DnDScheduleFooter: FC = () => {
 
       <div className={styles.lessons}>
         {lessons.map((lesson) => {
-          if (lesson.numOfLessons !== 0) {
+          if (lesson.currentLessons !== 0) {
             return (
               <DraggableLesson
                 key={lesson.id}

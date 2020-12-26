@@ -33,16 +33,20 @@ export const setTimeTableAC = (timetable: TTInitialStateT) =>
     },
   } as const)
 
-export const dropLesson = (
-  lesson: LessonT,
-  dropResult: DropResultT,
-  source: 'footer' | 'timetable'
-) =>
+export const dropLesson = (lesson: LessonT, dropResult: DropResultT, source: 'footer' | 'timetable') =>
   ({
     type: TtAcTypes.DROP_LESSON,
     payload: {
       lesson,
       dropResult,
       source,
+    },
+  } as const)
+
+export const resolveConflict = (answer: boolean) =>
+  ({
+    type: TtAcTypes.RESOLVE_CONFLICT,
+    payload: {
+      answer,
     },
   } as const)

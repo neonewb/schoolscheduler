@@ -1,3 +1,5 @@
+import { LessonT } from "../redux/timetable/timetable"
+
 export const DragItemTypes = {
   LESSON: 'lesson',
 } as const
@@ -5,6 +7,7 @@ export const DragItemTypes = {
 export type DropResultT = {
   classTitle: string
   dayNum: number
-  period: number
+  period: LessonT['period']
   id: string
+  target: 'timetable' | 'footer'
 }

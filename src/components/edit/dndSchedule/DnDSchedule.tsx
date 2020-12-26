@@ -7,8 +7,7 @@ import { useSelector } from 'react-redux'
 import { AppStateType } from '../../../redux/rootReducer'
 import { hasTimetableSel } from '../../../redux/schedules/sched.selectors'
 import { ReplaceConfirm } from './dndScheduleBody/ReplaceConfirm'
-import { useStore } from 'effector-react'
-import { isOpenReplace } from '../../../effector/replaceStore'
+import { getIsOpenModal } from '../../../redux/timetable/tt.selectors'
 
 type DnDScheduleProps = {
   mySchedule: ScheduleT
@@ -16,7 +15,7 @@ type DnDScheduleProps = {
 
 const DnDSchedule: FC<DnDScheduleProps> = ({ mySchedule }) => {
   const hasTimeTable = useSelector<AppStateType, boolean>(hasTimetableSel)
-  const isOpen = useStore(isOpenReplace)
+  const isOpen = useSelector(getIsOpenModal)
 
   if (hasTimeTable) {
     return (

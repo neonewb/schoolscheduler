@@ -143,7 +143,7 @@ function* deleteDocsFromCollection() {
   try {
     yield all(choosenSchedules.map((i) => call(deleteDocFromCollectionS, i.id)))
     yield put(delDocsFromRxStateAC())
-    showSnack(`${choosenSchedules.length} document(s) removed`, 'default')
+    showSnack(`${choosenSchedules.length} schedule(s) removed`, 'default')
   } catch (error) {
     yield put(delDocFromCollFailedAC(error))
   }

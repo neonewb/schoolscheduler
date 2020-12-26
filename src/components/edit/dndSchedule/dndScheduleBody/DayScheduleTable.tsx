@@ -76,7 +76,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
       </div>
     )
 
-    const myClass = clsses.find((e) => e.name === classTitle)
+    const myClass = clsses.find((e) => e.title === classTitle)
 
     // Add drop components and lessons if they are
     for (let period = 0; period < maxLessonsPerDay; period++) {
