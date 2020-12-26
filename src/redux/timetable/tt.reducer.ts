@@ -208,11 +208,10 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             }
           }
         })
-
         break
       }
 
-      case TtAcTypes.RESOLVE_CONFLICT:
+      case TtAcTypes.RESOLVE_CONFLICT: {
         const { answer } = action.payload
         console.log(answer)
 
@@ -234,6 +233,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
           }
         }
         break
+      }
 
       default:
         break

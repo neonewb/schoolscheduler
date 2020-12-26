@@ -4,10 +4,11 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
-import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded';
+import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded'
 import Tooltip from '@material-ui/core/Tooltip'
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
+import { Footer } from '../Footer'
 
 type MainListItemsPropsT = {
   handleClickDel: () => void
@@ -57,11 +58,8 @@ export const MainListItems: FC<MainListItemsPropsT> = ({ handleClickDel }) => {
 
 export const secondaryListItems = (
   <div>
-    <ListSubheader inset>Made by Ruslan</ListSubheader>
-    <ListSubheader inset>With</ListSubheader>
-    <ListSubheader inset>React</ListSubheader>
-    <ListSubheader inset>Redux</ListSubheader>
-    <ListSubheader inset>TypeScript</ListSubheader>
-    <ListSubheader inset>Firebase</ListSubheader>
+    <ListSubheader inset>Made by Ruslan:</ListSubheader>
+    <ListSubheader inset><Footer /></ListSubheader>
+    
   </div>
 )

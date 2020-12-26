@@ -1,10 +1,11 @@
 import { Grid, makeStyles, Typography } from '@material-ui/core'
 import React, { FC } from 'react'
 import { useDocumentTitle } from '../../hooks/useDocumentTitle'
+import { Footer } from '../Footer'
 
 const useStyles = makeStyles((theme) => ({
   mainPage: {
-    margin: theme.spacing(15, 3),
+    margin: theme.spacing(3, 3),
   },
 }))
 
@@ -19,6 +20,7 @@ const MainPageLeft: FC = () => {
           Neo Time Table - easy & free way to create & edit school schedules!
         </Typography>
       </div>
+      <Footer textAlign />
     </Grid>
   )
 }
