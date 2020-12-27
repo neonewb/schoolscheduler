@@ -216,6 +216,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         console.log(answer)
 
         if (answer) {
+          //to-do resolve conflict
           draft.conflict = {
             isOpenModal: false,
             lesson: null,

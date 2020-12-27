@@ -39,6 +39,7 @@ const App: FC = () => {
   }, [dispatch])
 
   const classes = useStyles()
+  
   return (
     <Grid container component='main' className={classes.root}>
       <Route exact path='/'>

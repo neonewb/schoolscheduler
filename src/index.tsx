@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './redux/redux.store'
 import { BrowserRouter as Router } from 'react-router-dom'
+import './configs/i18n'
 
 import theme from './styles/theme'
 import { CssBaseline, ThemeProvider } from '@material-ui/core'
