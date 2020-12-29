@@ -1,4 +1,4 @@
-import { getTimetableS } from './tt.selectors'
+import { getConflict, getTimetableS } from './tt.selectors'
 import { TTInitialStateT } from './tt.reducer'
 import {
   getChoosenScheduleID,
@@ -8,7 +8,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { setHasTimeTableAC, updateFailedAC } from '../schedules/sched.actions'
 import { dbApi } from '../../api/dbApi'
 import { TtAcTypes } from './timetable.d'
-import { getTimeTableACT, setTimeTableAC } from './tt.actions'
+import { dropLesson, getTimeTableACT, setTimeTableAC } from './tt.actions'
 import { showSnack } from '../../components/Notifier'
 
 function* manuallyCreateTimeTable() {
@@ -18,7 +18,7 @@ function* manuallyCreateTimeTable() {
   try {
     yield call(dbApi.updateDoc, id, {
       timetable: timetable,
-      hasTimeTable: true
+      hasTimeTable: true,
     })
     console.log(`Timetable successfully created!`)
     showSnack('Timetable successfully created!', 'success')
@@ -41,7 +41,13 @@ function* getTimeTable({ payload }: getTimeTableACT) {
   }
 }
 
+function* dropLessonAfterResolved() {
+  const { lesson, dropResult, source } = yield select(getConflict)
+  yield put(dropLesson(lesson, dropResult, source))
+}
+
 export function* ttSaga() {
   yield takeEvery('MANUALLY_CREATE_SCHEDULE', manuallyCreateTimeTable)
   yield takeEvery(TtAcTypes.GET_TIMETABLE, getTimeTable)
+  yield takeEvery(TtAcTypes.RESOLVE_CONFLICT, dropLessonAfterResolved)
 }

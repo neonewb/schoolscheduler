@@ -12,6 +12,7 @@ const CustomSwitch = withStyles((theme) => ({
     },
     '&$checked': {
       color: theme.palette.primary.main,
+      // TODO change red/teal color when checked
       // '& .MuiTouchRipple-child': {
         // backgroundColor: theme.palette.primary.main,
       // },

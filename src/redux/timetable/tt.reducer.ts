@@ -14,10 +14,12 @@ const TTinitialState = {
   lessonsTT: [] as LessonT[],
   conflict: {
     isOpenModal: false as boolean,
+    source: null as 'footer' | 'timetable' | null,
     lesson: null as LessonT | null,
     dropResult: null as DropResultT | null,
     conflictClassLesson: null as LessonT | null,
     conflictTeacherLesson: null as LessonT | null,
+    isConflictResolved: null as boolean | null,
   },
 } as const
 
@@ -69,41 +71,45 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
       case TtAcTypes.DROP_LESSON: {
         const { lesson, dropResult, source } = action.payload
 
-        // Check drop conflict
-        const classLessons = draft.classesTT.find(
-          (c) => c.title === lesson.classTitle
-        )?.lessons
-        const teacherLessons = draft.teachersTT.find(
-          (t) => t.name === lesson.teacher
-        )?.lessons
+        if (!draft.conflict.isConflictResolved) {
+          // Check drop conflict
+          const classLessons = draft.classesTT.find(
+            (c) => c.title === lesson.classTitle
+          )?.lessons
+          const teacherLessons = draft.teachersTT.find(
+            (t) => t.name === lesson.teacher
+          )?.lessons
 
-        let isConflict = false
+          let isConflict = false
 
-        if (!(classLessons?.length === 0 && teacherLessons?.length === 0)) {
-          const conflictClassLesson = classLessons?.find(
-            (les) =>
-              les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-              les.period === dropResult.period
-          )
-          const conflictTeacherLesson = teacherLessons?.find(
-            (les) =>
-              les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-              les.period === dropResult.period
-          )
-          if (conflictClassLesson || conflictTeacherLesson) {
-            isConflict = true
-            draft.conflict = {
-              isOpenModal: true,
-              lesson: lesson,
-              dropResult: dropResult,
-              conflictClassLesson: conflictClassLesson || null,
-              conflictTeacherLesson: conflictTeacherLesson || null,
+          if (!(classLessons?.length === 0 && teacherLessons?.length === 0)) {
+            const conflictClassLesson = classLessons?.find(
+              (les) =>
+                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+                les.period === dropResult.period
+            )
+            const conflictTeacherLesson = teacherLessons?.find(
+              (les) =>
+                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+                les.period === dropResult.period
+            )
+            if (conflictClassLesson || conflictTeacherLesson) {
+              isConflict = true
+              draft.conflict = {
+                isOpenModal: true,
+                source,
+                lesson: lesson,
+                dropResult: dropResult,
+                conflictClassLesson: conflictClassLesson || null,
+                conflictTeacherLesson: conflictTeacherLesson || null,
+                isConflictResolved: false,
+              }
             }
           }
-        }
 
-        if (isConflict) {
-          break
+          if (isConflict) {
+            break
+          }
         }
 
         draft.classesTT = draft.classesTT.map((clas) => {
@@ -193,45 +199,115 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         })
 
         // Edit number of lessons
-        draft.lessonsTT = draft.lessonsTT.map((lessn) => {
-          if (lessn.id !== lesson.id) {
-            return lessn
-          } else if (lessn.currentLessons! <= 1) {
-            return {
-              ...lessn,
-              currentLessons: 0,
+
+        const minus1Lesson = (lesson: LessonT) => {
+          return draft.lessonsTT.map((lessn) => {
+            if (lessn.id !== lesson.id) {
+              return lessn
+            } else if (lessn.currentLessons! <= 1) {
+              return {
+                ...lessn,
+                currentLessons: 0,
+              }
+            } else {
+              return {
+                ...lessn,
+                currentLessons: lessn.currentLessons! - 1,
+              }
             }
-          } else {
-            return {
-              ...lessn,
-              currentLessons: lessn.currentLessons! - 1,
-            }
-          }
-        })
+          })
+        }
+
+        draft.lessonsTT = minus1Lesson(lesson)
+
+        draft.conflict = {
+          ...draft.conflict,
+          source: null,
+          lesson: null,
+          dropResult: null,
+          isConflictResolved: null,
+        }
+
         break
       }
 
       case TtAcTypes.RESOLVE_CONFLICT: {
         const { answer } = action.payload
-        console.log(answer)
+
+        const resetConflict = {
+          isOpenModal: false,
+          conflictClassLesson: null,
+          conflictTeacherLesson: null,
+          isConflictResolved: true,
+        }
 
         if (answer) {
-          //to-do resolve conflict
-          draft.conflict = {
-            isOpenModal: false,
-            lesson: null,
-            dropResult: null,
-            conflictClassLesson: null,
-            conflictTeacherLesson: null,
+          const { conflictClassLesson, conflictTeacherLesson } = draft.conflict
+
+          const filterClassLesson = (classLesson: LessonT) => {
+            return draft.classesTT.map((clas) => {
+              if (clas.title !== classLesson.classTitle) {
+                return clas
+              } else {
+                return {
+                  ...clas,
+                  lessons: clas.lessons.filter(
+                    (lesn) => lesn.id !== classLesson.id
+                  ),
+                }
+              }
+            })
           }
+
+          const filterTeacherLesson = (TeacherLesson: LessonT) => {
+            return draft.teachersTT.map((teach) => {
+              if (teach.name !== TeacherLesson.teacher) {
+                return teach
+              } else {
+                return {
+                  ...teach,
+                  lessons: teach.lessons.filter(
+                    (lesn) => lesn.id !== TeacherLesson.id
+                  ),
+                }
+              }
+            })
+          }
+
+          const add1Lesson = (lesson: LessonT) => {
+            return draft.lessonsTT.map((lessn) => {
+              if (
+                lessn.classTitle !== lesson.classTitle ||
+                lessn.subject !== lesson.subject ||
+                lessn.teacher !== lesson.teacher
+              ) {
+                return lessn
+              } else if (lessn.maxLessons === lessn.currentLessons) {
+                return lessn
+              } else {
+                return {
+                  ...lessn,
+                  currentLessons: lessn.currentLessons! + 1,
+                }
+              }
+            })
+          }
+
+          if (conflictClassLesson) {
+            draft.classesTT = filterClassLesson(conflictClassLesson)
+            draft.teachersTT = filterTeacherLesson(conflictClassLesson)
+            draft.lessonsTT = add1Lesson(conflictClassLesson)
+          }
+
+          if (conflictTeacherLesson) {
+            draft.classesTT = filterClassLesson(conflictTeacherLesson)
+            draft.teachersTT = filterTeacherLesson(conflictTeacherLesson)
+            draft.lessonsTT = add1Lesson(conflictTeacherLesson)
+          }
+
+          draft.conflict = { ...draft.conflict, ...resetConflict }
         } else {
-          draft.conflict = {
-            isOpenModal: false,
-            lesson: null,
-            dropResult: null,
-            conflictClassLesson: null,
-            conflictTeacherLesson: null,
-          }
+          draft.conflict = { ...draft.conflict, ...resetConflict }
         }
         break
       }
