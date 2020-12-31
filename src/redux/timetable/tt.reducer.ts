@@ -32,7 +32,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
     switch (action.type) {
       case TtAcTypes.MANUALLY_CREATE_SCHEDULE: {
         const { classes, teachers, load: loads } = action.payload.schedule
-
+        
         draft.classesTT = classes.map((className) => ({
           title: className,
           lessons: [],
@@ -197,8 +197,6 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             }
           }
         })
-
-        // Edit number of lessons
 
         const minus1Lesson = (lesson: LessonT) => {
           return draft.lessonsTT.map((lessn) => {

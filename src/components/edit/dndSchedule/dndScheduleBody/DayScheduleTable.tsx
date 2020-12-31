@@ -66,13 +66,12 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
 
     // Add class names
     let classTitle = classes[classNum]
-    if (classTitle.length > 3) {
-      classTitle = classTitle.substring(0, 4)
-    }
+    let classTitleShort: string = classTitle.substring(0, 4)
+
     const key = nanoid()
     row.push(
       <div className={styles.classesNames} key={key}>
-        <Typography>{classTitle}</Typography>
+        <Typography>{classTitleShort}</Typography>
       </div>
     )
 
