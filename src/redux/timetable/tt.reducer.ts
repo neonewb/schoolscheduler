@@ -170,7 +170,10 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
           const { conflictClassLesson, conflictTeacherLesson } = draft.conflict
 
           if (conflictClassLesson) {
-            draft.classesTT = filterLessonIn(conflictClassLesson, draft.classesTT)
+            draft.classesTT = filterLessonIn(
+              conflictClassLesson,
+              draft.classesTT
+            )
             draft.teachersTT = filterLessonIn(
               conflictClassLesson,
               draft.teachersTT
@@ -187,13 +190,22 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
               conflictTeacherLesson,
               draft.teachersTT
             )
-            draft.lessonsTT = plus1Lesson(
-              conflictTeacherLesson,
-              draft.lessonsTT
-            )
-          }
-          if (conflictClassLesson && conflictTeacherLesson) {
-            
+            if (conflictClassLesson) {
+              if (
+                JSON.stringify(conflictClassLesson) !==
+                JSON.stringify(conflictTeacherLesson)
+              ) {
+                draft.lessonsTT = plus1Lesson(
+                  conflictTeacherLesson,
+                  draft.lessonsTT
+                )
+              }
+            } else {
+              draft.lessonsTT = plus1Lesson(
+                conflictTeacherLesson,
+                draft.lessonsTT
+              )
+            }
           }
 
           draft.conflict = { ...draft.conflict, ...resetHalfConflict }
