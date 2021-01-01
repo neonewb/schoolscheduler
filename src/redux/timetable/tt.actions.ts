@@ -43,6 +43,7 @@ export const dropLesson = (lesson: LessonT, dropResult: DropResultT, source: 'fo
     },
   } as const)
 
+export type resolveConflictACT = ReturnType<typeof resolveConflict>
 export const resolveConflict = (answer: boolean) =>
   ({
     type: TtAcTypes.RESOLVE_CONFLICT,

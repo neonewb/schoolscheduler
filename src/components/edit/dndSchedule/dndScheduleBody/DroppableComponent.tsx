@@ -24,6 +24,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
   myClass,
   children,
 }) => {
+  
   const canLessonDrop = (
     item: any,
     classTitle: string,

@@ -5,8 +5,12 @@ export type Notice = {
   dismissed: boolean
   key: string
   options: {
+    anchorOrigin: {
+      horizontal: 'left' | 'center' | 'right'
+      vertical: 'top' | 'bottom'
+    }
     key: string
-    variant: "default" | "error" | "success" | "warning" | "info" | undefined
+    variant: 'default' | 'error' | 'success' | 'warning' | 'info' | undefined
     action?: (key: string) => void
     onClose?: () => void
     onExited?: () => void

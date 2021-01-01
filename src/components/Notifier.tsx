@@ -24,6 +24,10 @@ export const showSnack = (
     options: {
       key,
       variant,
+      anchorOrigin: {
+        horizontal: 'right',
+        vertical: 'bottom',
+      },
       action: (key) => (
         <IconButton onClick={() => closeSnackbar(key)}>
           <CloseRoundedIcon />

@@ -8,7 +8,12 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { setHasTimeTableAC, updateFailedAC } from '../schedules/sched.actions'
 import { dbApi } from '../../api/dbApi'
 import { TtAcTypes } from './timetable.d'
-import { dropLesson, getTimeTableACT, setTimeTableAC } from './tt.actions'
+import {
+  dropLesson,
+  getTimeTableACT,
+  resolveConflictACT,
+  setTimeTableAC,
+} from './tt.actions'
 import { showSnack } from '../../components/Notifier'
 
 function* manuallyCreateTimeTable() {
@@ -41,9 +46,11 @@ function* getTimeTable({ payload }: getTimeTableACT) {
   }
 }
 
-function* dropLessonAfterResolved() {
-  const { lesson, dropResult, source } = yield select(getConflict)
-  yield put(dropLesson(lesson, dropResult, source))
+function* dropLessonAfterResolved({ payload }: resolveConflictACT) {
+  if (payload.answer) {
+    const { lesson, dropResult, source } = yield select(getConflict)
+    yield put(dropLesson(lesson, dropResult, source))
+  }
 }
 
 export function* ttSaga() {
