@@ -14,6 +14,7 @@ https://devschooltimetable.web.app
   * Effector
   * Material UI
   * Firebase
+  * i18next
   * React hook form
   * Yup
   * Notistack
