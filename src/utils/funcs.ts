@@ -136,7 +136,7 @@ export const resetHalfConflict = {
   conflictClassLesson: null,
   conflictTeacherLesson: null,
   isConflictResolved: true,
-}
+} as const
 
 export const resetAllConflict = {
   isOpenModal: false,
@@ -146,4 +146,40 @@ export const resetAllConflict = {
   source: null,
   lesson: null,
   dropResult: null,
+} as const
+
+export const checkDropConflict = (
+  classLessons: LessonT[] | undefined,
+  teacherLessons: LessonT[] | undefined,
+  dropResult: DropResultT,
+  source: 'timetable' | 'footer',
+  lesson: LessonT
+) => {
+  if (classLessons?.length !== 0 || teacherLessons?.length !== 0) {
+    const conflictClassLesson = classLessons?.find(
+      (les) =>
+        les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+        les.period === dropResult.period
+    )
+    const conflictTeacherLesson = teacherLessons?.find(
+      (les) =>
+        les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
+        les.period === dropResult.period
+    )
+    if (conflictClassLesson || conflictTeacherLesson) {
+      return {
+        isOpenModal: true,
+        source,
+        lesson: lesson,
+        dropResult: dropResult,
+        conflictClassLesson: conflictClassLesson || null,
+        conflictTeacherLesson: conflictTeacherLesson || null,
+        isConflictResolved: false,
+      }
+    } else {
+      return resetAllConflict
+    }
+  } else {
+    return resetAllConflict
+  }
 }

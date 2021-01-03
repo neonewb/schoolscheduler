@@ -1,5 +1,6 @@
 import {
   addLesson,
+  checkDropConflict,
   editLessonIn,
   filterLesson,
   filterLessonIn,
@@ -11,7 +12,6 @@ import {
 import produce, { Draft } from 'immer'
 import { nanoid } from 'nanoid'
 import { Reducer } from 'redux'
-import { daysOfTheWeek } from '../../utils/daysOfTheWeek'
 import { DropResultT } from '../../utils/DragDropTypes'
 import { InferActionsTypes } from '../rootReducer'
 import { ClassT, TeacherT, LessonT } from './timetable'
@@ -82,7 +82,6 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         const { lesson, dropResult, source } = action.payload
 
         if (!draft.conflict.isConflictResolved) {
-          // Check drop conflict
           const classLessons = draft.classesTT.find(
             (c) => c.title === lesson.classTitle
           )?.lessons
@@ -90,34 +89,15 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
             (t) => t.name === lesson.teacher
           )?.lessons
 
-          let isConflict = false
+          draft.conflict = checkDropConflict(
+            classLessons,
+            teacherLessons,
+            dropResult,
+            source,
+            lesson
+          )
 
-          if (!(classLessons?.length === 0 && teacherLessons?.length === 0)) {
-            const conflictClassLesson = classLessons?.find(
-              (les) =>
-                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-                les.period === dropResult.period
-            )
-            const conflictTeacherLesson = teacherLessons?.find(
-              (les) =>
-                les.dayOfTheWeek === daysOfTheWeek[dropResult.dayNum] &&
-                les.period === dropResult.period
-            )
-            if (conflictClassLesson || conflictTeacherLesson) {
-              isConflict = true
-              draft.conflict = {
-                isOpenModal: true,
-                source,
-                lesson: lesson,
-                dropResult: dropResult,
-                conflictClassLesson: conflictClassLesson || null,
-                conflictTeacherLesson: conflictTeacherLesson || null,
-                isConflictResolved: false,
-              }
-            }
-          }
-
-          if (isConflict) {
+          if (draft.conflict.isConflictResolved === false) {
             break
           }
         }
@@ -134,7 +114,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
               return addLesson(clas, lesson, dropResult)
             } else if (target === 'footer' && source === 'timetable') {
               return filterLesson(clas, lesson)
-            } else return { ...clas }
+            } else return clas
           }
         })
 
@@ -148,7 +128,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
               return addLesson(teacher, lesson, dropResult)
             } else if (target === 'footer' && source === 'timetable') {
               return filterLesson(teacher, lesson)
-            } else return { ...teacher }
+            } else return teacher
           }
         })
 
@@ -158,7 +138,7 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
           draft.lessonsTT = minus1Lesson(lesson, draft.lessonsTT)
         }
 
-        draft.conflict = { ...resetAllConflict }
+        draft.conflict = resetAllConflict
 
         break
       }
@@ -207,10 +187,9 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
               )
             }
           }
-
           draft.conflict = { ...draft.conflict, ...resetHalfConflict }
         } else {
-          draft.conflict = { ...resetAllConflict }
+          draft.conflict = resetAllConflict
         }
 
         break
