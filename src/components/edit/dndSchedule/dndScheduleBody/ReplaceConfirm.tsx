@@ -9,10 +9,14 @@ import {
 import React, { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { resolveConflict } from '../../../../redux/timetable/tt.actions'
-import { getConflict } from '../../../../redux/timetable/tt.selectors'
+import {
+  getConflict,
+  getIsOpenModal,
+} from '../../../../redux/timetable/tt.selectors'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 
 export const ReplaceConfirm: FC = () => {
+  const isOpen = useSelector(getIsOpenModal)
   const dispatch = useDispatch()
   const {
     conflictClassLesson,
@@ -28,6 +32,10 @@ export const ReplaceConfirm: FC = () => {
 
   const handleClose = () => {
     dispatch(resolveConflict(false))
+  }
+
+  if (!isOpen) {
+    return null
   }
 
   return (

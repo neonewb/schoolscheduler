@@ -4,10 +4,6 @@ import { nanoid } from 'nanoid'
 import DroppableComponent from './DroppableComponent'
 import { ScheduleT } from '../../../../redux/schedules/sched.actions'
 import { grey, teal } from '@material-ui/core/colors'
-import { useSelector } from 'react-redux'
-import { getClasses } from '../../../../redux/timetable/tt.selectors'
-import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
-import DraggableLesson from '../dndScheduleFooter/DraggableLesson'
 
 const useStyles = makeStyles({
   rowDivs: {
@@ -53,9 +49,8 @@ type DayScheduleTablePropsT = {
 const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   dayNum,
   mySchedule,
-}) => {
-  let { maxLessonsPerDay, classes } = mySchedule
-  const clsses = useSelector(getClasses)
+}) => {  
+  const { maxLessonsPerDay, classes } = mySchedule
   const styles = useStyles()
 
   let rows = []
@@ -75,22 +70,8 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
       </div>
     )
 
-    const myClass = clsses.find((e) => e.title === classTitle)
-
     // Add drop components and lessons if they are
     for (let period = 0; period < maxLessonsPerDay; period++) {
-      const renderLesson = () => {
-        if (!myClass || myClass?.lessons.length === 0) return null
-
-        const lesson = myClass.lessons.find(
-          (i) => i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
-        )
-
-        return lesson ? (
-          <DraggableLesson lesson={lesson} source={'timetable'} />
-        ) : null
-      }
-
       const id = nanoid()
       row.push(
         <DroppableComponent
@@ -99,9 +80,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
           dayNum={dayNum}
           period={period}
           key={id}
-          myClass={myClass}
           id={id}>
-          {renderLesson()}
         </DroppableComponent>
       )
     }

@@ -18,7 +18,6 @@ import { clearTimeTableAC } from '../../redux/timetable/tt.actions'
 type EditNavBarPropsT = {
   user: CurrentUserT
   schedLength: number
-  schedID: string
   isLoading: boolean
   mySchedule: ScheduleT | undefined
 }
@@ -26,7 +25,6 @@ type EditNavBarPropsT = {
 const EditNavBar: FC<EditNavBarPropsT> = ({
   user,
   schedLength,
-  schedID,
   isLoading,
   mySchedule,
 }) => {

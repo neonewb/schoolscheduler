@@ -4,10 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 import { auth } from '../../configs/firebase.config'
 import { useStylesEdit } from '../../styles/stylesForEdit'
-import {
-  getDocFromDBAC,
-  ScheduleT,
-} from '../../redux/schedules/sched.actions'
+import { getDocFromDBAC, ScheduleT } from '../../redux/schedules/sched.actions'
 import EditNavBar from './EditNavBar'
 import EditToolBar from './EditToolBar'
 import SettingsSchedule from './settingsSchedule/SettingsSchedule'
@@ -22,6 +19,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { AppStateType } from '../../redux/rootReducer'
 import { Skeleton } from '@material-ui/lab'
+import { getIsLoadingTT } from '../../redux/timetable/tt.selectors'
 
 const Edit: FC = () => {
   const classes = useStylesEdit()
@@ -29,7 +27,8 @@ const Edit: FC = () => {
   const [isSettingsOpen, setSettingsOpen] = useState<boolean>(false)
 
   const user = useSelector<AppStateType, CurrentUserT>(getUserS)
-  const isLoading = useSelector<AppStateType, boolean>(getIsLoadingS)
+  const isLoadingS = useSelector<AppStateType, boolean>(getIsLoadingS)
+  const isLoadingTT = useSelector<AppStateType, boolean>(getIsLoadingTT)
   const schedules = useSelector<AppStateType, Array<ScheduleT>>(getSchedulesS)
 
   const { id } = useParams<{ id: string }>()
@@ -54,11 +53,10 @@ const Edit: FC = () => {
     <DndProvider backend={HTML5Backend}>
       <div className={classes.root}>
         <EditNavBar
-          isLoading={isLoading}
+          isLoading={isLoadingS}
           mySchedule={mySchedule}
           user={user}
           schedLength={schedules.length}
-          schedID={id}
         />
 
         <Divider />
@@ -70,16 +68,20 @@ const Edit: FC = () => {
 
         <Divider />
 
-        {isSettingsOpen && mySchedule ? (
+        {isSettingsOpen && mySchedule && (
           <SettingsSchedule
             isOpen={isSettingsOpen}
             mySchedule={mySchedule}
             setSettingsOpen={setSettingsOpen}
           />
-        ) : mySchedule ? (
+        )}
+
+        {mySchedule && !isLoadingS && !isLoadingTT && !isSettingsOpen && (
           <DnDSchedule mySchedule={mySchedule} />
-        ) : (
-          <Skeleton variant='rect' style={{ width: '100%', height: '100%', }}/>
+        )}
+
+        {(isLoadingS || isLoadingTT) && (
+          <Skeleton variant='rect' style={{ width: '100%', height: '100%' }} />
         )}
       </div>
     </DndProvider>

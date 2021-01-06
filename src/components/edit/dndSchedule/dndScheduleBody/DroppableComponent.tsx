@@ -4,6 +4,11 @@ import { DragItemTypes } from '../../../../utils/DragDropTypes'
 import theme from '../../../../styles/theme'
 import { teal } from '@material-ui/core/colors'
 import { ClassT } from '../../../../redux/timetable/timetable'
+import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
+import { getClass } from '../../../../redux/timetable/tt.selectors'
+import { useSelector } from 'react-redux'
+import DraggableLesson from '../dndScheduleFooter/DraggableLesson'
+import { AppStateType } from '../../../../redux/rootReducer'
 
 type DroppableComponentPropsT = {
   style: string
@@ -11,8 +16,6 @@ type DroppableComponentPropsT = {
   dayNum: number
   period: number
   id: string
-  myClass: ClassT | undefined
-  children: any
 }
 
 const DroppableComponent: FC<DroppableComponentPropsT> = ({
@@ -21,10 +24,23 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
   classTitle,
   dayNum,
   period,
-  myClass,
-  children,
 }) => {
-  
+  const myClass = useSelector<AppStateType, ClassT | undefined>((state) =>
+    getClass(state, classTitle)
+  )
+
+  const renderLesson = () => {
+    if (!myClass || myClass?.lessons.length === 0) return null
+
+    const lesson = myClass.lessons.find(
+      (i) => i.dayOfTheWeek === daysOfTheWeek[dayNum] && i.period === period
+    )
+
+    return lesson ? (
+      <DraggableLesson lesson={lesson} source={'timetable'} />
+    ) : null
+  }
+
   const canLessonDrop = (
     item: any,
     classTitle: string,
@@ -70,7 +86,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
       ref={drop}
       className={style}
       style={{ ...stylesOnCanDrop, ...stylesOnActive }}>
-      {children}
+      {renderLesson()}
     </div>
   )
 }

@@ -31,6 +31,7 @@ const TTinitialState = {
     conflictTeacherLesson: null as LessonT | null,
     isConflictResolved: null as boolean | null,
   },
+  isLoading: false as boolean,
 } as const
 
 export type TTInitialStateT = typeof TTinitialState
@@ -66,10 +67,19 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         break
       }
 
+      case TtAcTypes.SET_TT_IS_LOADING_TRUE:
+        draft.isLoading = true
+        break
+
+      case TtAcTypes.SET_TT_IS_LOADING_FALSE:
+        draft.isLoading = false
+        break
+
       case TtAcTypes.CLEAR_TIMETABLE:
         draft.classesTT = []
         draft.teachersTT = []
         draft.lessonsTT = []
+        draft.isLoading = false
         break
 
       case TtAcTypes.SET_TIMETABLE:

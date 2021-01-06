@@ -53,8 +53,10 @@ const useStyles = makeStyles((theme) => ({
     margin: 12,
   },
   rippleColor: {
-    '& .MuiTouchRipple-child': {
-      backgroundColor: deepPurple[400],
+    '&:active': {
+      '& .MuiTouchRipple-child': {
+        backgroundColor: deepPurple[400],
+      },
     },
   },
   paper: {
@@ -125,8 +127,8 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
   ]
 
   const handleManuallyCreate = () => {
-    setSettingsOpen(!isOpen)
     dispatch(manuallyCreateScheduleAC(mySchedule))
+    setSettingsOpen(!isOpen)
   }
 
   if (isOpen) {

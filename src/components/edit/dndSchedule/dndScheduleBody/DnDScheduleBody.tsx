@@ -29,6 +29,7 @@ const DnDScheduleBody: FC<DnDScheduleBodyPropsT> = ({ mySchedule }) => {
   let daysArr: JSX.Element[] = []
 
   for (let dayNum = 0; dayNum < numberOfDays; dayNum++) {
+    
     const key = nanoid()
     daysArr.push(
       <DayScheduleTable key={key} dayNum={dayNum} mySchedule={mySchedule} />

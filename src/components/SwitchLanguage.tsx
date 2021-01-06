@@ -1,26 +1,24 @@
 import React, { FC } from 'react'
 import Switch from '@material-ui/core/Switch'
 import { FormControlLabel, Grid, withStyles } from '@material-ui/core'
-import { red } from '@material-ui/core/colors'
 import { useTranslation } from 'react-i18next'
 
 const CustomSwitch = withStyles((theme) => ({
   switchBase: {
-    color: red[400],
-    // TODO change red/teal color when checked
-    // '& .MuiTouchRipple-child': {
-    //   backgroundColor: red[500],
-    // },
+    color: theme.palette.primary.main,
     '&$checked': {
-      color: theme.palette.primary.main,
+      color: theme.palette.secondary.main,
+      '& .MuiTouchRipple-child': {
+        backgroundColor: theme.palette.secondary.main,
+      },
     },
     '&$checked + $track': {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.secondary.main,
     },
   },
   checked: {},
   track: {
-    backgroundColor: red[500],
+    backgroundColor: theme.palette.primary.main,
   },
 }))(Switch)
 

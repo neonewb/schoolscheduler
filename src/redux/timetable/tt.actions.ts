@@ -51,3 +51,13 @@ export const resolveConflict = (answer: boolean) =>
       answer,
     },
   } as const)
+
+export const TtIsLoadingTrue = () =>
+  ({
+    type: TtAcTypes.SET_TT_IS_LOADING_TRUE,
+  } as const)
+
+export const TtIsLoadingFalse = () =>
+  ({
+    type: TtAcTypes.SET_TT_IS_LOADING_FALSE,
+  } as const)

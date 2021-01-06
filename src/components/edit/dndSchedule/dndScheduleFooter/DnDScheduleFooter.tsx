@@ -61,7 +61,6 @@ const DnDScheduleFooter: FC = () => {
   if (isActive) {
     stylesOnActive = {
       backgroundColor: theme.palette.primary.main,
-      border: '1px solid ' + teal[700],
       borderRadius: 4,
     }
   }
@@ -70,7 +69,6 @@ const DnDScheduleFooter: FC = () => {
   if (canDrop) {
     stylesOnCanDrop = {
       backgroundColor: teal[50],
-      border: '1px solid ' + teal[100],
       borderRadius: 4,
     }
   }
