@@ -8,7 +8,7 @@ import DnDScheduleHead from './DnDScheduleHead'
 const useStyles = makeStyles({
   wrapper: {
     position: 'relative',
-    width: '100%',
+    // width: '100%',
     maxWidth: '100%',
     minWidth: 600,
     overflow: 'auto',
@@ -26,12 +26,12 @@ const DnDScheduleBody: FC<DnDScheduleBodyPropsT> = ({ mySchedule }) => {
   let { numberOfDays } = mySchedule
   const styles = useStyles()
 
-  let daysArr = []
+  let daysArr: JSX.Element[] = []
 
-  for (let i = 0; i < numberOfDays; i++) {
+  for (let dayNum = 0; dayNum < numberOfDays; dayNum++) {
     const key = nanoid()
     daysArr.push(
-      <DayScheduleTable key={key} dayNum={i} mySchedule={mySchedule} />
+      <DayScheduleTable key={key} dayNum={dayNum} mySchedule={mySchedule} />
     )
   }
 

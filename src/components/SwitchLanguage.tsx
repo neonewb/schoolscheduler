@@ -1,28 +1,24 @@
 import React, { FC } from 'react'
 import Switch from '@material-ui/core/Switch'
-import { Grid, Typography, withStyles } from '@material-ui/core'
+import { FormControlLabel, Grid, withStyles } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
 import { useTranslation } from 'react-i18next'
 
 const CustomSwitch = withStyles((theme) => ({
   switchBase: {
-    color: red[500],
-    '& .MuiTouchRipple-child': {
-      backgroundColor: red[500],
-    },
+    color: red[400],
+    // TODO change red/teal color when checked
+    // '& .MuiTouchRipple-child': {
+    //   backgroundColor: red[500],
+    // },
     '&$checked': {
       color: theme.palette.primary.main,
-      // TODO change red/teal color when checked
-      // '& .MuiTouchRipple-child': {
-        // backgroundColor: theme.palette.primary.main,
-      // },
     },
     '&$checked + $track': {
       backgroundColor: theme.palette.primary.main,
     },
   },
-  checked: {
-  },
+  checked: {},
   track: {
     backgroundColor: red[500],
   },
@@ -46,9 +42,10 @@ export const SwitchLanguage: FC<Props> = () => {
 
   return (
     <Grid container justify='center' alignItems='center'>
-      <Typography>ENG</Typography>
-      <CustomSwitch checked={checked} onChange={handleChangeLng} />
-      <Typography>RU</Typography>
+      <FormControlLabel
+        control={<CustomSwitch checked={checked} onChange={handleChangeLng} />}
+        label='ENG / RU'
+      />
     </Grid>
   )
 }

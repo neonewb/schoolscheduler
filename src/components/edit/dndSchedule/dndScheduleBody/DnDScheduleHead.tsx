@@ -34,7 +34,6 @@ const useStyles = makeStyles({
     position: 'sticky',
     zIndex: 1,
     display: 'flex',
-    width: '100%',
     maxWidth: '100%',
     margin: 8
   },

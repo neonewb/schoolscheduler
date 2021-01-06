@@ -22,9 +22,10 @@ const MainPageLeft: FC = () => {
         <Typography component='h1' variant='h3'>
           {t('MainPageLeft')}
         </Typography>
-      </div>
+      
       <SwitchLanguage/>
       <Footer textAlign />
+      </div>
     </Grid>
   )
 }

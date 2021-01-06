@@ -13,6 +13,8 @@ import DraggableLesson from './DraggableLesson'
 
 const useStyles = makeStyles({
   footer: {
+    borderTop: '1px solid #E0E0E0',
+    // boxShadow: '0px -1px 5px #E0E0E0',
     width: '100%',
     minWidth: 600,
     display: 'flex',
@@ -24,7 +26,7 @@ const useStyles = makeStyles({
     display: 'flex',
     width: '100%',
     maxWidth: '100%',
-    height: 64,
+    height: 82,
     overflow: 'auto',
     '& div': {
       margin: 8,
