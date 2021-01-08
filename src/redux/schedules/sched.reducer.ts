@@ -1,5 +1,10 @@
 import { alphabet } from '../../utils/alphabet'
-import { isANumber, isLoadIncludesItem } from '../../utils/funcs'
+import {
+  compareLoad,
+  compareWithInt,
+  isANumber,
+  isLoadIncludesItem,
+} from '../../utils/funcs'
 import { nanoid } from 'nanoid'
 import * as SchedActions from './sched.actions'
 import { ScheduleT, LoadT } from './sched.actions'
@@ -477,6 +482,30 @@ const schedReducer: Reducer<SchedInitialStateT, SchedActionsTypes> = (
           }
         }),
       }
+
+    case 'SORT_SHED_SETTINGS':
+      return {
+        ...state,
+        schedules: state.schedules.map((schedule) => {
+          if (!schedule.isChoosen) return schedule
+
+          const {
+            classes: classesOld,
+            teachers: teachersOld,
+            subjects: subjectsOld,
+            load: loadOld,
+          } = schedule
+
+          return {
+            ...schedule,
+            classes: [...classesOld].sort(compareWithInt),
+            teachers: [...teachersOld].sort(),
+            subjects: [...subjectsOld].sort(),
+            load: [...loadOld].sort(compareLoad),
+          }
+        }),
+      }
+
     default:
       return state
   }

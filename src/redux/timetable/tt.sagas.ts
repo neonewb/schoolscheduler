@@ -1,10 +1,6 @@
 import { getConflict, getTimetableS } from './tt.selectors'
 import { TTInitialStateT } from './tt.reducer'
-import {
-  getChoosenScheduleID,
-  hasTimetableS,
-  hasTimetableSel,
-} from '../schedules/sched.selectors'
+import { hasTimetableS } from '../schedules/sched.selectors'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { setHasTimeTableAC, updateFailedAC } from '../schedules/sched.actions'
 import { dbApi } from '../../api/dbApi'
@@ -12,6 +8,7 @@ import { TtAcTypes } from './timetable.d'
 import {
   dropLesson,
   getTimeTableACT,
+  manCreateSchedT,
   resolveConflictACT,
   setTimeTableAC,
   TtIsLoadingFalse,
@@ -19,10 +16,9 @@ import {
 } from './tt.actions'
 import { showSnack } from '../../components/Notifier'
 
-function* manuallyCreateTimeTable() {
+function* manuallyCreateTimeTable({ payload }: manCreateSchedT) {
+  const { id, hasTimeTable } = payload.schedule
   const timetable: TTInitialStateT = yield select(getTimetableS)
-  const id: string = yield select(getChoosenScheduleID)
-  const hasTimeTable = yield select(hasTimetableSel)
 
   try {
     yield call(dbApi.updateDoc, id, {

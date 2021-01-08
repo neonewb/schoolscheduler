@@ -293,3 +293,8 @@ export const setHasTimeTableAC = (id: string) =>
       id,
     },
   } as const)
+
+export const sortShedSettins = () =>
+  ({
+    type: 'SORT_SHED_SETTINGS',
+  } as const)

@@ -5,8 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded'
 import FileCopyRoundedIcon from '@material-ui/icons/FileCopyRounded'
+import AccountCircleRoundedIcon from '@material-ui/icons/AccountCircleRounded';
 import Tooltip from '@material-ui/core/Tooltip'
-import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded'
 import HelpRoundedIcon from '@material-ui/icons/HelpRounded'
 import { Footer } from '../Footer'
 
@@ -35,12 +35,12 @@ export const MainListItems: FC<MainListItemsPropsT> = ({ handleClickDel }) => {
         </ListItem>
       </Tooltip>
 
-      <Tooltip title='Settings' placement='right'>
+      <Tooltip title='Accaunt settings' placement='right'>
         <ListItem button>
           <ListItemIcon>
-            <SettingsRoundedIcon color='primary' fontSize='large' />
+            <AccountCircleRoundedIcon color='primary' fontSize='large' />
           </ListItemIcon>
-          <ListItemText primary='Settings' />
+          <ListItemText primary='Accaunt settings' />
         </ListItem>
       </Tooltip>
 

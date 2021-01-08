@@ -3,6 +3,7 @@ import { ScheduleT } from '../schedules/sched.actions'
 import { LessonT, TtAcTypes } from './timetable.d'
 import { TTInitialStateT } from './tt.reducer'
 
+export type manCreateSchedT = ReturnType<typeof manuallyCreateScheduleAC>
 export const manuallyCreateScheduleAC = (schedule: ScheduleT) =>
   ({
     type: TtAcTypes.MANUALLY_CREATE_SCHEDULE,

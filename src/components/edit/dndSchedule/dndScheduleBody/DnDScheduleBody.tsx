@@ -8,7 +8,6 @@ import DnDScheduleHead from './DnDScheduleHead'
 const useStyles = makeStyles({
   wrapper: {
     position: 'relative',
-    // width: '100%',
     maxWidth: '100%',
     minWidth: 600,
     overflow: 'auto',

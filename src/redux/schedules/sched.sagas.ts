@@ -1,4 +1,4 @@
-import { setTimeTableAC } from './../timetable/tt.actions'
+import { manuallyCreateScheduleAC, setTimeTableAC } from './../timetable/tt.actions'
 import { firestore } from 'firebase'
 import { all, call, put, select, takeEvery } from 'redux-saga/effects'
 import { dbApi } from '../../api/dbApi'
@@ -34,8 +34,8 @@ function* addDocToCollection(action: AddDocToCollectionT) {
         email: payload.email,
         userid: payload.userID,
         title: 'New schedule',
-        numberOfDays: 6,
-        maxLessonsPerDay: 10,
+        numberOfDays: 5,
+        maxLessonsPerDay: 6,
         numberOfColumns: 2,
         isOpenCustomClassNames: false,
         hasTimeTable: false,
@@ -53,8 +53,8 @@ function* addDocToCollection(action: AddDocToCollectionT) {
         payload.email,
         payload.userID,
         'New schedule',
+        5,
         6,
-        10,
         2,
         false,
         false,
@@ -99,7 +99,7 @@ function* getDocFromDB(action: GetDocFromDBT) {
     } else {
       // doc.data() will be undefined in this case
       console.error('No such document!')
-     showSnack('No such document!', 'error')
+      showSnack('No such document!', 'error')
       yield put(setIsLoadingFalse())
     }
   } catch (error) {
@@ -220,6 +220,21 @@ function* setLoadS() {
   }
 }
 
+function* setSortedS() {
+  const schedule: ScheduleT = yield select(getChoosenSchedule)
+  yield put(manuallyCreateScheduleAC(schedule))
+  try {
+    yield call(dbApi.updateDoc, schedule.id, {
+      classes: schedule.classes,
+      teachers: schedule.teachers,
+      subjects: schedule.subjects,
+      load: schedule.load,
+    })
+  } catch (error) {
+    yield put(updateFailedAC(error))
+  }
+}
+
 export function* schedulesSaga() {
   yield takeEvery('ADD_DOC_TO_COLLECTION', addDocToCollection)
   yield takeEvery('GET_DOC_FROM_DB', getDocFromDB)
@@ -241,4 +256,5 @@ export function* schedulesSaga() {
   yield takeEvery('DELETE_TEACHER', setTeacherS)
   yield takeEvery('SET_LOAD', setLoadS)
   yield takeEvery('DELETE_LOAD', setLoadS)
+  yield takeEvery('SORT_SHED_SETTINGS', setSortedS)
 }

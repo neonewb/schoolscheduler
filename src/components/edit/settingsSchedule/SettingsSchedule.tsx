@@ -11,6 +11,7 @@ import {
   clearCheckClassAC,
   openCustomClassNamesAC,
   ScheduleT,
+  sortShedSettins,
   updateFieldAC,
 } from '../../../redux/schedules/sched.actions'
 import Subjects from './Subjects'
@@ -23,7 +24,6 @@ import TodayRoundedIcon from '@material-ui/icons/TodayRounded'
 import WatchLaterRoundedIcon from '@material-ui/icons/WatchLaterRounded'
 
 import Load from './load/Load'
-import { manuallyCreateScheduleAC } from '../../../redux/timetable/tt.actions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,7 +127,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
   ]
 
   const handleManuallyCreate = () => {
-    dispatch(manuallyCreateScheduleAC(mySchedule))
+    dispatch(sortShedSettins())
     setSettingsOpen(!isOpen)
   }
 
@@ -144,7 +144,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
 
           <Slider
             className={classes.slider}
-            defaultValue={6}
+            defaultValue={mySchedule.numberOfDays}
             onChangeCommitted={handleChangeNumOfDays}
             aria-labelledby='days-slider'
             valueLabelDisplay='auto'
@@ -164,7 +164,7 @@ const SettingsSchedule: FC<SettingsScheduleProps> = ({
           </div>
           <Slider
             className={classes.slider}
-            defaultValue={10}
+            defaultValue={mySchedule.maxLessonsPerDay}
             onChangeCommitted={handleChangeMaxLessons}
             aria-labelledby='lessons-slider'
             valueLabelDisplay='auto'

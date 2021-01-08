@@ -39,8 +39,8 @@ export const filterLessonIn = <T extends ClassT[] | TeacherT[]>(
   //@ts-ignore
   return draftCT.map((item) => {
     if (
-      item.title === conflictLesson.classTitle ||
-      item.name === conflictLesson.teacher
+      item?.title === conflictLesson.classTitle ||
+      item?.name === conflictLesson.teacher
     ) {
       return {
         ...item,
@@ -182,4 +182,125 @@ export const checkDropConflict = (
   } else {
     return resetAllConflict
   }
+}
+
+const hasFirstInt = (n: string) => /^\d+/.test(n)
+
+export const compareWithInt = (a: string, b: string) => {
+  // Check number in start of the string and compare them
+  if (hasFirstInt(a) && hasFirstInt(b)) {
+    if (parseInt(a) < parseInt(b)) {
+      return -1
+    } else if (parseInt(a) > parseInt(b)) {
+      return 1
+    } // Numbers are equal, compare as strings
+    else if (a < b) {
+      return -1
+    } else if (a > b) {
+      return 1
+    } else {
+      return 0
+    }
+  } else if (a < b) {
+    return -1
+  } else if (a > b) {
+    return 1
+  } else {
+    // a must be equal to b
+    return 0
+  }
+}
+
+export const compareLoad = (a: LoadT, b: LoadT) => {
+  // Compare subjects
+  if (a.subject < b.subject) {
+    return -1
+  } else if (a.subject > b.subject) {
+    return 1
+  } // Subjects are equal, compare class titles
+  // Check number in start of the class name and compare them
+  else if (hasFirstInt(a.className) && hasFirstInt(b.className)) {
+    if (parseInt(a.className) < parseInt(b.className)) {
+      return -1
+    } else if (parseInt(a.className) > parseInt(b.className)) {
+      return 1
+    } // Numbers are equal, compare as strings
+    else if (a.className < b.className) {
+      return -1
+    } else if (a.className > b.className) {
+      return 1
+    }
+    // Class titles are equal, compare teachers
+    else if (a.teacher < b.teacher) {
+      return -1
+    } else if (a.teacher > b.teacher) {
+      return 1
+    }
+  } // Subjects are equal, compare class titles
+  else if (a.className < b.className) {
+    return -1
+  } else if (a.className > b.className) {
+    return 1
+  } // Class titles are equal, compare teachers
+  else if (a.teacher < b.teacher) {
+    return -1
+  } else if (a.teacher > b.teacher) {
+    return 1
+  }
+  // a must be equal to b
+  return 0
+}
+
+export const bSearchTeacher = (sortedArray: TeacherT[], key: string) => {
+  let start = 0
+  let end = sortedArray.length - 1
+
+  while (start <= end) {
+    let middle = Math.floor((start + end) / 2)
+
+    if (sortedArray[middle].name === key) {
+      // found the key
+      return middle
+    } else if (sortedArray[middle].name < key) {
+      // continue searching to the right
+      start = middle + 1
+    } else {
+      // continue searching to the left
+      end = middle - 1
+    }
+  }
+  // key wasn't found
+  return -1
+}
+
+export const bSearchClass = (sortedArray: ClassT[], key: string) => {
+  let start = 0
+  let end = sortedArray.length - 1
+
+  while (start <= end) {
+    let middle = Math.floor((start + end) / 2)
+
+    if (sortedArray[middle].title === key) {
+      // found the key
+      return middle
+    } else if (hasFirstInt(sortedArray[middle].title) && hasFirstInt(key)) {
+      if (parseInt(sortedArray[middle].title) < parseInt(key)) {
+        start = middle + 1
+      } else if (parseInt(sortedArray[middle].title) > parseInt(key)) {
+        end = middle - 1
+      } else if (sortedArray[middle].title < key) {
+        start = middle + 1
+      } else {
+        end = middle - 1
+      }
+    } else if (sortedArray[middle].title < key) {
+      // continue searching to the right
+      start = middle + 1
+    } else {
+      // continue searching to the left
+      end = middle - 1
+    }
+  }
+  // key wasn't found
+  return -1
 }

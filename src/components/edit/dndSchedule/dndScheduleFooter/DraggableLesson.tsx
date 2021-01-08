@@ -90,6 +90,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
 
       <Popover
         id='mouse-over-popover'
+        elevation={3}
         style={{ pointerEvents: 'none' }}
         open={open}
         anchorEl={anchorEl}

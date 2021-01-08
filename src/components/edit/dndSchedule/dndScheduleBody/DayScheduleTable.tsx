@@ -49,7 +49,7 @@ type DayScheduleTablePropsT = {
 const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   dayNum,
   mySchedule,
-}) => {  
+}) => {
   const { maxLessonsPerDay, classes } = mySchedule
   const styles = useStyles()
 
@@ -80,8 +80,8 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
           dayNum={dayNum}
           period={period}
           key={id}
-          id={id}>
-        </DroppableComponent>
+          id={id}
+        />
       )
     }
     rows.push(row)

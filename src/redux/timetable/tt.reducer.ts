@@ -1,5 +1,7 @@
 import {
   addLesson,
+  bSearchClass,
+  bSearchTeacher,
   checkDropConflict,
   editLessonIn,
   filterLesson,
@@ -54,16 +56,15 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
           lessons: [],
         }))
 
-        loads.forEach((load) => {
-          draft.lessonsTT.push({
-            id: nanoid(),
-            subject: load.subject,
-            teacher: load.teacher,
-            classTitle: load.className,
-            currentLessons: Number(load.lessons),
-            maxLessons: Number(load.lessons),
-          })
-        })
+        draft.lessonsTT = loads.map((load) => ({
+          id: nanoid(),
+          subject: load.subject,
+          teacher: load.teacher,
+          classTitle: load.className,
+          currentLessons: Number(load.lessons),
+          maxLessons: Number(load.lessons),
+        }))
+
         break
       }
 
@@ -90,14 +91,13 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
 
       case TtAcTypes.DROP_LESSON: {
         const { lesson, dropResult, source } = action.payload
+        const classIdx = bSearchClass(draft.classesTT, lesson.classTitle)
+        const teacherIdx = bSearchTeacher(draft.teachersTT, lesson.teacher)
 
         if (!draft.conflict.isConflictResolved) {
-          const classLessons = draft.classesTT.find(
-            (c) => c.title === lesson.classTitle
-          )?.lessons
-          const teacherLessons = draft.teachersTT.find(
-            (t) => t.name === lesson.teacher
-          )?.lessons
+          const classLessons = draft.classesTT[classIdx]?.lessons
+
+          const teacherLessons = draft.teachersTT[teacherIdx]?.lessons
 
           draft.conflict = checkDropConflict(
             classLessons,
@@ -114,38 +114,17 @@ const TTReducer: Reducer<TTInitialStateT, TTActionsTypes> = produce(
 
         const { target } = dropResult
 
-        draft.classesTT = draft.classesTT.map((clas) => {
-          if (clas.title !== lesson.classTitle) {
-            return clas
-          } else {
-            if (target === 'timetable' && source === 'timetable') {
-              return editLessonIn(clas, lesson.id, dropResult)
-            } else if (target === 'timetable' && source === 'footer') {
-              return addLesson(clas, lesson, dropResult)
-            } else if (target === 'footer' && source === 'timetable') {
-              return filterLesson(clas, lesson)
-            } else return clas
-          }
-        })
-
-        draft.teachersTT = draft.teachersTT.map((teacher) => {
-          if (teacher.name !== lesson.teacher) {
-            return teacher
-          } else {
-            if (target === 'timetable' && source === 'timetable') {
-              return editLessonIn(teacher, lesson.id, dropResult)
-            } else if (target === 'timetable' && source === 'footer') {
-              return addLesson(teacher, lesson, dropResult)
-            } else if (target === 'footer' && source === 'timetable') {
-              return filterLesson(teacher, lesson)
-            } else return teacher
-          }
-        })
-
-        if (target === 'footer' && source === 'timetable') {
-          draft.lessonsTT = plus1Lesson(lesson, draft.lessonsTT)
+        if (target === 'timetable' && source === 'timetable') {
+          draft.classesTT[classIdx] = editLessonIn(draft.classesTT[classIdx], lesson.id, dropResult)
+          draft.teachersTT[teacherIdx] = editLessonIn(draft.teachersTT[teacherIdx], lesson.id, dropResult)
         } else if (target === 'timetable' && source === 'footer') {
+          draft.classesTT[classIdx] = addLesson(draft.classesTT[classIdx], lesson, dropResult)
+          draft.teachersTT[teacherIdx] = addLesson(draft.teachersTT[teacherIdx], lesson, dropResult)
           draft.lessonsTT = minus1Lesson(lesson, draft.lessonsTT)
+        } else if (target === 'footer' && source === 'timetable') {
+          draft.classesTT[classIdx] = filterLesson(draft.classesTT[classIdx], lesson)
+          draft.teachersTT[teacherIdx] = filterLesson(draft.teachersTT[teacherIdx], lesson)
+          draft.lessonsTT = plus1Lesson(lesson, draft.lessonsTT)
         }
 
         draft.conflict = resetAllConflict
