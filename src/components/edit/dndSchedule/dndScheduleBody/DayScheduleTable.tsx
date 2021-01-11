@@ -43,14 +43,17 @@ const useStyles = makeStyles({
 
 type DayScheduleTablePropsT = {
   dayNum: number
-  mySchedule: ScheduleT
+  maxLessonsPerDay: number
+  classes: ScheduleT['classes']
+  demo?: boolean
 }
 
 const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
   dayNum,
-  mySchedule,
+  maxLessonsPerDay,
+  classes,
+  demo,
 }) => {
-  const { maxLessonsPerDay, classes } = mySchedule
   const styles = useStyles()
 
   let rows = []
@@ -81,6 +84,7 @@ const DayScheduleTable: FC<DayScheduleTablePropsT> = ({
           period={period}
           key={id}
           id={id}
+          demo={demo}
         />
       )
     }

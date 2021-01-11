@@ -5,6 +5,7 @@ import { useDrag } from 'react-dnd'
 import { useDispatch } from 'react-redux'
 import { LessonT } from '../../../../redux/timetable/timetable'
 import { dropLesson } from '../../../../redux/timetable/tt.actions'
+import { dropLessonDemo } from '../../../../redux/timetableDemo/tt.demo.actions'
 import { daysOfTheWeek } from '../../../../utils/daysOfTheWeek'
 import { DragItemTypes, DropResultT } from '../../../../utils/DragDropTypes'
 
@@ -27,11 +28,17 @@ const useStyles = makeStyles({
 type DraggableLessonPropsT = {
   lesson: LessonT
   source: 'footer' | 'timetable'
+  demo?: boolean
 }
 
-const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
+const DraggableLesson: FC<DraggableLessonPropsT> = ({
+  lesson,
+  source,
+  demo,
+}) => {
   const styles = useStyles()
   const dispatch = useDispatch()
+  const dropLessonAction = demo ? dropLessonDemo : dropLesson
 
   const [{ isDragging }, drag] = useDrag({
     item: {
@@ -52,7 +59,7 @@ const DraggableLesson: FC<DraggableLessonPropsT> = ({ lesson, source }) => {
             lesson.period === dropResult.period
           )
         ) {
-          dispatch(dropLesson(lesson, dropResult, source))
+          dispatch(dropLessonAction(lesson, dropResult, source))
         }
       }
     },

@@ -9,6 +9,7 @@ import { getClass } from '../../../../redux/timetable/tt.selectors'
 import { useSelector } from 'react-redux'
 import DraggableLesson from '../dndScheduleFooter/DraggableLesson'
 import { AppStateType } from '../../../../redux/rootReducer'
+import { getClassDemo } from '../../../../redux/timetableDemo/tt.demo.selectors'
 
 type DroppableComponentPropsT = {
   style: string
@@ -16,6 +17,7 @@ type DroppableComponentPropsT = {
   dayNum: number
   period: number
   id: string
+  demo?: boolean
 }
 
 const DroppableComponent: FC<DroppableComponentPropsT> = ({
@@ -24,9 +26,11 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
   classTitle,
   dayNum,
   period,
+  demo,
 }) => {
+  const getClassSelector = demo ? getClassDemo : getClass
   const myClass = useSelector<AppStateType, ClassT | undefined>((state) =>
-    getClass(state, classTitle)
+    getClassSelector(state, classTitle)
   )
 
   const renderLesson = () => {
@@ -37,7 +41,7 @@ const DroppableComponent: FC<DroppableComponentPropsT> = ({
     )
 
     return lesson ? (
-      <DraggableLesson lesson={lesson} source={'timetable'} />
+      <DraggableLesson lesson={lesson} source={'timetable'} demo={demo} />
     ) : null
   }
 

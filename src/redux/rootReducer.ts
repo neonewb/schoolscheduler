@@ -2,9 +2,11 @@ import { combineReducers } from 'redux'
 import authReducer from './auth/auth.reducer'
 import schedReducer from './schedules/sched.reducer'
 import TTReducer from './timetable/tt.reducer'
+import TTReducerDemo from './timetableDemo/tt.demo.reducer'
 
 export const rootReducer = combineReducers({
   timetable: TTReducer,
+  timetableDemo: TTReducerDemo,
   sched: schedReducer,
   auth: authReducer,
 })
