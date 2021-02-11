@@ -28,7 +28,7 @@ export const getTimeTableAC = (id: string) =>
 
 export const setTimeTableAC = (timetable: TTInitialStateT) =>
   ({
-    type: TtAcTypes.SET_TIMETABLE,
+    type: TtAcTypes.SET_TIMETABLE_DEMO,
     payload: {
       timetable,
     },
@@ -51,7 +51,7 @@ export const dropLessonDemo = (
 export type resolveConflictACT = ReturnType<typeof resolveConflict>
 export const resolveConflict = (answer: boolean) =>
   ({
-    type: TtAcTypes.RESOLVE_CONFLICT,
+    type: TtAcTypes.RESOLVE_CONFLICT_DEMO,
     payload: {
       answer,
     },

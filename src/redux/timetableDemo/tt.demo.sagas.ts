@@ -15,5 +15,5 @@ function* dropLessonAfterResolved({ payload }: resolveConflictACT) {
 }
 
 export function* ttSagaDemo() {
-  yield takeEvery(TtAcTypes.RESOLVE_CONFLICT, dropLessonAfterResolved)
+  // yield takeEvery(TtAcTypes.RESOLVE_CONFLICT, dropLessonAfterResolved)
 }

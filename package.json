@@ -56,7 +56,8 @@
     "redux-logger": "^3.0.6"
   },
   "scripts": {
-    "start": "node fix-cra.js && react-scripts start",
+    "startf": "node fix-cra.js && react-scripts start",
+    "start": "react-scripts start",
     "stop": "taskkill -F -IM node.exe",
     "build": "react-scripts build",
     "deploy": "firebase deploy",

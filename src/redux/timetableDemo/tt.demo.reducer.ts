@@ -217,7 +217,7 @@ const TTReducerDemo: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         draft.isLoading = false
         break
 
-      case TtAcTypes.SET_TIMETABLE:
+      case TtAcTypes.SET_TIMETABLE_DEMO:
         draft.classesTT = action.payload.timetable.classesTT
         draft.teachersTT = action.payload.timetable.teachersTT
         draft.lessonsTT = action.payload.timetable.lessonsTT
@@ -272,7 +272,7 @@ const TTReducerDemo: Reducer<TTInitialStateT, TTActionsTypes> = produce(
         break
       }
 
-      case TtAcTypes.RESOLVE_CONFLICT: {
+      case TtAcTypes.RESOLVE_CONFLICT_DEMO: {
         const { answer } = action.payload
 
         if (answer) {

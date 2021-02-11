@@ -12,9 +12,6 @@ export const getClass = (state: AppStateType, classTitle: string) => {
   return state.timetable.classesTT[clsIdx]
 }
 
-export const getClassLessons = (classTitle: string) => (state: AppStateType) =>
-  state.timetable.classesTT.find((el) => el.title === classTitle)?.lessons
-
 export const getConflict = (state: AppStateType) => state.timetable.conflict
 
 export const getIsOpenModal = (state: AppStateType) =>
