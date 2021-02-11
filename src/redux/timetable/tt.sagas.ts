@@ -64,21 +64,19 @@ function* dropLessonAfterResolved({ payload }: resolveConflictACT) {
 
 function* updateTimetable({ payload }: dropLessonAT) {
   const shedId = getChoosenScheduleID(yield select())  
-  // const timetable: TTInitialStateT = yield select(getTimetableS)
-  const { lesson, dropResult: {target}, source } = payload
-  // const timetable: TTInitialStateT = yield select(getTimetableS)
+  // const { lesson, dropResult: {target}, source } = payload
+  const timetable: TTInitialStateT = yield select(getTimetableS)
 
   try {
-    // yield call(dbApi.updateDoc, shedId, {
-    //   timetable: timetable,
-    // })
-    if (target === 'footer' || source === 'footer') {
-      const mylesson = yield select(getLesson, lesson)
-      yield call(dbApi.updateDoc, shedId, {
-        'timetable.lessonsTT': firebase.firestore.FieldValue.arrayUnion(mylesson),
-      })
-    }
-
+    yield call(dbApi.updateDoc, shedId, {
+      timetable: timetable,
+    })
+    // if (target === 'footer' || source === 'footer') {
+    //   const mylesson = yield select(getLesson, lesson)
+    //   yield call(dbApi.updateDoc, shedId, {
+    //     'timetable.lessonsTT': firebase.firestore.FieldValue.arrayUnion(mylesson),
+    //   })
+    // }
     showSnack('Timetable successfully updated!', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))
