@@ -1,9 +1,18 @@
 import { bSearchClass } from '../../utils/funcs'
 import { AppStateType } from '../rootReducer'
+import { LessonT } from './timetable'
 
 export const getTimetableS = (state: AppStateType) => state.timetable
 
 export const getLessonsS = (state: AppStateType) => state.timetable.lessonsTT
+
+export const getLesson = (state: AppStateType, lesson: LessonT) =>
+  state.timetable.lessonsTT.find(
+    (l) =>
+      l.classTitle === lesson.classTitle &&
+      l.teacher === lesson.teacher &&
+      l.subject === lesson.subject
+  )
 
 export const getClasses = (state: AppStateType) => state.timetable.classesTT
 

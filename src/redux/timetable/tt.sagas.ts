@@ -1,12 +1,16 @@
-import { getConflict, getTimetableS } from './tt.selectors'
+import { getConflict, getLesson, getTimetableS } from './tt.selectors'
 import { TTInitialStateT } from './tt.reducer'
-import { getChoosenScheduleID, hasTimetableS } from '../schedules/sched.selectors'
+import {
+  getChoosenScheduleID,
+  hasTimetableS,
+} from '../schedules/sched.selectors'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { setHasTimeTableAC, updateFailedAC } from '../schedules/sched.actions'
 import { dbApi } from '../../api/dbApi'
 import { TtAcTypes } from './timetable.d'
 import {
   dropLesson,
+  dropLessonAT,
   getTimeTableACT,
   manCreateSchedT,
   resolveConflictACT,
@@ -15,6 +19,7 @@ import {
   TtIsLoadingTrue,
 } from './tt.actions'
 import { showSnack } from '../../components/Notifier'
+import firebase from 'firebase'
 
 function* manuallyCreateTimeTable({ payload }: manCreateSchedT) {
   const { id, hasTimeTable } = payload.schedule
@@ -57,15 +62,23 @@ function* dropLessonAfterResolved({ payload }: resolveConflictACT) {
   }
 }
 
-function* updateTimetable() {
-  const id: string = yield select(getChoosenScheduleID)
-  const timetable: TTInitialStateT = yield select(getTimetableS)
+function* updateTimetable({ payload }: dropLessonAT) {
+  const shedId = getChoosenScheduleID(yield select())  
+  // const timetable: TTInitialStateT = yield select(getTimetableS)
+  const { lesson, dropResult: {target}, source } = payload
+  // const timetable: TTInitialStateT = yield select(getTimetableS)
 
   try {
-    yield call(dbApi.updateDoc, id, {
-      timetable: timetable,
-    })
-    console.log(`Timetable successfully updated!`)
+    // yield call(dbApi.updateDoc, shedId, {
+    //   timetable: timetable,
+    // })
+    if (target === 'footer' || source === 'footer') {
+      const mylesson = yield select(getLesson, lesson)
+      yield call(dbApi.updateDoc, shedId, {
+        'timetable.lessonsTT': firebase.firestore.FieldValue.arrayUnion(mylesson),
+      })
+    }
+
     showSnack('Timetable successfully updated!', 'success')
   } catch (error) {
     yield put(updateFailedAC(error))

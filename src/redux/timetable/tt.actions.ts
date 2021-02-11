@@ -34,6 +34,7 @@ export const setTimeTableAC = (timetable: TTInitialStateT) =>
     },
   } as const)
 
+export type dropLessonAT = ReturnType<typeof dropLesson>
 export const dropLesson = (lesson: LessonT, dropResult: DropResultT, source: 'footer' | 'timetable') =>
   ({
     type: TtAcTypes.DROP_LESSON,
